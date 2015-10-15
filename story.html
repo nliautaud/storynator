@@ -31,14 +31,14 @@
 			clear: both;
 		}
 		.part,
-		.parts > .placeholder {
+		.part-placeholder {
 			position: relative;
 			border-left: 1em solid #BDBDBD;
 			margin: 1em 2em;
 			padding: 0 2em 3em; 
 			counter-increment: part;
 		}
-		.parts > .placeholder {
+		.part-placeholder {
 			background: #f5f5f5;
 			border: 5px dashed #234;
 		}
@@ -75,7 +75,7 @@
 			display: none;
 		}
 		.case,
-		.cases .sortable-placeholder,
+		.case-placeholder,
 		.cases .add {
 			position: relative;
 			margin: 1em;
@@ -83,12 +83,12 @@
 			min-width: 300px;
 		}
 		.bigimg .case,
-		.bigimg .cases .sortable-placeholder,
+		.bigimg .case-placeholder,
 		.bigimg .cases .add {
 			width: 15%;
 			min-width: 200px;
 		}
-		.cases .sortable-placeholder {
+		.cases .case-placeholder {
 			background: #f5f5f5;
 			border: 1px dashed grey;
 		}
@@ -338,14 +338,14 @@
 				forcePlaceholderSize: false,
 				handle: '.handle',
 				items: '.part',
-				placeholderClass: 'placeholder'
+				placeholderClass: 'part-placeholder'
 			});
 			$('.cases.sortable').sortable({
 				forcePlaceholderSize: true,
 				connectWith: '.parts',
 				handle: '.img',
 				items: '.case',
-				placeholderClass: 'placeholder'
+				placeholderClass: 'case-placeholder'
 			}).bind('sortstart', onstart).bind('sortstop', onstop);
 
 			//*/// add
