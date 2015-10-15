@@ -23,6 +23,7 @@
 			margin-top: 8em !important;
 			font-size: 11px;
 			counter-reset: part;
+			counter-reset: partcase;
 			counter-reset: totalcase;
 		}
 		.part {
@@ -36,6 +37,10 @@
 			margin: 1em 2em;
 			padding: 0 2em 3em; 
 			counter-increment: part;
+		}
+		.parts > .placeholder {
+			background: #f5f5f5;
+			border: 5px dashed #234;
 		}
 		.part-header {
 			float: left;
@@ -59,44 +64,41 @@
 		}
 		.cases {
 			display: flex;
-			flex-flow: row wrap;
-			counter-reset: case; 
+			flex-flow: row wrap; 
 		}
 		.case {
 			display: flex;
 			flex-flow: column;
-			counter-increment: case;
 			counter-increment: totalcase;
 		}
 		.nocases .part .cases {
 			display: none;
 		}
 		.case,
-		.cases .placeholder,
+		.cases .sortable-placeholder,
 		.cases .add {
 			position: relative;
 			margin: 1em;
-			overflow: hidden;
 			width: 25%;
 			min-width: 300px;
 		}
 		.bigimg .case,
-		.bigimg .cases .placeholder,
+		.bigimg .cases .sortable-placeholder,
 		.bigimg .cases .add {
 			width: 15%;
 			min-width: 200px;
+		}
+		.cases .sortable-placeholder {
+			background: #f5f5f5;
+			border: 1px dashed grey;
 		}
 		.case.pano {
 			width: auto !important;
 			min-width: auto !important;
 		}
-		.cases > .placeholder {
-			background: #f5f5f5;
-			border: 1px dashed grey;
-		}
-		.parts > .placeholder {
-			background: #f5f5f5;
-			border: 5px dashed #234;
+		.case .img {
+			counter-increment: partcase;
+			position: relative;
 		}
 		.case img {
 			width: 100%;
@@ -115,10 +117,23 @@
 			display: none;
 		}
 
+		.handle {
+			border: .5em dotted #EEEEEE;
+			background: #f5f5f5;
+			width: 1em;
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: -1.9em;
+		}
+		.nomanage .handle {
+			display: none;
+		}
+
 		/* numerotation */
 
 		.part-header::before {
-			content: counter(part);
+			content: counter(part, decimal-leading-zero);
 			font-size: 1em;
 			color: #aaa;
 			position: absolute;
@@ -127,7 +142,7 @@
 			text-align: right;
 		}
 		.case::after {
-			content: counter(part)"."counter(case)" ("counter(totalcase, decimal-leading-zero) ")";
+			content: "P"counter(totalcase, decimal-leading-zero)" (S"counter(part, decimal-leading-zero)"-"counter(partcase, decimal-leading-zero)")";
 			top: 0; bottom: 0;
 			right: 0;
 			color: #555;
@@ -151,11 +166,11 @@
 			top: 0;
 			z-index: 999;
 		}
-		.noediting .btn.partdel,
-		.noediting .btn.add {
+		.nomanage .btn.partdel,
+		.nomanage .btn.add {
 			display: none;
 		}
-		.caseedit {
+		.overlay {
 			position: absolute;
 			right: 0; left: 0;
 			top: 0; bottom: 0;
@@ -166,16 +181,16 @@
 			justify-content: center;
 			z-index: 999;
 		}
-		.noediting .caseedit {
+		.nomanage .overlay {
 			display: none;
 		}
 		.btn.delete::after,
-		.caseedit .delete::after {
+		.overlay .delete::after {
 			content: "✕";
 			font-size: 2em;
 			text-align: center;
 		}
-		.caseedit .pano::after {
+		.overlay .pano::after {
 			content: "⇔";
 			font-size: 2em;
 			text-align: center;
@@ -241,7 +256,7 @@
 			padding-right: .5em;
 		}
 		.notexts .btn-texts::before,
-		.noediting .btn-editing::before,
+		.nomanage .btn-manage::before,
 		.bigimg .btn-bigimg::before,
 		.nocases .btn-cases::before {
 			content: "☐";
@@ -267,14 +282,14 @@
 		<header class="header">
 			<div contenteditable="true"><h1>Storyboard</h1></div>
 			<ul>
-				<li><div class="btn toggle btn-editing">Editing</div></li>
+				<li><div class="btn toggle btn-manage">Manage</div></li>
 				<li><div class="btn toggle btn-cases">Cases</div></li>
 				<li><div class="btn toggle btn-texts">Texts</div></li>
 				<li><div class="btn toggle btn-bigimg">Big picture</div></li>
 				<li><a class="btn" href="https://github.com/nliautaud/storynator" target="_blank">Github</a></li>
 			</ul>
 		</header>
-		<ul class="parts" data-sortable-id="0" aria-dropeffect="move">
+		<ul class="parts sortable" data-sortable-id="0" aria-dropeffect="move">
 			<div class="btn add add-part"></div>
 		</ul>
 	</div>
@@ -282,73 +297,90 @@
 	<script src="./story_files/_html.sortable.min.js"></script>
 	<script id="part-tpl" type="text/x-custom-template">
 		<li class="part">
+			<div class="handle"></div>
 			<div class="btn partdel"></div>
 			<header class="part-header">
 				<h1 class="part-title" contenteditable="true">Title</h1>
 				<p class="part-overview" contenteditable="true">Overview</p>
 			</header>
-			<ul class="cases">
+			<ul class="cases sortable connected">
 				<div class="btn add add-case"></div>
 			</ul>
 		</li>
 	</script>
 	<script id="case-tpl" type="text/x-custom-template">
 		<li class="case">
-			<img src="./story_files/_placeholder.png">
+			<div class="img"><img src="./story_files/_placeholder.png"></div>
 			<p contenteditable="true">caption</p>
 		</li>
+	</script>
+	<script id="overlay-tpl" type="text/x-custom-template">
+		<div class="overlay">
+			<div class="btn delete"></div>
+			<div class="btn pano"></div>
+		</div>
 	</script>
 	<script type="text/javascript" charset="utf-8" async="" defer="">
 		$(function() {
 			var case_tpl = $('#case-tpl').html();
 			var part_tpl = $('#part-tpl').html();
+			var overlay_tpl = $('#overlay-tpl').html();
 			var story = $('.story');
-			var dropimage = true;
+			var dragcase = false;
 
-			$('.parts').sortable({
+			var onstart = function(e, ui) {
+				dragcase = true;
+			};
+			var onstop = function(e, ui) {
+				dragcase = false;
+			};
+			$('.parts.sortable').sortable({
 				forcePlaceholderSize: false,
-				items: 'li',
+				handle: '.handle',
+				items: '.part',
 				placeholderClass: 'placeholder'
 			});
-			$('.cases').sortable({
+			$('.cases.sortable').sortable({
 				forcePlaceholderSize: true,
-				items: 'li',
-				placeholderClass: 'placeholder',
-				connectWith: 'parts' //be able to drag cases in other parts
-			}).bind('sortstop', function(e, ui) {
-				dropimage = true;
-			});
+				connectWith: '.parts',
+				handle: '.img',
+				items: '.case',
+				placeholderClass: 'placeholder'
+			}).bind('sortstart', onstart).bind('sortstop', onstop);
 
-			// add
+			//*/// add
 
 			story.delegate('.add-case', 'click', function(e){
 				$(case_tpl).insertBefore($(this));
-				$('.cases').sortable();
+				$('.cases.sortable')
+					.sortable('reload')
+					.bind('sortstart', onstart)
+					.bind('sortstop', onstop);
 			});
 			story.delegate('.add-part', 'click', function(e){
 				$(part_tpl).find('.cases').prepend(case_tpl);
 				$(part_tpl).insertBefore($(this));
-				$('.parts').sortable();
+				$('.parts.sortable').sortable('reload');
 			});
 
-			// case edit & part delete
+			//*/// case overlay & part delete
 
-			var edittpl = '<div class="caseedit"><div class="btn delete"></div><div class="btn pano"></div></div>';
-			story.delegate('.case img', 'click', function(e){
-				$('.caseedit').remove();
-				$(this).parent().prepend(edittpl);
+			story.delegate('.case .img', 'click', function(event){
+				$('.overlay').remove();
+				$(this).prepend(overlay_tpl);
+    			event.stopPropagation();
 			});
-			story.delegate('.caseedit', 'click', function(e){
-				$('.caseedit').remove();
+			$(window).on('click', function() {
+				$('.overlay').remove();
 			});
-			story.delegate('.caseedit .delete', 'click', function(e){
+			story.delegate('.overlay .delete', 'click', function(e){
 				$(this).closest('.case').animate({
 					opacity: 0, width: 0, minWidth: 0
 				}, function() {
 					$(this).closest('.case').remove();
 				});
 			});
-			story.delegate('.caseedit .pano', 'click', function(e){
+			story.delegate('.overlay .pano', 'click', function(e){
 				$(this).closest('.case').toggleClass('pano');
 			});
 			story.delegate('.part>.partdel', 'click', function(e){
@@ -359,7 +391,7 @@
 				});
 			});
 
-			// menu
+			//*/// menu
 
 			$('.btn-cases').on('click', function () {
 				story.toggleClass('nocases');
@@ -367,42 +399,41 @@
 			$('.btn-texts').on('click', function () {
 				story.toggleClass('notexts');
 			});
-			$('.btn-editing').on('click', function () {
-				story.toggleClass('noediting');
+			$('.btn-manage').on('click', function () {
+				story.toggleClass('nomanage');
+				var toggle = story.hasClass('nomanage') ? 'disable' : 'enable';
+				$('.cases.sortable').sortable(toggle);
+				$('.parts.sortable').sortable(toggle);
 			});
 			$('.btn-bigimg').on('click', function () {
 				story.toggleClass('bigimg');
 			});
 
-			// drop image
+			//*/// drop image
 
-			story.delegate('.case img', 'dragstart', function(e){
-				dropimage = false;
-			});
 			story.delegate('.case img', 'dragenter', function(e){
-				if(dropimage) {
+				if(!dragcase) {
 					e.stopPropagation();
 					e.preventDefault();
 					$(this).addClass('dragenter');
 				}
 			});
 			story.delegate('.case img', 'dragleave', function(e){
-				if(dropimage) $(this).removeClass('dragenter');
+				if(!dragcase) $(this).removeClass('dragenter');
 			});
 			story.delegate('.case img', 'dragover', function(e){
-				if(dropimage) {
+				if(!dragcase) {
 					e.stopPropagation();
 					e.preventDefault();
 				}
 			});
 			story.delegate('.case img', 'drop', function(e){
-				if(dropimage) {
+				if(!dragcase) {
 					e.preventDefault();
 					var files = e.originalEvent.dataTransfer.files;
 					$(this).removeClass('dragenter');
 					$(this).attr('src', 'story_files/' + files[0].name);
 				}
-				dropimage = true;
 			});
 		});
 	</script>
