@@ -1,4 +1,10 @@
-A simple html5 storyboard editor, with drag and drop and direct text editing.
+A simple local html5 storyboard editor, with drag and drop and direct text editing.
+
+Demo : https://cdn.rawgit.com/nliautaud/storynator/master/story.html (dropping images will not work online)
+
+### Installation
+
+Open the demo and save the page.
 
 ### Managing cases and parts
 
@@ -26,7 +32,7 @@ You can apply an image by dropping a file onto it. The image files _**must**_ be
 
 ### Saving & sharing
 
-Save the page. Like just ''Ctrl+S'' or ''Cmd+S''. And overwrite the old one.
+Save the page. Like just ''Ctrl+S'' or ''Cmd+S''. Overwrite the old one if you want.
 
 The project files (system files and storyboard images) are contained on a sibling directory (``story_files/`` by default). This directory name rely on the browser and OS implementations, so different browsers and OS may have different behaviors.
 
