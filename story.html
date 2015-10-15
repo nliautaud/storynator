@@ -96,23 +96,26 @@
 			width: auto !important;
 			min-width: auto !important;
 		}
-		.case .img {
+		.case-img {
 			counter-increment: partcase;
 			position: relative;
 		}
-		.case img {
+		.case-img img {
 			width: 100%;
 		}
-		.case img.dragenter {
+		.case-img img.dragenter {
 			outline: 5px solid #00796B;
 		}
-		.case p {
+		.case-text {
 			position: relative;
 			padding: .5em 0;
-			margin-bottom: 0;
+		}
+		.case-text p,
+		.case-text div {
+			padding: .5em 0;
 		}
 		.notexts .part-overview,
-		.notexts .case p,
+		.notexts .case-text,
 		.notexts .case::after {
 			display: none;
 		}
@@ -310,8 +313,8 @@
 	</script>
 	<script id="case-tpl" type="text/x-custom-template">
 		<li class="case">
-			<div class="img"><img src="./story_files/_placeholder.png"></div>
-			<p contenteditable="true">caption</p>
+			<div class="case-img"><img src="./story_files/_placeholder.png"></div>
+			<div class="case-text" contenteditable="true">caption</div>
 		</li>
 	</script>
 	<script id="overlay-tpl" type="text/x-custom-template">
@@ -365,7 +368,7 @@
 
 			//*/// case overlay & part delete
 
-			story.delegate('.case .img', 'click', function(event){
+			story.delegate('.case-img', 'click', function(event){
 				$('.overlay').remove();
 				$(this).prepend(overlay_tpl);
     			event.stopPropagation();
