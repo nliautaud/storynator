@@ -435,6 +435,27 @@
 					$(this).attr('src', 'story_files/' + files[0].name);
 				}
 			});
+
+			//*/// shortcuts
+
+			function cleanup() {
+				var attrs = [
+					'data-sortable-id', 'data-item-sortable-id',
+					'role', 'aria-grabbed', 'aria-dropeffect',
+					'draggable', 'style'];
+				$.each(attrs, function(id, val){
+					$('*['+val+']').removeAttr(val);
+				});
+			}
+			$(window).on('keydown', function(event) {
+				if (event.ctrlKey || event.metaKey) {
+					switch (String.fromCharCode(event.which).toLowerCase()) {
+					case 'q':
+						cleanup();
+						alert('cleaned');
+					}
+				}
+			});
 		});
 	</script>
 
