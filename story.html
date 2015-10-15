@@ -20,23 +20,6 @@
 			padding: 0;
 			list-style: none;
 		}
-		.info {
-			padding: 4em;
-			margin: auto;
-			background: #fff;
-			max-width: 40em;
-			box-shadow: 0 0 1px;
-			max-height: 99em;
-			opacity: 1;
-			visibility: visible;
-			transition: all .2s ease-in-out, visibility .2s 0s linear;
-		}
-		.noinfo .info {
-			max-height: 0;
-			opacity: 0;
-			padding: 0 4em;
-			visibility: hidden;
-		}
 		ul.parts {
 			margin-top: 8em !important;
 			font-size: 11px;
@@ -250,10 +233,10 @@
 		.header li {
 			display: inline-block;
 		}
-		.header a {
-			padding: .5em 1em;
+		.header .btn {
+			padding: 0 1em;
 		}
-		.header a::before {
+		.toggle::before {
 			font-weight: 300;
 			content: "☑";
 			padding-right: .5em;
@@ -281,46 +264,17 @@
 	</style>
 </head>
 <body>
-	<div class="story noinfo">
+	<div class="story">
 		<header class="header">
 			<div contenteditable="true"><h1>Storyboard</h1></div>
 			<ul>
-				<li><a class="btn btn-editing">Editing</a></li>
-				<li><a class="btn btn-cases">Cases</a></li>
-				<li><a class="btn btn-texts">Texts</a></li>
-				<li><a class="btn btn-bigimg">Big picture</a></li>
-				<li><a class="btn btn-info">Info</a></li>
+				<li><div class="btn toggle btn-editing">Editing</div></li>
+				<li><div class="btn toggle btn-cases">Cases</div></li>
+				<li><div class="btn toggle btn-texts">Texts</div></li>
+				<li><div class="btn toggle btn-bigimg">Big picture</div></li>
+				<li><a class="btn" href="https://github.com/nliautaud/storynator" target="_blank">Github</a></li>
 			</ul>
 		</header>
-		<div class="info">
-		<p>That's a dumb fucking cool storyboard editor. Direct text editing, drag and drop things.
-		<p>La mécanique du plastique powaa.</p>
-			<h2>Menu</h2>
-			<ul>
-				<li>Editing : show the buttons to add, delete and edit new parts or cases.</li>
-				<li>Cases : show / hide cases to focus on the parts.</li>
-				<li>Texts : show / hide parts and cases texts.</li>
-				<li>Big picture : switch between two sizes of cases.</li>
-			</ul>
-			<h2>Adding and deleting</h2>
-			<p>Add new parts or cases with the buttons "ADD A NEW thing".
-			<p>Delete parts by clicking on the top left cross.
-			<p><br>You have access to the cases options by clicking on them in edit mode.
-			<p>The cross icon delete the case, the arrow icon switch the case to "pano" mode (no width limit).</p>
-			<h2>Text editing</h2>
-			<p>The texts are directly editables. You can use <b>bold</b>, <i>italic</i> and <u>underline</u> with the usual keyboard shortcuts.
-			<p>(you can edit the storyboard title, the parts titles and overviews, and the cases captions)
-			<h2>Reordering things</h2>
-			<p>Just drag & drop.
-			<h2>Images</h2>
-			<p>You can load an image on a case by dropping a file onto it.
-			<p>-> The image files <b><u>must</u></b> be on the <code>story_files/</code> directory and dropped from there.
-			<h2>Saving</h2>
-			Save the file. Like Ctrl+S or Cmd+S. And overwrite the old one.
-			<h2>TODO / bugs</h2>
-			<p contenteditable="true">Cette zone est éditable, pour rajouter vite fait des infos.</p>
-
-		</div>
 		<ul class="parts" data-sortable-id="0" aria-dropeffect="move">
 			<div class="btn add add-part"></div>
 		</ul>
@@ -419,9 +373,6 @@
 			});
 			$('.btn-bigimg').on('click', function () {
 				story.toggleClass('bigimg');
-			});
-			$('.btn-info').on('click', function(e){
-				story.toggleClass('noinfo');
 			});
 
 			// drop image
