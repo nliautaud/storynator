@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<!-- saved from url=(0098)file:///E:/Dropbox/lamecaniqueduplastique/projet_karl/01%20-%20preproduction/storyboard/story.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<link rel="stylesheet" href="">
+	<style type="text/css" media="screen">
+		@import url(https://fonts.googleapis.com/css?family=Anonymous+Pro:400,700);
+
+		.story {
+			box-sizing: border-box;
+			font: 400 13px/1.25 "Anonymous Pro";
+			padding-top: 3em;
+		}
+		.story .parts,
+		.story .parts ul,
+		.story p {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+		.info {
+			padding: 4em;
+			margin: auto;
+			background: #fff;
+			max-width: 40em;
+			box-shadow: 0 0 1px;
+			max-height: 99em;
+			opacity: 1;
+			visibility: visible;
+			transition: all .2s ease-in-out, visibility .2s 0s linear;
+		}
+		.noinfo .info {
+			max-height: 0;
+			opacity: 0;
+			padding: 0 4em;
+			visibility: hidden;
+		}
+		ul.parts {
+			margin-top: 8em !important;
+			font-size: 11px;
+			counter-reset: part;
+			counter-reset: totalcase;
+		}
+		.part {
+			position: relative;
+			clear: both;
+		}
+		.part,
+		.parts > .placeholder {
+			position: relative;
+			border-left: 1em solid #BDBDBD;
+			margin: 1em 2em;
+			padding: 0 2em 3em; 
+			counter-increment: part;
+		}
+		.part-header {
+			float: left;
+			width: 15%;
+			max-width: 15em;
+			padding-right: 4em;
+		}
+		.nocases .part {
+			padding-bottom: 0;
+		}
+		.nocases .part-header {
+			float: none;
+			width: auto;
+			max-width: 40em;
+		}
+		.part-title {
+			margin-top: 0;
+			font-size: 11px;
+			font-weight: 700;
+			text-shadow: 0;
+		}
+		.cases {
+			display: flex;
+			flex-flow: row wrap;
+			counter-reset: case; 
+		}
+		.case {
+			display: flex;
+			flex-flow: column;
+			counter-increment: case;
+			counter-increment: totalcase;
+		}
+		.nocases .part .cases {
+			display: none;
+		}
+		.case,
+		.cases .placeholder,
+		.cases .add {
+			position: relative;
+			margin: 1em;
+			overflow: hidden;
+			width: 25%;
+			min-width: 300px;
+		}
+		.bigimg .case,
+		.bigimg .cases .placeholder,
+		.bigimg .cases .add {
+			width: 15%;
+			min-width: 200px;
+		}
+		.case.pano {
+			width: auto !important;
+			min-width: auto !important;
+		}
+		.cases > .placeholder {
+			background: #f5f5f5;
+			border: 1px dashed grey;
+		}
+		.parts > .placeholder {
+			background: #f5f5f5;
+			border: 5px dashed #234;
+		}
+		.case img {
+			width: 100%;
+		}
+		.case img.dragenter {
+			outline: 5px solid #00796B;
+		}
+		.case p {
+			position: relative;
+			padding: .5em 0;
+			margin-bottom: 0;
+		}
+		.notexts .part-overview,
+		.notexts .case p,
+		.notexts .case::after {
+			display: none;
+		}
+
+		/* numerotation */
+
+		.part-header::before {
+			content: counter(part);
+			font-size: 1em;
+			color: #aaa;
+			position: absolute;
+			top: 0;
+			left: .5em;
+			text-align: right;
+		}
+		.case::after {
+			content: counter(part)"."counter(case)" ("counter(totalcase, decimal-leading-zero) ")";
+			top: 0; bottom: 0;
+			right: 0;
+			color: #555;
+		}
+
+		/* buttons */
+
+		.btn,
+		.btn:visited {
+			cursor: pointer;
+			text-decoration: none;
+			color: #00796B;
+			font-weight: 700;
+		}
+		.btn:hover {
+			color: #FF5722;
+		}
+		.btn.partdel {
+			position: absolute;
+			left: -1.8em;
+			top: 0;
+			z-index: 999;
+		}
+		.noediting .btn.partdel,
+		.noediting .btn.add {
+			display: none;
+		}
+		.caseedit {
+			position: absolute;
+			right: 0; left: 0;
+			top: 0; bottom: 0;
+			background: rgba(255,255,255,.5);
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+		}
+		.noediting .caseedit {
+			display: none;
+		}
+		.btn.delete::after,
+		.caseedit .delete::after {
+			content: "✕";
+			font-size: 2em;
+			text-align: center;
+		}
+		.caseedit .pano::after {
+			content: "⇔";
+			font-size: 2em;
+			text-align: center;
+		}
+		.add {
+			font-size: 1.2em;
+		}
+		.add-part {
+			display: inline;
+			text-transform: uppercase;
+			padding: 2em;
+		}
+		.add-case {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			text-transform: uppercase;
+			padding: 1em 0;
+			border: 1px solid #eee;
+			background: #f5f5f5;
+			border-radius: 3px;
+		}
+		.add-part::after {
+			content: "Add a new part";
+		}
+		.add-case::after {
+			content: "Add a new case";
+		}
+
+		/* header / display switches */
+
+		.header {
+			position: fixed;
+			background: #fff;
+			top: 0;
+			right: 0;
+			left: 0;
+			z-index: 999;
+			box-shadow: 0 0 1px;
+			padding: 1em;
+		}
+		.header div,
+		.header h1,
+		.header ul {
+			display: inline-block;
+		}
+		.header h1 {
+			margin: 0;
+		}
+		.header ul {
+			float: right;
+			margin-top: .5em;
+		}
+		.header li {
+			display: inline-block;
+		}
+		.header a {
+			padding: .5em 1em;
+		}
+		.header a::before {
+			font-weight: 300;
+			content: "☑";
+			padding-right: .5em;
+		}
+		.notexts .btn-texts::before,
+		.noediting .btn-editing::before,
+		.bigimg .btn-bigimg::before,
+		.nocases .btn-cases::before {
+			content: "☐";
+		}
+
+		@media only screen and (max-width : 600px) {
+			.part {
+				margin-left: 0;
+				margin-right: 0;
+			}
+			.part-header {
+				float: none;
+				width: auto;
+				max-width: 40em;
+				padding-right: 0;
+				padding-bottom: 4em;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="story noinfo">
+		<header class="header">
+			<div contenteditable="true"><h1>Storyboard</h1></div>
+			<ul>
+				<li><a class="btn btn-editing">Editing</a></li>
+				<li><a class="btn btn-cases">Cases</a></li>
+				<li><a class="btn btn-texts">Texts</a></li>
+				<li><a class="btn btn-bigimg">Big picture</a></li>
+				<li><a class="btn btn-info">Info</a></li>
+			</ul>
+		</header>
+		<div class="info">
+		<p>That's a dumb fucking cool storyboard editor. Direct text editing, drag and drop things.
+		<p>La mécanique du plastique powaa.</p>
+			<h2>Menu</h2>
+			<ul>
+				<li>Editing : show the buttons to add, delete and edit new parts or cases.</li>
+				<li>Cases : show / hide cases to focus on the parts.</li>
+				<li>Texts : show / hide parts and cases texts.</li>
+				<li>Big picture : switch between two sizes of cases.</li>
+			</ul>
+			<h2>Adding and deleting</h2>
+			<p>Add new parts or cases with the buttons "ADD A NEW thing".
+			<p>Delete parts by clicking on the top left cross.
+			<p><br>You have access to the cases options by clicking on them in edit mode.
+			<p>The cross icon delete the case, the arrow icon switch the case to "pano" mode (no width limit).</p>
+			<h2>Text editing</h2>
+			<p>The texts are directly editables. You can use <b>bold</b>, <i>italic</i> and <u>underline</u> with the usual keyboard shortcuts.
+			<p>(you can edit the storyboard title, the parts titles and overviews, and the cases captions)
+			<h2>Reordering things</h2>
+			<p>Just drag & drop.
+			<h2>Images</h2>
+			<p>You can load an image on a case by dropping a file onto it.
+			<p>-> The image files <b><u>must</u></b> be on the <code>story_files/</code> directory and dropped from there.
+			<h2>Saving</h2>
+			Save the file. Like Ctrl+S or Cmd+S. And overwrite the old one.
+			<h2>TODO / bugs</h2>
+			<p contenteditable="true">Cette zone est éditable, pour rajouter vite fait des infos.</p>
+
+		</div>
+		<ul class="parts" data-sortable-id="0" aria-dropeffect="move">
+			<div class="btn add add-part"></div>
+		</ul>
+	</div>
+	<script src="./story_files/_jquery-2.1.4.min.js"></script>
+	<script src="./story_files/_html.sortable.min.js"></script>
+	<script id="part-tpl" type="text/x-custom-template">
+		<li class="part">
+			<div class="btn partdel"></div>
+			<header class="part-header">
+				<h1 class="part-title" contenteditable="true">Title</h1>
+				<p class="part-overview" contenteditable="true">Overview</p>
+			</header>
+			<ul class="cases">
+				<div class="btn add add-case"></div>
+			</ul>
+		</li>
+	</script>
+	<script id="case-tpl" type="text/x-custom-template">
+		<li class="case">
+			<img src="./story_files/_placeholder.png">
+			<p contenteditable="true">caption</p>
+		</li>
+	</script>
+	<script type="text/javascript" charset="utf-8" async="" defer="">
+		$(function() {
+			var case_tpl = $('#case-tpl').html();
+			var part_tpl = $('#part-tpl').html();
+			var story = $('.story');
+			var dropimage = true;
+
+			$('.parts').sortable({
+				forcePlaceholderSize: false,
+				items: 'li',
+				placeholderClass: 'placeholder'
+			});
+			$('.cases').sortable({
+				forcePlaceholderSize: true,
+				items: 'li',
+				placeholderClass: 'placeholder',
+				connectWith: 'parts' //be able to drag cases in other parts
+			}).bind('sortstop', function(e, ui) {
+				dropimage = true;
+			});
+
+			// add
+
+			story.delegate('.add-case', 'click', function(e){
+				$(case_tpl).insertBefore($(this));
+				$('.cases').sortable();
+			});
+			story.delegate('.add-part', 'click', function(e){
+				$(part_tpl).find('.cases').prepend(case_tpl);
+				$(part_tpl).insertBefore($(this));
+				$('.parts').sortable();
+			});
+
+			// case edit & part delete
+
+			var edittpl = '<div class="caseedit"><div class="btn delete"></div><div class="btn pano"></div></div>';
+			story.delegate('.case img', 'click', function(e){
+				$('.caseedit').remove();
+				$(this).parent().prepend(edittpl);
+			});
+			story.delegate('.caseedit', 'click', function(e){
+				$('.caseedit').remove();
+			});
+			story.delegate('.caseedit .delete', 'click', function(e){
+				$(this).closest('.case').animate({
+					opacity: 0, width: 0, minWidth: 0
+				}, function() {
+					$(this).closest('.case').remove();
+				});
+			});
+			story.delegate('.caseedit .pano', 'click', function(e){
+				$(this).closest('.case').toggleClass('pano');
+			});
+			story.delegate('.part>.partdel', 'click', function(e){
+				$(this).parent().animate({
+					opacity: 0, height: 0
+				}, function() {
+					$(this).remove();
+				});
+			});
+
+			// menu
+
+			$('.btn-cases').on('click', function () {
+				story.toggleClass('nocases');
+			});
+			$('.btn-texts').on('click', function () {
+				story.toggleClass('notexts');
+			});
+			$('.btn-editing').on('click', function () {
+				story.toggleClass('noediting');
+			});
+			$('.btn-bigimg').on('click', function () {
+				story.toggleClass('bigimg');
+			});
+			$('.btn-info').on('click', function(e){
+				story.toggleClass('noinfo');
+			});
+
+			// drop image
+
+			story.delegate('.case img', 'dragstart', function(e){
+				dropimage = false;
+			});
+			story.delegate('.case img', 'dragenter', function(e){
+				if(dropimage) {
+					e.stopPropagation();
+					e.preventDefault();
+					$(this).addClass('dragenter');
+				}
+			});
+			story.delegate('.case img', 'dragleave', function(e){
+				if(dropimage) $(this).removeClass('dragenter');
+			});
+			story.delegate('.case img', 'dragover', function(e){
+				if(dropimage) {
+					e.stopPropagation();
+					e.preventDefault();
+				}
+			});
+			story.delegate('.case img', 'drop', function(e){
+				if(dropimage) {
+					e.preventDefault();
+					var files = e.originalEvent.dataTransfer.files;
+					$(this).removeClass('dragenter');
+					$(this).attr('src', 'story_files/' + files[0].name);
+				}
+				dropimage = true;
+			});
+		});
+	</script>
+
+</body></html>
