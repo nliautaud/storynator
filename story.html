@@ -491,8 +491,10 @@
 
 			//*/// drop image
 
-			story.delegate('.case img', 'dragenter', function(e){
+			story.delegate('.case', 'dragenter', function(e){
 				$('.overlay').remove();
+			});
+			story.delegate('.case img', 'dragenter', function(e){
 				if(!dragcase) {
 					e.stopPropagation();
 					e.preventDefault();
