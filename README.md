@@ -2,7 +2,7 @@ A simple local html5 storyboard editor, with drag and drop and direct text editi
 
 [Demo][demo]
 
-[demo]: https://cdn.rawgit.com/nliautaud/storynator/47536425054c8baed92235b9e516ef54fac72979/story.html
+[demo]: https://cdn.rawgit.com/nliautaud/storynator/82b4ccce43b37ee3e66cd422af3799d3e81d78c2/story.html
 
 ### Installation
 
@@ -10,17 +10,22 @@ Open the [demo][demo] and save the page.
 
 ### Managing cases and parts
 
-Add, reorder or delete parts and cases by using the buttons shown with the option *Manage*. Click on a case to show more options.
+Add and delete parts and cases by using the buttons shown with the option *Manage*.
 
-Drag & drop to reorder things. Use the left handle for the parts (hiding the cases may help for that too).
+Drag & drop to reorder things. Use the handle for to drag the parts (folding them first may help for that).
 
-Whithout the management mode, you can still edit texts and reorder cases.
+Whithout the management mode, you can still edit texts and manage cases.
+
+Click on a case to show more options.
+- Delete the case.
+- Disable/enable the case width limitation.
+- Define the case as a the same shot than the previous one, or as a cut.
 
 ### Text editing
 
 The texts are directly editables.
 
-Depending on your browser, you may apply **bold**, *italic* and _underline_ with the usual keyboard shortcuts.
+Depending on your browser, you may apply **bold**, *italic* and _underline_ with the usual keyboard shortcuts, and use undo/redo shortcut.
 
 ### Images
 
@@ -28,9 +33,11 @@ You can apply an image by dropping a file onto it. The image files _**must**_ be
 
 ### Display options
 
-- *Cases* show / hide the cases to focus on the parts.
 - *Texts* : show / hide parts and cases texts.
-- *Big picture* : switch between two sizes of cases.
+- *Numbers* : show / hide parts and cases numbering.
+- *Big images* : switch between two sizes of cases.
+
+The parts may be folded or opened with the button at the top or by clicking on the arrow next to their title.
 
 ### Saving & sharing
 
