@@ -6,98 +6,221 @@
 	<link rel="stylesheet" href="">
 	<style type="text/css" media="screen">
 		@import url(https://fonts.googleapis.com/css?family=Anonymous+Pro:400,700);
-
-		.story {
+		body {
+			padding: 0;
+			margin: 0;
 			box-sizing: border-box;
-			font: 400 13px/1.25 "Anonymous Pro";
-			padding-top: 3em;
+			font: 400 11px/1.25 "Anonymous Pro";
 		}
+		.story {
+			counter-reset: part shot shot-total case case-total;
+			padding: 1em 1%;
+		}
+
+		/* header */
+
+		.header {
+			position: fixed;
+			background: #fff;
+			top: 0;
+			right: 0;
+			left: 0;
+			z-index: 999;
+			box-shadow: 0 0 1px;
+			padding: .5em;
+			overflow: auto;
+		}
+		.header.static {
+			position: static;
+			box-shadow: none;
+		}
+		.header * {
+			margin: 0;
+			padding: 0;
+			display: inline-block;
+		}
+		.header h1 {
+			padding: .25em .5em;
+		}
+		.header ul {
+			float: right;
+			margin: 1.1em 0;
+		}
+		.header .btn {
+			padding: 0 1em;
+		}
+		.toggle::before {
+			font-weight: 300;
+			padding-right: .5em;
+		}
+		.toggle.off::before {
+			content: "☐";
+		}
+
+		/* PARTS */
+
 		.story .parts,
-		.story .parts ul,
-		.story p {
+		.story .parts ul {
 			margin: 0;
 			padding: 0;
 			list-style: none;
 		}
-		ul.parts {
-			margin-top: 8em !important;
-			font-size: 11px;
-			counter-reset: part;
-			counter-reset: totalcase;
-		}
-		.part {
-			position: relative;
-			clear: both;
-			counter-reset: partcase;
+		.story .parts {
+			padding: 3em 0;
 		}
 		.part,
-		.part-placeholder {
+		.add-part {
 			position: relative;
-			border-left: 1em solid #BDBDBD;
-			margin: 1em 2em;
-			padding: 0 2em 3em; 
+			clear: both;
+			counter-reset: shot 1;
 			counter-increment: part;
 		}
-		.part-placeholder {
-			background: #f5f5f5;
-			border: 5px dashed #234;
+		.part-header,
+		.part-placeholder,
+		.add-part  {
+			position: relative;
+			min-height: 2.75em;
+			border-radius: 3px;
+			margin: 1em;
+			padding: 1em;
+			box-sizing: border-box;
+		}
+		.part-header,
+		.add-part {
+			border: 1px solid #ccc;
 		}
 		.part-header {
-			float: left;
-			width: 15%;
-			max-width: 15em;
-			padding-right: 4em;
+			border-left-width: .5em;
+			padding: .25em 1em;
 		}
-		.nocases .part {
-			padding-bottom: 0;
-		}
-		.nocases .part-header {
-			float: none;
-			width: auto;
-			max-width: 40em;
+		.part-placeholder {
+			border: 2px solid #005249;
 		}
 		.part-title {
-			margin-top: 0;
-			font-size: 11px;
+			display: inline-block;
+			padding: .5em;
+			margin: 0 4.5em 0 0;
+			font-size: 13px;
 			font-weight: 700;
-			text-shadow: 0;
 		}
+		.part-overview {
+			max-width: 40em;
+    		margin: 0 1.5em 0 0;
+			padding: .25em .5em .75em;
+		}
+		.part-handle {
+			border: .8em dotted #00796B;
+			background: #005249;
+			position: absolute;
+			top: -1px; bottom: -1px;
+			left: -1.4em;
+			border-radius: .6em 0 0 .6em;
+		}
+		.part-header::before,
+		.part-delete,
+		.part-close {
+			font-weight: 700;
+			position: absolute;
+			top: 0; bottom: 0;
+			margin: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.part-header::before {
+			content: "PART "counter(part, decimal-leading-zero);
+			right: 2em;
+		}
+		.part-delete {
+			right: -1.75em;
+		}
+		.part-close {
+			right: .25em;
+			color: #ccc;
+			cursor: pointer;
+			font-size: 2em;
+		}
+
+		/* CASES */
+
 		.cases {
 			display: flex;
 			flex-flow: row wrap; 
+			overflow: hidden;
 		}
 		.case {
 			display: flex;
 			flex-flow: column;
-			counter-increment: totalcase;
-		}
-		.nocases .part .cases {
-			display: none;
+			counter-increment: case-total case;
 		}
 		.case,
-		.case-placeholder,
-		.cases .add {
+		.case-placeholder {
 			position: relative;
-			margin: 1em;
-			width: 25%;
+			padding: 1em;
+			width: 23%;
 			min-width: 300px;
-		}
-		.bigimg .case,
-		.bigimg .case-placeholder,
-		.bigimg .cases .add {
-			width: 15%;
-			min-width: 200px;
+			border: 1px dashed transparent;
 		}
 		.cases .case-placeholder {
 			background: #f5f5f5;
-			border: 1px dashed grey;
+			border-color: #00796B;
+		}	min-width: 23% !important;
 		}
-		.case.pano {
-			width: auto !important;
-			min-width: auto !important;
+		/* numbers and cuts indicators */
+		.case.cut {
+			counter-reset: case 1;
+			counter-increment: shot;
 		}
+		.case.cut::after {
+			counter-increment: shot-total;
+		}
+		.case::before,
+		.case::after {
+			color: #555;
+		}
+		.case::before,
+		.case.cut~.case.cut::before {
+			position: absolute;
+			bottom: 1em; right: 1em;
+			content: counter(shot-total, decimal-leading-zero);
+		}
+		.case.cut~.case::before {
+			content: none;
+		}
+		.case::after,
+		.case.cut~.case.cut::after {
+			content: " PART "counter(part, decimal-leading-zero)
+					 " SHOT "counter(shot, decimal-leading-zero);
+		}
+		.case.cut~.case::after {
+			content: "("counter(case)")";
+		}
+		/* cuts indicators */
+		.case .case-img::before {
+			content: " ";
+			position: absolute;
+			left: -2.5em;
+			width: 3em;
+			top: 50%; bottom: 50%;
+			border: 1px solid #ff5722;
+			border-width: 1px 0 0;
+			z-index: -1;
+			transition: width .2s ease-in-out, left .2s ease-in-out;
+		}
+		.case.cut .case-img::before {
+			content: " ";
+			position: absolute;
+			left: -1.25em; width: 0;
+			top: 25%; bottom: 25%;
+			border: 1px dashed #ff5722;
+			border-width: 0 1px 0 0;
+			z-index: -1;
+		}
+		.case:first-child .case-img::before {
+			content: none;
+		}
+		/* case content */
 		.case-img {
-			counter-increment: partcase;
 			position: relative;
 		}
 		.case-img img {
@@ -114,303 +237,250 @@
 		.case-text div {
 			padding: .5em 0;
 		}
+		/* sizing */
+		.case,
+		.case-placeholder,
+		.part-header,
+		.add-part {
+			width: 23%;
+			min-width: 300px;
+			transition: all .2s ease-in-out;
+		}
+		.bigimg .case,
+		.bigimg .case-placeholder,
+		.bigimg .part-header,
+		.bigimg .add-part {
+			width: 15%;
+			min-width: 200px;
+		}
+		.case.ispano {
+			width: auto !important;
+			min-width: 23% !important;
+		}
+		.bigimg .case.ispano {
+			width: auto !important;
+			min-width: 15% !important;
+		}
+
+		/* switches */
+		@keyframes reveal {
+			from {opacity: 0;}
+			to {opacity: 1;}
+		}
+		.overlay {
+			animation-duration: .2s;
+			animation-name: reveal;
+		}
+		.case {
+			animation-duration: .2s;
+			animation-name: reveal;
+			transition: all .2s ease;
+		}
+		.case.remove {
+			min-width: 0;
+			width: 0;
+			opacity: 0;
+		}
+		.part-delete,
+		.part-handle,
+		.btn.add {
+			opacity: 1;
+			visibility: visible;
+			transition: opacity .2s ease-in-out, visibility 0 .2s linear;
+		}
+		.nomanage .part-delete,
+		.nomanage .part-handle,
+		.nomanage .btn.add {
+			opacity: 0;
+			visibility: hidden;
+		}
+		.part-header::before,
+		.case::before,
+		.case::after,
+		.part-overview,
+		.case-text {
+			max-height: 15em;
+			opacity: 1;
+			transition: all .2s ease-in-out;
+		}
 		.notexts .part-overview,
 		.notexts .case-text,
-		.notexts .case::after {
-			display: none;
+		.nonumbers .part-header::before,
+		.nonumbers .case::before,
+		.nonumbers .case::after {
+			opacity: 0;
+			max-height: 0;
+			padding-top: 0;
+			padding-bottom: 0;
+			margin-top: 0;
+			margin-bottom: 0;
 		}
 
-		.handle {
-			border: .5em dotted #EEEEEE;
-			background: #f5f5f5;
-			width: 1em;
-			position: absolute;
-			top: 0;
-			bottom: 0;
-			left: -1.9em;
-		}
-		.nomanage .handle {
-			display: none;
-		}
-
-		/* numerotation */
-
-		.part-header::before {
-			content: counter(part, decimal-leading-zero);
-			font-size: 1em;
-			color: #aaa;
-			position: absolute;
-			top: 0;
-			left: .5em;
-			text-align: right;
-		}
-		.case::after {
-			content: "P"counter(totalcase, decimal-leading-zero)" (S"counter(part, decimal-leading-zero)"-"counter(partcase, decimal-leading-zero)")";
-			top: 0; bottom: 0;
-			right: 0;
-			color: #555;
-		}
-
-		/* buttons */
+		/* BUTTONS */
 
 		.btn,
 		.btn:visited {
+			text-transform: uppercase;
 			cursor: pointer;
 			text-decoration: none;
 			color: #00796B;
 			font-weight: 700;
+			font-size: 1.2em;
+			-webkit-user-select: none;  
+			-moz-user-select: none;    
+			-ms-user-select: none; 
+    		user-select: none;
 		}
 		.btn:hover {
 			color: #FF5722;
-		}
-		.btn.partdel {
-			position: absolute;
-			left: -1.8em;
-			top: 0;
-			z-index: 999;
-		}
-		.nomanage .btn.partdel,
-		.nomanage .btn.add {
-			display: none;
 		}
 		.overlay {
 			position: absolute;
 			right: 0; left: 0;
 			top: 0; bottom: 0;
-			background: rgba(255,255,255,.5);
+			background: rgba(255,255,255,.6);
 			display: flex;
 			flex-direction: column;
 			align-items: center;
 			justify-content: center;
 			z-index: 999;
-		}
-		.nomanage .overlay {
-			display: none;
-		}
-		.btn.delete::after,
-		.overlay .delete::after {
-			content: "✕";
 			font-size: 2em;
-			text-align: center;
 		}
-		.overlay .pano::after {
-			content: "⇔";
-			font-size: 2em;
-			text-align: center;
+		.overlay .btn {
+			font-weight: 300;
 		}
 		.add {
-			font-size: 1.2em;
-		}
-		.add-part {
-			display: inline;
-			text-transform: uppercase;
-			padding: 2em;
-		}
-		.add-case {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			text-transform: uppercase;
-			padding: 1em 0;
-			border: 1px solid #eee;
-			background: #f5f5f5;
+		}
+		.add-case::after {
+			font-size: 1.5em;
+			border: 1px solid #ccc;
 			border-radius: 3px;
+			padding: .5em 1em;
+		}
+
+		/* icons and texts */
+
+		.toggle::before {
+			content: "☑";
+		}
+		.toggle.off::before {
+			content: "☐";
 		}
 		.add-part::after {
 			content: "Add a new part";
 		}
 		.add-case::after {
-			content: "Add a new case";
+			content: "+";
 		}
-
-		/* header / display switches */
-
-		.header {
-			position: fixed;
-			background: #fff;
-			top: 0;
-			right: 0;
-			left: 0;
-			z-index: 999;
-			box-shadow: 0 0 1px;
-			padding: 1em;
+		.part-close::after {
+			content: "▴";
 		}
-		.header div,
-		.header h1,
-		.header ul {
-			display: inline-block;
+		.part.closed .part-close::after {
+			content: "▾";
 		}
-		.header h1 {
-			margin: 0;
+		.toggle-parts::after {
+			content: "▾ Open all parts";
 		}
-		.header ul {
-			float: right;
-			margin-top: .5em;
+		.toggle-parts.close::after {
+			content: "▴ Close all parts";
 		}
-		.header li {
-			display: inline-block;
+		.part-delete::after,
+		.overlay .delete::after {
+			content: "✕";
 		}
-		.header .btn {
-			padding: 0 1em;
+		.overlay .btn-pano::after {
+			content: "⇔";
 		}
-		.toggle::before {
-			font-weight: 300;
-			content: "☑";
-			padding-right: .5em;
+		.case.ispano .btn-pano::after {
+			content: "⇐⇒";
 		}
-		.notexts .btn-texts::before,
-		.nomanage .btn-manage::before,
-		.bigimg .btn-bigimg::before,
-		.nocases .btn-cases::before {
-			content: "☐";
+		.overlay .btn-cut::after {
+			content: "||";
 		}
-
-		@media only screen and (max-width : 600px) {
-			.part {
-				margin-left: 0;
-				margin-right: 0;
-			}
-			.part-header {
-				float: none;
-				width: auto;
-				max-width: 40em;
-				padding-right: 0;
-				padding-bottom: 4em;
-			}
+		.case.cut .btn-cut::after {
+			content: "--";
 		}
 	</style>
 </head>
 <body>
+	<header class="header">
+		<div class="header-title" contenteditable="true"><h1>Storyboard</h1></div>
+		<ul>
+			<li><div class="btn toggle" data-toggle="nomanage">Manage</div></li>
+			<li><div class="btn toggle" data-toggle="notexts">Texts</div></li>
+			<li><div class="btn toggle" data-toggle="nonumbers">Numbers</div></li>
+			<li><div class="btn toggle" data-toggle="bigimg">Big images</div></li>
+			<li><a class="btn" href="https://github.com/nliautaud/storynator" target="_blank">Github</a></li>
+		</ul>
+	</header>
 	<div class="story">
-		<header class="header">
-			<div contenteditable="true"><h1>Storyboard</h1></div>
-			<ul>
-				<li><div class="btn toggle btn-manage">Manage</div></li>
-				<li><div class="btn toggle btn-cases">Cases</div></li>
-				<li><div class="btn toggle btn-texts">Texts</div></li>
-				<li><div class="btn toggle btn-bigimg">Big picture</div></li>
-				<li><a class="btn" href="https://github.com/nliautaud/storynator" target="_blank">Github</a></li>
-			</ul>
-		</header>
-		<ul class="parts sortable" data-sortable-id="0" aria-dropeffect="move">
+		<div class="btn toggle-parts close"></div>
+		<ul class="parts sortable">
 			<div class="btn add add-part"></div>
 		</ul>
 	</div>
 	<script src="./story_files/_jquery-2.1.4.min.js"></script>
 	<script src="./story_files/_html.sortable.min.js"></script>
-	<script id="part-tpl" type="text/x-custom-template">
-		<li class="part">
-			<div class="handle"></div>
-			<div class="btn partdel"></div>
-			<header class="part-header">
-				<h1 class="part-title" contenteditable="true">Title</h1>
-				<p class="part-overview" contenteditable="true">Overview</p>
-			</header>
-			<ul class="cases sortable connected">
-				<div class="btn add add-case"></div>
-			</ul>
-		</li>
-	</script>
-	<script id="case-tpl" type="text/x-custom-template">
-		<li class="case">
-			<div class="case-img"><img src="./story_files/_placeholder.png"></div>
-			<div class="case-text" contenteditable="true">caption</div>
-		</li>
+	<script id="template" type="text/x-custom-template">
+	<li class="part">
+		<header class="part-header">
+			<h1 class="part-title" contenteditable="true">Title</h1>
+			<p class="part-overview" contenteditable="true">Overview</p>
+			<div class="part-handle"></div>
+			<div class="part-close"></div>
+			<div class="btn part-delete"></div>
+		</header>
+		<ul class="cases sortable connected">
+			<li class="case cut">
+				<div class="case-img"><img src="data:image/gif;base64,R0lGODlhEAAJAKIAAMzMzJaWlrGxsaOjo76+vpycnMXFxaqqqiwAAAAAEAAJAAADCwi63P4wykmrvRgmADs="></div>
+				<div class="case-text" contenteditable="true">caption</div>
+			</li>
+			<div class="btn add add-case"></div>
+		</ul>
+	</li>
 	</script>
 	<script id="overlay-tpl" type="text/x-custom-template">
 		<div class="overlay">
 			<div class="btn delete"></div>
-			<div class="btn pano"></div>
+			<div class="btn btn-pano" data-toggle="ispano"></div>
+			<div class="btn btn-cut" data-toggle="cut"></div>
 		</div>
 	</script>
 	<script type="text/javascript" charset="utf-8" async="" defer="">
 		$(function() {
-			var case_tpl = $('#case-tpl').html();
-			var part_tpl = $('#part-tpl').html();
+			var part_tpl = $('#template').html();
+			var case_tpl = $(part_tpl).find('.case').wrap('<p>').parent().html();
 			var overlay_tpl = $('#overlay-tpl').html();
 			var story = $('.story');
 			var dragcase = false;
 
-			var onstart = function(e, ui) {
-				dragcase = true;
-			};
-			var onstop = function(e, ui) {
-				dragcase = false;
-			};
-			$('.parts.sortable').sortable({
-				forcePlaceholderSize: false,
-				handle: '.handle',
-				items: '.part',
-				placeholderClass: 'part-placeholder'
-			});
-			$('.cases.sortable').sortable({
-				forcePlaceholderSize: true,
-				connectWith: '.parts',
-				handle: '.img',
-				items: '.case',
-				placeholderClass: 'case-placeholder'
-			}).bind('sortstart', onstart).bind('sortstop', onstop);
+			$('.header').clone().addClass('static').prependTo('body');
 
-			//*/// add
+			//*/// sortable
 
-			story.delegate('.add-case', 'click', function(e){
-				$(case_tpl).insertBefore($(this));
-				$('.cases.sortable')
-					.sortable('reload')
-					.bind('sortstart', onstart)
-					.bind('sortstop', onstop);
-			});
-			story.delegate('.add-part', 'click', function(e){
-				$(part_tpl).find('.cases').prepend(case_tpl);
-				$(part_tpl).insertBefore($(this));
-				$('.parts.sortable').sortable('reload');
-			});
-
-			//*/// case overlay & part delete
-
-			story.delegate('.case-img', 'click', function(event){
-				$('.overlay').remove();
-				$(this).prepend(overlay_tpl);
-    			event.stopPropagation();
-			});
-			$(window).on('click', function() {
-				$('.overlay').remove();
-			});
-			story.delegate('.overlay .delete', 'click', function(e){
-				$(this).closest('.case').animate({
-					opacity: 0, width: 0, minWidth: 0
-				}, function() {
-					$(this).closest('.case').remove();
+			function sortable() {
+				$('.parts.sortable').sortable({
+					forcePlaceholderSize: false,
+					handle: '.part-handle',
+					items: '.part',
+					placeholderClass: 'part-placeholder'
 				});
-			});
-			story.delegate('.overlay .pano', 'click', function(e){
-				$(this).closest('.case').toggleClass('pano');
-			});
-			story.delegate('.part>.partdel', 'click', function(e){
-				$(this).parent().animate({
-					opacity: 0, height: 0
-				}, function() {
-					$(this).remove();
+				$('.cases.sortable').sortable({
+					forcePlaceholderSize: true,
+					connectWith: '.parts',
+					handle: '.img',
+					items: '.case',
+					placeholderClass: 'case-placeholder'
+				}).bind('sortstart', function(e, ui) {
+					dragcase = true;
+				}).bind('sortstop', function(e, ui) {
+					dragcase = false;
 				});
-			});
-
-			//*/// menu
-
-			$('.btn-cases').on('click', function () {
-				story.toggleClass('nocases');
-			});
-			$('.btn-texts').on('click', function () {
-				story.toggleClass('notexts');
-			});
-			$('.btn-manage').on('click', function () {
-				story.toggleClass('nomanage');
-				var toggle = story.hasClass('nomanage') ? 'disable' : 'enable';
-				$('.cases.sortable').sortable(toggle);
-				$('.parts.sortable').sortable(toggle);
-			});
-			$('.btn-bigimg').on('click', function () {
-				story.toggleClass('bigimg');
-			});
+			}
+			sortable();
 
 			//*/// drop image
 
@@ -437,6 +507,72 @@
 					$(this).removeClass('dragenter');
 					$(this).attr('src', 'story_files/' + files[0].name);
 				}
+			});
+
+			//*/// add
+
+			story.delegate('.add-part', 'click', function(e){
+				$(this).before(part_tpl);
+				$('.part:last-of-type').hide().slideDown(200);
+				sortable();
+			});
+			story.delegate('.add-case', 'click', function(e){
+				$(this).before(case_tpl);
+				sortable();
+			});
+
+			//*/// menu
+
+			$('.header *[data-toggle]').on('click', function(e){
+				var $this = $(this);
+				story.toggleClass($this.data('toggle'));
+				$this.toggleClass('off');
+			});
+
+			//*/// case overlay
+
+			story.delegate('.case-img', 'click', function(event){
+				$('.overlay').remove();
+				$(this).prepend(overlay_tpl);
+    			event.stopPropagation();
+			});
+			$(window).on('click', function() {
+				$('.overlay').remove();
+			});
+			story.delegate('.overlay .delete', 'click', function(e){
+				var $case = $(this).closest('.case');
+				$case.addClass('remove');
+				setTimeout(function(){
+					$case.remove();
+				}, 200);
+			});
+			story.delegate('.case *[data-toggle]', 'click', function(e){
+				var $this = $(this);
+				$this.closest('.case').toggleClass($this.data('toggle'));
+			});
+
+			//*/// part delete & fold
+
+			story.delegate('.part-delete', 'click', function(e){
+				var part = $(this).closest('.part');
+				togglePart(part);
+				part.animate({
+					opacity: 0, height: 0
+				}, function() {
+					part.remove();
+				});
+			});
+			function togglePart(part) {
+				part.toggleClass('closed')
+					.children('.cases').slideToggle(200);
+			}
+			story.delegate('.part-close', 'click', function(e){
+				togglePart($(this).closest('.part'));
+			});
+			$('.toggle-parts').on('click', function(e){
+				var target = $(this).hasClass('close') ? ':not(.closed)' : '.closed';
+				togglePart($('.part' + target));
+				$(this).toggleClass('close');
 			});
 
 			//*/// shortcuts
