@@ -1,10 +1,12 @@
 A simple local html5 storyboard editor, with drag and drop and direct text editing.
 
-Demo : https://cdn.rawgit.com/nliautaud/storynator/master/story.html (dropping images will not work online)
+[Demo][demo]
+
+[demo]: https://cdn.rawgit.com/nliautaud/storynator/898ce084afb6a026ad3b5bf955a7628088561c6b/story.html
 
 ### Installation
 
-Open the demo and save the page.
+Open the [demo][demo] and save the page.
 
 ### Managing cases and parts
 
@@ -37,3 +39,4 @@ Save the page. Like just ''Ctrl+S'' or ''Cmd+S''. Overwrite the old one if you w
 The project files (system files and storyboard images) are contained on a sibling directory (``story_files/`` by default). This directory name rely on the browser and OS implementations, so different browsers and OS may have different behaviors.
 
 A project is self-contained. You can move it, copy it, send it trough mail, synchronize it trough Dropbox, BitSync or any other way. Just remember to include the project files in the sibling directory.
+
