@@ -13,7 +13,7 @@
 			font: 400 11px/1.25 "Anonymous Pro";
 		}
 		.story {
-			counter-reset: part shot shot-total case case-total;
+			counter-reset: part shot -1 shot-total case case-total;
 			padding: 1em 1%;
 		}
 
@@ -72,7 +72,7 @@
 		.add-part {
 			position: relative;
 			clear: both;
-			counter-reset: shot 1;
+			counter-reset: shot;
 			counter-increment: part;
 		}
 		.part-header,
@@ -168,30 +168,34 @@
 		}
 		/* numbers and cuts indicators */
 		.case.cut {
-			counter-reset: case 1;
-			counter-increment: shot;
+			counter-reset: case;
 		}
-		.case.cut::after {
-			counter-increment: shot-total;
+		.case:first-child,
+		.case.cut {
+			counter-increment: shot shot-total;
 		}
 		.case::before,
 		.case::after {
 			color: #555;
 		}
 		.case::before,
+		.case:first-child~.case.cut::before,
 		.case.cut~.case.cut::before {
 			position: absolute;
 			bottom: 1em; right: 1em;
 			content: counter(shot-total, decimal-leading-zero);
 		}
+		.case:first-child~.case::before,
 		.case.cut~.case::before {
 			content: none;
 		}
 		.case::after,
+		.case:first-child~.case.cut::after,
 		.case.cut~.case.cut::after {
 			content: " PART "counter(part, decimal-leading-zero)
 					 " SHOT "counter(shot, decimal-leading-zero);
 		}
+		.case:first-child~.case::after,
 		.case.cut~.case::after {
 			content: "("counter(case)")";
 		}
