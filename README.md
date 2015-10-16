@@ -2,7 +2,7 @@ A simple local html5 storyboard editor, with drag and drop and direct text editi
 
 [Demo][demo]
 
-[demo]: https://cdn.rawgit.com/nliautaud/storynator/898ce084afb6a026ad3b5bf955a7628088561c6b/story.html
+[demo]: https://cdn.rawgit.com/nliautaud/storynator/47536425054c8baed92235b9e516ef54fac72979/story.html
 
 ### Installation
 
