@@ -105,7 +105,7 @@
 		}
 		.part-overview {
 			max-width: 40em;
-    		margin: 0 1.5em 0 0;
+			margin: 0 1.5em 0 0;
 			padding: .25em .5em .75em;
 		}
 		.part-handle {
@@ -329,7 +329,7 @@
 			-webkit-user-select: none;  
 			-moz-user-select: none;    
 			-ms-user-select: none; 
-    		user-select: none;
+			user-select: none;
 		}
 		.btn:hover {
 			color: #FF5722;
@@ -418,7 +418,7 @@
 	</header>
 	<div class="story">
 		<div class="btn toggle-parts close"></div>
-		<ul class="parts sortable">
+		<ul class="parts sortable" data-sortable-id="0" aria-dropeffect="move">
 			<div class="btn add add-part"></div>
 		</ul>
 	</div>
@@ -454,10 +454,17 @@
 			var part_tpl = $('#template').html();
 			var case_tpl = $(part_tpl).find('.case').wrap('<p>').parent().html();
 			var overlay_tpl = $('#overlay-tpl').html();
-			var story = $('.story');
-			var dragcase = false;
 
-			$('.header').clone().addClass('static').prependTo('body');
+			var body = $('body'),
+				header = $('.header'),
+				story = $('.story'),
+				dragcase = false;
+
+			var setHeaderSpace = function() {
+				body.css('padding-top', header.outerHeight());
+			};
+			$(window).on('resize', setHeaderSpace);
+			setHeaderSpace();
 
 			//*/// sortable
 
@@ -485,6 +492,7 @@
 			//*/// drop image
 
 			story.delegate('.case img', 'dragenter', function(e){
+				$('.overlay').remove();
 				if(!dragcase) {
 					e.stopPropagation();
 					e.preventDefault();
@@ -507,6 +515,16 @@
 					$(this).removeClass('dragenter');
 					$(this).attr('src', 'story_files/' + files[0].name);
 				}
+			});
+			/* prevent opening file */
+			$(window).on('dragover', function(e){
+				e.preventDefault();
+			});
+			$(window).on('drop', function(e){
+				e.preventDefault();
+			});
+			$(window).bind('beforeunload', function(){
+				return 'Any changes to the storyboard will be lost.';
 			});
 
 			//*/// add
@@ -534,7 +552,7 @@
 			story.delegate('.case-img', 'click', function(event){
 				$('.overlay').remove();
 				$(this).prepend(overlay_tpl);
-    			event.stopPropagation();
+				event.stopPropagation();
 			});
 			$(window).on('click', function() {
 				$('.overlay').remove();
