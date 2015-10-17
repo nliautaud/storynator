@@ -6,6 +6,25 @@
 	<link rel="stylesheet" href="">
 	<style type="text/css" media="screen">
 		@import url(https://fonts.googleapis.com/css?family=Anonymous+Pro:400,700);
+
+		@keyframes error {
+			00% {transform: translateX(0);}
+			33% {transform: translateX(1em);}
+			66% {transform: translateX(-1em);}
+			100% {transform: translateX(0);}
+		}
+		@keyframes drop {
+			00% {transform: scale(1);}
+			25% {transform: scale(0.9);}
+			50% {transform: scale(1.02);}
+			75% {transform: scale(0.95);}
+			100% {transform: scale(1);}
+		}
+		@keyframes reveal {
+			from {opacity: 0;}
+			to {opacity: 1;}
+		}
+
 		body {
 			padding: 0;
 			margin: 0;
@@ -226,12 +245,21 @@
 		/* case content */
 		.case-img {
 			position: relative;
+			line-height: 0;
 		}
 		.case-img img {
 			width: 100%;
+			transition: all .1s ease;
 		}
 		.case-img img.dragenter {
-			outline: 5px solid #00796B;
+			outline: 2px solid #00796B;
+			transform: scale(1.05);
+		}
+		.case-img img.dropped {
+			animation: drop .4s ease-in-out;
+		}
+		.case-img img.notimage {
+			animation: error .2s;
 		}
 		.case-text {
 			position: relative;
@@ -258,45 +286,38 @@
 			min-width: 200px;
 		}
 		.case.ispano {
-			width: auto !important;
+			width: 100% !important;
 			min-width: 23% !important;
 		}
 		.bigimg .case.ispano {
-			width: auto !important;
+			width: 100% !important;
 			min-width: 15% !important;
 		}
 
 		/* switches */
-		@keyframes reveal {
-			from {opacity: 0;}
-			to {opacity: 1;}
+		.nomanagement .management {
+			display: none;
+		}
+		.management {
+			opacity: 1;
+			visibility: visible;
+			transition: opacity .2s ease-in-out, visibility 0 .2s linear;
+		}
+		.hidemanagement .management {
+			opacity: 0;
+			visibility: hidden;
 		}
 		.overlay {
-			animation-duration: .2s;
-			animation-name: reveal;
+			animation: reveal .2s;
 		}
 		.case {
-			animation-duration: .2s;
-			animation-name: reveal;
+			animation: reveal .2s;
 			transition: all .2s ease;
 		}
 		.case.remove {
 			min-width: 0;
 			width: 0;
 			opacity: 0;
-		}
-		.part-delete,
-		.part-handle,
-		.btn.add {
-			opacity: 1;
-			visibility: visible;
-			transition: opacity .2s ease-in-out, visibility 0 .2s linear;
-		}
-		.nomanage .part-delete,
-		.nomanage .part-handle,
-		.nomanage .btn.add {
-			opacity: 0;
-			visibility: hidden;
 		}
 		.part-header::before,
 		.case::before,
@@ -307,11 +328,11 @@
 			opacity: 1;
 			transition: all .2s ease-in-out;
 		}
-		.notexts .part-overview,
-		.notexts .case-text,
-		.nonumbers .part-header::before,
-		.nonumbers .case::before,
-		.nonumbers .case::after {
+		.hidetexts .part-overview,
+		.hidetexts .case-text,
+		.hidenumbers .part-header::before,
+		.hidenumbers .case::before,
+		.hidenumbers .case::after {
 			opacity: 0;
 			max-height: 0;
 			padding-top: 0;
@@ -344,14 +365,15 @@
 			top: 0; bottom: 0;
 			background: rgba(255,255,255,.6);
 			display: flex;
-			flex-direction: column;
+			flex-flow: row-reverse wrap;
 			align-items: center;
-			justify-content: center;
 			z-index: 999;
 			font-size: 2em;
 		}
 		.overlay .btn {
 			font-weight: 300;
+			text-align: center;
+			flex: 1;
 		}
 		.add {
 			display: flex;
@@ -413,9 +435,9 @@
 	<header class="header">
 		<div class="header-title" contenteditable="true"><h1>Storyboard</h1></div>
 		<ul>
-			<li><div class="btn toggle" data-toggle="nomanage">Manage</div></li>
-			<li><div class="btn toggle" data-toggle="notexts">Texts</div></li>
-			<li><div class="btn toggle" data-toggle="nonumbers">Numbers</div></li>
+			<li><div class="btn toggle management" data-toggle="hidemanagement">Manage</div></li>
+			<li><div class="btn toggle" data-toggle="hidetexts">Texts</div></li>
+			<li><div class="btn toggle" data-toggle="hidenumbers">Numbers</div></li>
 			<li><div class="btn toggle" data-toggle="bigimg">Big images</div></li>
 			<li><a class="btn" href="https://github.com/nliautaud/storynator" target="_blank">Github</a></li>
 		</ul>
@@ -423,26 +445,24 @@
 	<div class="story">
 		<div class="btn toggle-parts close"></div>
 		<ul class="parts sortable" data-sortable-id="0" aria-dropeffect="move">
-			<div class="btn add add-part"></div>
+			<div class="btn add add-part management"></div>
 		</ul>
 	</div>
-	<script src="./story_files/_jquery-2.1.4.min.js"></script>
-	<script src="./story_files/_html.sortable.min.js"></script>
 	<script id="template" type="text/x-custom-template">
 	<li class="part">
 		<header class="part-header">
 			<h1 class="part-title" contenteditable="true">Title</h1>
 			<p class="part-overview" contenteditable="true">Overview</p>
-			<div class="part-handle"></div>
+			<div class="part-handle management"></div>
 			<div class="part-close"></div>
-			<div class="btn part-delete"></div>
+			<div class="btn part-delete management"></div>
 		</header>
 		<ul class="cases sortable connected">
 			<li class="case cut">
 				<div class="case-img"><img src="data:image/gif;base64,R0lGODlhEAAJAKIAAMzMzJaWlrGxsaOjo76+vpycnMXFxaqqqiwAAAAAEAAJAAADCwi63P4wykmrvRgmADs="></div>
 				<div class="case-text" contenteditable="true">caption</div>
 			</li>
-			<div class="btn add add-case"></div>
+			<div class="btn add add-case management"></div>
 		</ul>
 	</li>
 	</script>
@@ -453,173 +473,59 @@
 			<div class="btn btn-cut" data-toggle="cut"></div>
 		</div>
 	</script>
-	<script type="text/javascript" charset="utf-8" async="" defer="">
-		$(function() {
-			var part_tpl = $('#template').html();
-			var case_tpl = $(part_tpl).find('.case').wrap('<p>').parent().html();
-			var overlay_tpl = $('#overlay-tpl').html();
+	<script src="./story_files/jquery-2.1.4.min.js"></script>
+	<script src="./story_files/html.sortable.min.js"></script>
+	<script src="./story_files/main.js"></script>
+	<script charset="utf-8" async defer>
 
-			var body = $('body'),
-				header = $('.header'),
-				story = $('.story'),
-				dragcase = false;
+		// Interface helpers and toggles
+		// management is enabled by story_files/main.js
 
-			var setHeaderSpace = function() {
-				body.css('padding-top', header.outerHeight());
-			};
-			$(window).on('resize', setHeaderSpace);
-			setHeaderSpace();
+		var story = document.querySelector('.story'),
+			header = document.querySelector('.header');
 
-			//*/// sortable
+		function getTarget (e) {
+			e = e || window.event;
+		    var targ = e.target || e.srcElement;
+		    if (targ.nodeType == 3) targ = targ.parentNode; // defeat Safari bug
+		    return targ;
+		}
 
-			function sortable() {
-				$('.parts.sortable').sortable({
-					forcePlaceholderSize: false,
-					handle: '.part-handle',
-					items: '.part',
-					placeholderClass: 'part-placeholder'
-				});
-				$('.cases.sortable').sortable({
-					forcePlaceholderSize: true,
-					connectWith: '.parts',
-					handle: '.img',
-					items: '.case',
-					placeholderClass: 'case-placeholder'
-				}).bind('sortstart', function(e, ui) {
-					dragcase = true;
-				}).bind('sortstop', function(e, ui) {
-					dragcase = false;
-				});
+		document.body.className += ' nomanagement';
+
+		// fixed header space
+		var setHeaderSpace = function() {
+			document.body.style.paddingTop = header.offsetHeight + 'px';
+		};
+		window.onresize = setHeaderSpace;
+		window.onload = setHeaderSpace;
+
+		// header options toggle
+		document.querySelector('.header ul').onclick = function (e){
+			var tgt = getTarget(e);
+			tgt.classList.toggle('off');
+			story.classList.toggle(tgt.dataset.toggle);
+		};
+
+		// parts toggles
+		document.querySelector('body').addEventListener('click', function(e) {
+			var tgt = getTarget(e);
+			if(tgt.classList.contains('part-close')) {
+				tgt.parentNode.parentNode.classList.toggle('closed');
 			}
-			sortable();
-
-			//*/// drop image
-
-			story.delegate('.case', 'dragenter', function(e){
-				$('.overlay').remove();
-			});
-			story.delegate('.case img', 'dragenter', function(e){
-				if(!dragcase) {
-					e.stopPropagation();
-					e.preventDefault();
-					$(this).addClass('dragenter');
-				}
-			});
-			story.delegate('.case img', 'dragleave', function(e){
-				if(!dragcase) $(this).removeClass('dragenter');
-			});
-			story.delegate('.case img', 'dragover', function(e){
-				if(!dragcase) {
-					e.stopPropagation();
-					e.preventDefault();
-				}
-			});
-			story.delegate('.case img', 'drop', function(e){
-				if(!dragcase) {
-					e.preventDefault();
-					var files = e.originalEvent.dataTransfer.files;
-					$(this).removeClass('dragenter');
-					$(this).attr('src', 'story_files/' + files[0].name);
-				}
-			});
-			/* prevent opening file */
-			$(window).on('dragover', function(e){
-				e.preventDefault();
-			});
-			$(window).on('drop', function(e){
-				e.preventDefault();
-			});
-			$(window).bind('beforeunload', function(){
-				return 'Any changes to the storyboard will be lost.';
-			});
-
-			//*/// add
-
-			story.delegate('.add-part', 'click', function(e){
-				$(this).before(part_tpl);
-				$('.part:last-of-type').hide().slideDown(200);
-				sortable();
-			});
-			story.delegate('.add-case', 'click', function(e){
-				$(this).before(case_tpl);
-				sortable();
-			});
-
-			//*/// menu
-
-			$('.header *[data-toggle]').on('click', function(e){
-				var $this = $(this);
-				story.toggleClass($this.data('toggle'));
-				$this.toggleClass('off');
-			});
-
-			//*/// case overlay
-
-			story.delegate('.case-img', 'click', function(event){
-				$('.overlay').remove();
-				$(this).prepend(overlay_tpl);
-				event.stopPropagation();
-			});
-			$(window).on('click', function() {
-				$('.overlay').remove();
-			});
-			story.delegate('.overlay .delete', 'click', function(e){
-				var $case = $(this).closest('.case');
-				$case.addClass('remove');
-				setTimeout(function(){
-					$case.remove();
-				}, 200);
-			});
-			story.delegate('.case *[data-toggle]', 'click', function(e){
-				var $this = $(this);
-				$this.closest('.case').toggleClass($this.data('toggle'));
-			});
-
-			//*/// part delete & fold
-
-			story.delegate('.part-delete', 'click', function(e){
-				var part = $(this).closest('.part');
-				togglePart(part);
-				part.animate({
-					opacity: 0, height: 0
-				}, function() {
-					part.remove();
-				});
-			});
-			function togglePart(part) {
-				part.toggleClass('closed')
-					.children('.cases').slideToggle(200);
-			}
-			story.delegate('.part-close', 'click', function(e){
-				togglePart($(this).closest('.part'));
-			});
-			$('.toggle-parts').on('click', function(e){
-				var target = $(this).hasClass('close') ? ':not(.closed)' : '.closed';
-				togglePart($('.part' + target));
-				$(this).toggleClass('close');
-			});
-
-			//*/// shortcuts
-
-			function cleanup() {
-				var attrs = [
-					'data-sortable-id', 'data-item-sortable-id',
-					'role', 'aria-grabbed', 'aria-dropeffect',
-					'draggable', 'style'];
-				$.each(attrs, function(id, val){
-					$('*['+val+']').removeAttr(val);
-				});
-			}
-			$(window).on('keydown', function(event) {
-				if (event.ctrlKey || event.metaKey) {
-					switch (String.fromCharCode(event.which).toLowerCase()) {
-					case 'q':
-						cleanup();
-						alert('cleaned');
-					}
-				}
-			});
 		});
+		document.querySelector('.toggle-parts').onclick = function (e){
+			var target = '.closed';
+			if(this.classList.contains('close'))
+				target = ':not(' + target + ')';
+			var parts = document.querySelector('.part'+target);
+			if(parts === null) return;
+			for (var i = 0; i < parts.length; i++) {
+				part.classList.toggle('closed');
+			}
+			this.classList.toggle('close');
+		};
+ 
 	</script>
-
-</body></html>
+</body>
+</html>
