@@ -31,6 +31,21 @@
 			box-sizing: border-box;
 			font: 400 11px/1.25 "Anonymous Pro";
 		}
+		body.changed::before {
+			content: "There is unsaved modifications";
+			display: block;
+			background: white;
+			position: fixed;
+			right: 0;
+			margin: .5em;
+			z-index: 999;
+			padding: .5em 1em;
+			font-family: Lato,Helvetica,Arial,sans-serif;
+			line-height: 1.467;
+			color: #bdc3c7;
+			border: 1px solid #bdc3c7;
+			border-radius: 6px;
+		}
 		.story {
 			counter-reset: part shot -1 shot-total case case-total;
 			padding: 1em 1%;
@@ -526,7 +541,13 @@
 		    return targ;
 		}
 
-		document.body.className += ' nomanagement';
+		// disable management and contenteditable.
+		// are re-enabled by story_files/main.js
+		document.body.className = 'nomanagement';
+		var editables = document.querySelectorAll('*[contenteditable]');
+		for (var i = 0; i < editables.length; i++) {
+			editables[i].setAttribute("contenteditable", false);
+		}
 
 		// fixed header space
 		var setHeaderSpace = function() {

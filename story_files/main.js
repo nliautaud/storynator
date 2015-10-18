@@ -9,7 +9,14 @@ $(function() {
 		dragcase = false,
 		changes = false;
 
+	// activate management and contenteditable
 	body.removeClass('nomanagement');
+	$('*[contenteditable]').attr('contenteditable', true);
+
+	function setChanged() {
+		if(!changes) body.addClass('changed');
+		changes = true;
+	}
 
 	//*/// sortable
 
@@ -20,7 +27,7 @@ $(function() {
 			items: '.part',
 			placeholderClass: 'part-placeholder'
 		}).bind('sortupdate', function(e, ui) {
-			changes = true;
+			setChanged();
 		});
 		$('.cases.sortable').sortable({
 			forcePlaceholderSize: true,
@@ -33,7 +40,7 @@ $(function() {
 		}).bind('sortstop', function(e, ui) {
 			dragcase = false;
 		}).bind('sortupdate', function(e, ui) {
-			changes = true;
+			setChanged();
 		});
 	}
 	sortable();
@@ -77,7 +84,7 @@ $(function() {
 			}
 
 			// let's go
-			changes = true;
+			setChanged();
 			var reader = new FileReader();
 			reader.readAsDataURL(file);
 			reader.addEventListener('loadend', function (e, f) {
@@ -125,11 +132,10 @@ $(function() {
 	});
 	/* alert before quitting when changes may be lost */
 	body.delegate('*[contenteditable]', 'input', function(e){
-		changes = true;
+		setChanged();
 	});
 	$(window).bind('beforeunload', function(){
-		if(changes)
-			return 'Any changes to the storyboard will be lost.';
+		if(changes) return 'Any changes to the storyboard will be lost.';
 	});
 
 	//*/// add
@@ -138,12 +144,12 @@ $(function() {
 		$(this).before(part_tpl);
 		$('.part:last-of-type').hide().slideDown(200);
 		sortable();
-		changes = true;
+		setChanged();
 	});
 	story.delegate('.add-case', 'click', function(e){
 		$(this).before(case_tpl);
 		sortable();
-		changes = true;
+		setChanged();
 	});
 
 	//*/// case overlay
@@ -162,12 +168,12 @@ $(function() {
 		setTimeout(function(){
 			$case.remove();
 		}, 200);
-		changes = true;
+		setChanged();
 	});
 	story.delegate('.case *[data-toggle]', 'click', function(e){
 		var $this = $(this);
 		$this.closest('.case').toggleClass($this.data('toggle'));
-		changes = true;
+		setChanged();
 	});
 
 	//*/// part delete
@@ -179,7 +185,7 @@ $(function() {
 				opacity: 0, height: 0
 			}, function() {
 				part.remove();
-				changes = true;
+				setChanged();
 			});
 	});
 
