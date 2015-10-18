@@ -4,11 +4,13 @@ A simple local html5 storyboard editor, with drag and drop and direct text editi
 
 [demo]: https://cdn.rawgit.com/nliautaud/storynator/1d4832602627cbb7cc65cec1ba9d9c6555aa9bdd/story.html
 
-### Installation, saving & sharing
+### Installation
 
 Open the [demo][demo], and save it (like just ``Ctrl+S`` or ``Cmd+S``).
 
-To save changes, save the page again. Overwrite the old one if you want.
+### Saving & sharing
+
+Save the page to save changes. Overwrite the old one if you want.
 
 ```
 story.html
