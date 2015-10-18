@@ -2,48 +2,40 @@ A simple local html5 storyboard editor, with drag and drop and direct text editi
 
 [Demo][demo]
 
-[demo]: https://cdn.rawgit.com/nliautaud/storynator/82b4ccce43b37ee3e66cd422af3799d3e81d78c2/story.html
+[demo]: https://cdn.rawgit.com/nliautaud/storynator/1d4832602627cbb7cc65cec1ba9d9c6555aa9bdd/story.html
 
-### Installation
+### Installation, saving & sharing
 
-Open the [demo][demo] and save the page.
+Open the [demo][demo], and save it (like just ``Ctrl+S`` or ``Cmd+S``).
 
-### Managing cases and parts
+To save changes, save the page again. Overwrite the old one if you want.
 
-Add and delete parts and cases by using the buttons shown with the option *Manage*.
+```
+story.html
+story_files/
+```
+The storyboard itself is self-contained in the html file and may be distributed, copied, sent by mail or synchronised trough Dropbox, BitSync, or shared on its own in any other way.
 
-Drag & drop to reorder things. Use the handle for to drag the parts (folding them first may help for that).
-
-Whithout the management mode, you can still edit texts and manage cases.
-
-Click on a case to show more options.
-- Delete the case.
-- Disable/enable the case width limitation.
-- Define the case as a the same shot than the previous one, or as a cut.
-
-### Text editing
-
-The texts are directly editables.
-
-Depending on your browser, you may apply **bold**, *italic* and _underline_ with the usual keyboard shortcuts, and use undo/redo shortcut.
-
-### Images
-
-You can apply an image by dropping a file onto it. The image files _**must**_ be on the ``story_files/`` directory and dropped from there.
+The sibling directory contain only the system files that allow to edit the storyboard content. Thus, a shared storyboard may be editable depending on whether you choose to include this directory or not. Note that its name rely on the browser and OS implementations, so different browsers and OS may have different behaviors and may use a slightly different name. 
 
 ### Display options
 
+- *Manage* : show / hide management buttons and indicators.
 - *Texts* : show / hide parts and cases texts.
-- *Numbers* : show / hide parts and cases numbering.
-- *Big images* : switch between two sizes of cases.
+- *Numbers* : show / hide parts and cases numbers.
+- *Overview* : display cases two times smaller.
 
-The parts may be folded or opened with the button at the top or by clicking on the arrow next to their title.
+The parts may be folded or opened by clicking on the arrow next to their title.
 
-### Saving & sharing
+### Editing
 
-Save the page. Like just ''Ctrl+S'' or ''Cmd+S''. Overwrite the old one if you want.
+The texts are directly editables. Depending on your browser you may use the usual keyboard shortcuts to undo changes and apply formatting, like **bold**, *italic* or _underline_.
 
-The project files (system files and storyboard images) are contained on a sibling directory (``story_files/`` by default). This directory name rely on the browser and OS implementations, so different browsers and OS may have different behaviors.
+Drop image files to replace old ones.
 
-A project is self-contained. You can move it, copy it, send it trough mail, synchronize it trough Dropbox, BitSync or any other way. Just remember to include the project files in the sibling directory.
+Drag & drop to reorder. You can reorder parts by using the handle next to their title (folding them first may help for that).
 
+Click on a case to show more options :
+- Define the case as a the same shot than the previous one.
+- Disable/enable the case width limitation.
+- Delete the case.
