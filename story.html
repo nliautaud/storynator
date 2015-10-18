@@ -165,6 +165,11 @@
 		.cases {
 			display: flex;
 			flex-flow: row wrap;
+			overflow: hidden;
+			transition: height .2s ease;
+		}
+		.closed .cases {
+			height: 0;
 		}
 		.case,
 		.case-placeholder,
@@ -537,12 +542,12 @@
 			var target = '.closed';
 			if(this.classList.contains('close'))
 				target = ':not(' + target + ')';
-			var parts = document.querySelector('.part'+target);
+			var parts = story.querySelectorAll('.part'+target);
+			this.classList.toggle('close');
 			if(parts === null) return;
 			for (var i = 0; i < parts.length; i++) {
-				part.classList.toggle('closed');
+				parts[i].classList.toggle('closed');
 			}
-			this.classList.toggle('close');
 		};
  
 	</script>
