@@ -105,7 +105,8 @@
 			box-sizing: border-box;
 		}
 		.part-header,
-		.add-part {
+		.add-part,
+		.part-delete {
 			border: 1px solid #ccc;
 		}
 		.part-header {
@@ -151,13 +152,18 @@
 			right: 2em;
 		}
 		.part-delete {
-			right: -1.75em;
+			padding: .5em;
+			right: -3em;
 		}
 		.part-close {
 			right: .25em;
 			color: #ccc;
 			cursor: pointer;
 			font-size: 2em;
+			-webkit-user-select: none;  
+			-moz-user-select: none;    
+			-ms-user-select: none; 
+			user-select: none;
 		}
 
 		/* CASES */
@@ -238,16 +244,15 @@
 			.col {
 				width: 100%;
 			}
+			.part-header {
+				width: 80%;
+			}
 			.overview .col {
 				width: 50%;
 			}
 		}
 
-		/* numbers and cuts indicators */
-		.case::before,
-		.case::after {
-			color: #555;
-		}
+		/* numbers */
 		.case {
 			counter-reset: case 1;
 			counter-increment: shot shot-total case-total;
@@ -256,21 +261,26 @@
 			counter-reset: none;
 			counter-increment: shot-total case case-total;
 		}
-		.case::before {
+		.case-nbr {
+			position: relative;
+			color: #555;
+		}
+		.case-nbr::before {
 			position: absolute;
-			bottom: 0; right: .5em;
+			bottom: 0;right: 0;
+			z-index: 999;
 			content: counter(shot-total, decimal-leading-zero);
 		}
-		.case+.case.sameshot::before {
+		.case + .sameshot .case-nbr::before {
 			content: none;
 		}
-		.case::after {
+		.case-nbr::after {
 			position: absolute;
 			bottom: 0;
 			content: " PART "counter(part, decimal-leading-zero)
 					 " SHOT "counter(shot, decimal-leading-zero);
 		}
-		.case+.case.sameshot::after {
+		.case + .sameshot .case-nbr::after {
 			content: "("counter(case)")";
 		}
 		/* cuts indicators */
@@ -318,7 +328,7 @@
 		.case-text {
 			position: relative;
 			padding: .5em 0;
-			margin-bottom: .5em;
+			margin-bottom: 1em;
 		}
 		.case-text p,
 		.case-text div {
@@ -329,11 +339,13 @@
 			display: none;
 		}
 		.management {
+			max-height: 10em;
 			opacity: 1;
 			visibility: visible;
-			transition: opacity .2s ease-in-out, visibility 0 .2s linear;
+			transition: max-height .2s ease-in-out, opacity .2s ease-in-out, visibility 0 .2s linear;
 		}
 		.hidemanagement .management {
+			max-height: 0;
 			opacity: 0;
 			visibility: hidden;
 		}
@@ -350,19 +362,17 @@
 			opacity: 0;
 		}
 		.part-header::before,
-		.case::before,
-		.case::after,
 		.part-overview,
-		.case-text {
+		.case-text,
+		.case-nbr {
 			max-height: 15em;
 			opacity: 1;
 			transition: all .2s ease-in-out;
 		}
 		.hidetexts .part-overview,
 		.hidetexts .case-text,
-		.hidenumbers .part-header::before,
-		.hidenumbers .case::before,
-		.hidenumbers .case::after {
+		.hidenumbers .case-nbr,
+		.hidenumbers .part-header::before {
 			opacity: 0;
 			max-height: 0;
 			padding-top: 0;
@@ -485,6 +495,7 @@
 			<li class="case col">
 				<div class="case-img"><img src="data:image/gif;base64,R0lGODlhEAAJAKIAAMzMzJaWlrGxsaOjo76+vpycnMXFxaqqqiwAAAAAEAAJAAADCwi63P4wykmrvRgmADs="></div>
 				<div class="case-text" contenteditable="true">caption</div>
+				<div class="case-nbr"></div>
 			</li>
 			<div class="btn add add-case col management"></div>
 		</ul>
