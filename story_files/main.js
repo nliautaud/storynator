@@ -174,13 +174,13 @@ $(function() {
 
 	story.delegate('.part-delete', 'click', function(e){
 		var part = $(this).closest('.part');
-		togglePart(part);
-		part.animate({
-			opacity: 0, height: 0
-		}, function() {
-			part.remove();
-			changes = true;
-		});
+		part.addClass('hidemanagement')
+			.animate({
+				opacity: 0, height: 0
+			}, function() {
+				part.remove();
+				changes = true;
+			});
 	});
 
 	//*/// shortcuts
