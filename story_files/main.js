@@ -146,8 +146,13 @@ $(function() {
 		sortable();
 		setChanged();
 	});
+	story.delegate('.add-case-before', 'click', function(e){
+		$(this).closest('.part').find('.cases').prepend(case_tpl);
+		sortable();
+		setChanged();
+	});
 	story.delegate('.add-case', 'click', function(e){
-		$(this).before(case_tpl);
+		$(this).closest('.part').find('.cases').append(case_tpl);
 		sortable();
 		setChanged();
 	});
