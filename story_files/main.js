@@ -27,7 +27,7 @@ $(function() {
 			connectWith: '.parts',
 			handle: '.img',
 			items: '.case',
-			placeholderClass: 'case-placeholder'
+			placeholderClass: 'case-placeholder col'
 		}).bind('sortstart', function(e, ui) {
 			dragcase = true;
 		}).bind('sortstop', function(e, ui) {
