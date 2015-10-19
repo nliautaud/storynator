@@ -1,22 +1,26 @@
-A simple local html5 storyboard editor, with drag and drop and direct text editing.
+#Storynator
 
-[Demo][demo]
+A simple storyboard editor, with drag and drop and direct text editing.
+
+[![Demo](http://nliautaud.fr/chrome-frame.png)][demo]
 
 [demo]: https://cdn.rawgit.com/nliautaud/storynator/43d107de37e9a6b14bf026b384fd493c216c858e/story.html
 
-### Installation
+### Getting started
 
-Open the [demo][demo], and save it (like just ``Ctrl+S`` or ``Cmd+S``).
+Open the [demo][demo] and start editing.
 
-### Saving & sharing
+When you're ready to save your changes, juste save the page (like just ``Ctrl+S`` or ``Cmd+S``).
 
-Save the page to save changes. Overwrite the old one if you want.
+Open your local storyboard, edit-it and save it again. Overwrite the old one if you want.
+
+Do it again.
 
 ```
 story.html
 story_files/
 ```
-The storyboard itself is self-contained in the html file and may be distributed, copied, sent by mail or synchronised trough Dropbox, BitSync, or shared on its own in any other way.
+The storyboard itself is self-contained in the html file and may be distributed, copied, sent by mail or synchronised trough Dropbox, BitSync, or shared on its own in any other way. 
 
 The sibling directory contain only the system files that allow to edit the storyboard content. Thus, a shared storyboard may be editable depending on whether you choose to include this directory or not. Note that its name rely on the browser and OS implementations, so different browsers and OS may have different behaviors and may use a slightly different name. 
 
