@@ -35,7 +35,7 @@ The parts may be folded or opened by clicking on the arrow next to their title.
 
 ### Editing
 
-The texts are directly editables. Depending on your browser you may use the usual keyboard shortcuts to undo changes and apply formatting, like **bold**, *italic* or _underline_.
+The texts are directly editables. Depending on your browser you may use the usual keyboard shortcuts to undo changes and apply formatting like bold, italic or underline.
 
 Drop image files to replace old ones.
 
