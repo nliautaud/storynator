@@ -7,7 +7,8 @@ $(function() {
 		header = $('.header'),
 		story = $('.story'),
 		dragcase = false,
-		changes = false;
+		changes = false,
+		linkedCases = null;
 
 	// activate management and contenteditable
 	body.removeClass('nomanagement');
@@ -20,30 +21,95 @@ $(function() {
 
 	//*/// sortable
 
-	function sortable() {
-		$('.parts.sortable').sortable({
-			forcePlaceholderSize: false,
-			handle: '.part-handle',
-			items: '.part',
-			placeholderClass: 'part-placeholder'
-		}).bind('sortupdate', function(e, ui) {
-			setChanged();
-		});
-		$('.cases.sortable').sortable({
-			forcePlaceholderSize: true,
-			connectWith: '.parts',
-			handle: '.img',
-			items: '.case',
-			placeholderClass: 'case-placeholder col'
-		}).bind('sortstart', function(e, ui) {
-			dragcase = true;
-		}).bind('sortstop', function(e, ui) {
-			dragcase = false;
-		}).bind('sortupdate', function(e, ui) {
-			setChanged();
+	Sortable.create(document.querySelector('.parts'), {
+		animation: 200,
+		draggable: '.part',
+		handle: '.part-handle',
+		ghostClass: 'dragged',
+	});
+	var sortableParts = [];
+	function initCasesSort() {
+		// destroy old ones
+		for (var i = 0; i < sortableParts.length; i++) {
+			sortableParts[i].destroy();
+		}
+		sortableParts.length = 0;
+		// make new ones
+		[].forEach.call(document.querySelectorAll('.cases'), function (el) {
+			sortableParts.push(Sortable.create(el, {
+				group: 'cases',
+				draggable: '.case',
+				handle: '.case-img',
+				chosenClass: 'dragged',
+				ghostClass: 'dragged',
+				animation: 0,
+				onStart: function (evt) {
+					dragcase = true;
+					tagSiblingsOf($(evt.item));
+				},
+				onEnd: function (evt) {
+					dragcase = false;
+					manageMoves($(evt.item));
+				},
+				onSort: function (evt) {
+					setChanged();
+				}
+			}));
 		});
 	}
-	sortable();
+
+	function tagSiblingsOf(item) {
+		// tag the cases which are in the same shot
+		// that the given item (cf. manageMoves)
+		item.nextUntil(':not(.sameshot)')
+			.addClass('linked after');
+		if(item.hasClass('sameshot')) {
+			item.prevUntil(':not(.sameshot)')
+				.andSelf().prev()
+				.addClass('linked before');
+		}
+	}
+	function manageMoves(item) {
+		// manage global behaviors of :
+		// - cases moved in their shot,
+		// - cases moved in/out a shot,
+		// - all a shot moved at once.
+		var linked = $('.linked'),
+			next = item.next(),
+			prev = item.prev(),
+			prevIsMyShot = prev.hasClass('linked'),
+			nextIsMyShot = next.hasClass('linked'),
+			nextHaveSameshot = next.hasClass('sameshot'),
+			haveSameshot = item.hasClass('sameshot');
+		// was in a shot
+		if(linked.length != 0) {
+			// moved at the head of its shot
+			if(nextIsMyShot && !prevIsMyShot) {
+				item.removeClass('sameshot');
+				next.addClass('sameshot');
+				console.log('moved first of its shot');
+			}
+			// was the first : others follow the chosen one
+			else if(!prevIsMyShot && !haveSameshot) {
+				$('.linked.before').detach().insertBefore(item);
+				$('.linked.after').detach().insertAfter(item);
+				console.log('follow me !');
+			}
+			// moved outside of its shot
+			else if(!prevIsMyShot && !nextIsMyShot) {
+				item.removeClass('sameshot');
+				console.log('bye bye');
+			}
+			linked.removeClass('linked before after');
+		}
+		// is inserted in a shot
+		if(nextHaveSameshot) {
+			item.addClass('sameshot');
+			console.log('moved in a shot');
+		}
+	}
+
+	initCasesSort();
 
 	//*/// drop image
 
@@ -70,15 +136,16 @@ $(function() {
 		if(!dragcase) {
 			e.preventDefault();
 			var file = e.originalEvent.dataTransfer.files[0];
-			var img = $(this);
+			var img = $(this),
+				tcase = img.parents('.case');
 			img.removeClass('dragenter');
 
 			// not a supported image
 			var authorized = ['image/jpeg', 'image/gif', 'image/png'];
 			if(file === undefined || authorized.indexOf(file.type) == -1) {
-				img.addClass('notimage');
+				tcase.addClass('notimage');
 				setTimeout(function () {
-					img.removeClass('notimage');
+					tcase.removeClass('notimage');
 				}, 200);
 				return;
 			}
@@ -99,11 +166,11 @@ $(function() {
 						max = 4000;
 					// set pano mode
 					if(width > 2 * height)
-						img.closest('.case').addClass('ispano');
+						tcase.addClass('ispano');
 					// animate
-					img.addClass('dropped');
+					tcase.addClass('dropped');
 					setTimeout(function () {
-						img.removeClass('dropped');
+						tcase.removeClass('dropped');
 					}, 500);
 					// limit size
 					if(width > max) {
@@ -141,19 +208,16 @@ $(function() {
 	//*/// add
 
 	story.delegate('.add-part', 'click', function(e){
-		$(this).before(part_tpl);
-		$('.part:last-of-type').hide().slideDown(200);
-		sortable();
+		$(part_tpl).appendTo('.parts').hide().slideDown(200);
+		initCasesSort();
 		setChanged();
 	});
 	story.delegate('.add-case-before', 'click', function(e){
 		$(this).closest('.part').find('.cases').prepend(case_tpl);
-		sortable();
 		setChanged();
 	});
 	story.delegate('.add-case', 'click', function(e){
 		$(this).closest('.part').find('.cases').append(case_tpl);
-		sortable();
 		setChanged();
 	});
 

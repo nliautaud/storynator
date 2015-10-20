@@ -15,9 +15,9 @@
 		}
 		@keyframes drop {
 			00% {transform: scale(1);}
-			25% {transform: scale(0.9);}
-			50% {transform: scale(1.02);}
-			75% {transform: scale(0.95);}
+			25% {transform: scale(0.97);}
+			50% {transform: scale(1);}
+			75% {transform: scale(0.99);}
 			100% {transform: scale(1);}
 		}
 		@keyframes reveal {
@@ -110,7 +110,6 @@
 			counter-increment: part;
 		}
 		.part-header,
-		.part-placeholder,
 		.add-part  {
 			position: relative;
 			min-height: 2.75em;
@@ -122,8 +121,11 @@
 		.add-part {
 			border: 1px solid #ccc;
 		}
-		.part-placeholder {
+		.part.dragged {
 			border: 2px solid #005249;
+		}
+		.part.dragged .management {
+			display: none;
 		}
 		.part-title {
 			display: inline-block;
@@ -216,30 +218,36 @@
 			overflow: hidden;
 			transition: height .2s ease;
 		}
+		.cases:empty {
+			border: 1px dashed #ccc;
+		}
+		.cases:empty::before {
+			content: "empty";
+			color: #777;
+			width: 100%;
+			padding: 1em;
+			text-align: center;
+		}
 		.closed .cases {
 			height: 0;
+			min-height: 0;
+			border: 0;
 		}
-		.case,
-		.case-placeholder {
+		.case {
 			box-sizing: border-box;
 			float: left;
 			display: inline-block;
 			position: relative;
-			margin-bottom: 1%;
-		}
-		.case-placeholder {
-			background: #f5f5f5;
-			outline: 1px dashed #00796B;
 		}
 		/* sizing */
 		.col {
-			margin: .5% 0;
+			margin: .5% 0 1.5em;
 			padding: 0 .5%;
 			width: 25%;
-			transition: all .2s ease-in-out;
+			transition: all .15s ease;
 		}
 		.overview .col {
-			margin: .25% 0;
+			margin-top: .25%;
 			padding: 0 .25%;
 			width: 12.5%;
 		}
@@ -260,12 +268,12 @@
 		}
 		@media only screen and (max-width : 1500px) {
 			.col {
-				margin: 1% 0;
+				margin-top: 1%;
 				padding: 0 1%;
 				width: 33.33%;
 			}
 			.overview .col {
-				margin: .5% 0;
+				margin-top: .5%;
 				padding: 0 .5%;
 				width: 16.65%;
 			}
@@ -313,15 +321,14 @@
 		}
 		.case-nbr {
 			position: relative;
-			height: 1em;
+    		padding: 0 1em;
 			font: 300 .7em arial;
 			color: #A0A0A0;
 		}
 		.case-nbr::before,
 		.case-nbr::after {
 			position: absolute;
-			padding: .5em 1em;
-			z-index: 999;
+			padding: .75em 1.5em;
 		}
 		.case-nbr::before {
 			left: 0;
@@ -339,30 +346,24 @@
 			content: "("counter(case)")";
 		}
 		/* cuts indicators */
-		.case-img::before {
+		.case .case-img::before {
 			content: " ";
 			position: absolute;
 			top: 50%; bottom: 50%;
-			left: -50%; width: 100%;
-			background: white;
+			left: -10%; width: 20%;
+			background: transparent;
 			z-index: -1;
-			transition: all .2s ease-in-out;
+			transition: all .2s ease;
 		}
-		.case.sameshot .case-img::before {
-			top: 25%; bottom: 25%;
+		.case+.case.sameshot .case-img::before {
+			top: 0; bottom: 0;
 			background: #9c9c9c;
 		}
-		/*.case .case-img::before {
-			content: "";
-			position: absolute;
-			left: -4%; width: 0;
-			top: 25%; bottom: 25%;
-			border: 1px dashed #ff5722;
-			border-width: 0 1px 0 0;
-			z-index: -1;
-		}*/
-		.case:first-child .case-img::before {
+		.case.dragged .case-img::before {
 			content: none;
+		}
+		.case:first-child .btn-sameshot {
+			display: none;
 		}
 		/* case content */
 		.case-img {
@@ -373,15 +374,16 @@
 		.case-img img {
 			width: 100%;
 			transition: all .1s ease;
+			z-index: 1;
 		}
 		.case-img img.dragenter {
-			outline: 2px solid #00796B;
-			transform: scale(1.05);
+			outline: 1em solid #00796B;
+			outline-offset: -1em;
 		}
-		.case-img img.dropped {
+		.case.dropped {
 			animation: drop .4s ease-in-out;
 		}
-		.case-img img.notimage {
+		.case.notimage {
 			animation: error .2s;
 		}
 		.case-text {
@@ -391,6 +393,7 @@
 			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 			background: #FBFBFB;
 			font-size: 13px;
+			z-index: 2;
 		}
 		.overview .case-text {
 			font-size: 11px;
@@ -546,9 +549,8 @@
 	</header>
 	<div class="story">
 		<div class="btn toggle-parts close"></div>
-		<ul class="parts sortable" data-sortable-id="0" aria-dropeffect="move">
-			<div class="btn add add-part col management"></div>
-		</ul>
+		<ul class="parts sortable" data-sortable-id="0" aria-dropeffect="move"></ul>
+		<div class="btn add add-part col management"></div>
 	</div>
 	<script id="template" type="text/x-custom-template">
 	<li class="part">
@@ -565,15 +567,15 @@
 				<div class="btn add-case"></div>
 			</div>
 		</header>
-		<ul class="cases sortable connected">
-			<li class="case col">
+		<ul class="cases sortable connected"><!--
+			--><li class="case col">
 				<div class="case-img">
 					<img src="data:image/gif;base64,R0lGODlhEAAJAKIAAMzMzJaWlrGxsaOjo76+vpycnMXFxaqqqiwAAAAAEAAJAAADCwi63P4wykmrvRgmADs=">
 				</div>
 				<div class="case-text" contenteditable="true">caption</div>
 				<div class="case-nbr"></div>
-			</li>
-		</ul>
+			</li><!--
+		--></ul>
 	</li>
 	</script>
 	<script id="overlay-tpl" type="text/x-custom-template">
@@ -584,7 +586,7 @@
 		</div>
 	</script>
 	<script src="./story_files/jquery-2.1.4.min.js"></script>
-	<script src="./story_files/html.sortable.min.js"></script>
+	<script src="./story_files/Sortable.min.js"></script>
 	<script src="./story_files/main.js"></script>
 	<script charset="utf-8" async defer>
 
@@ -604,8 +606,8 @@
 		// disable management and contenteditable.
 		// are re-enabled by story_files/main.js
 		document.body.className = 'nomanagement';
-		story.className += ' hidemanagement';
-		header.querySelector('.management').classList.add('off');
+		// story.className += ' hidemanagement';
+		// header.querySelector('.management').classList.add('off');
 		var editables = document.querySelectorAll('*[contenteditable]');
 		for (var i = 0; i < editables.length; i++) {
 			editables[i].setAttribute("contenteditable", false);
