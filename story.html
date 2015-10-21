@@ -47,11 +47,15 @@
 			border-radius: 6px;
 		}
 		.story {
-			counter-reset: part shot -1 shot-total case case-total;
+			counter-reset: scene shot -1 shot-total frame frame-total;
 			padding: 1em 1%;
 		}
 
-		/* header */
+		/* 
+		 *
+		 * HEADER
+		 *
+		*/
 
 		.header {
 			position: fixed;
@@ -91,26 +95,30 @@
 			content: "☐";
 		}
 
-		/* PARTS */
+		/* 
+		 *
+		 * SCENES
+		 *
+		*/
 
-		.story .parts,
-		.story .parts ul {
+		.story .scenes,
+		.story .scenes ul {
 			margin: 0;
 			padding: 0;
 			list-style: none;
 		}
-		.story .parts {
+		.story .scenes {
 			padding: 3em 0;
 		}
-		.part,
-		.add-part {
+		.scene,
+		.add-scene {
 			position: relative;
 			clear: both;
 			counter-reset: shot;
-			counter-increment: part;
+			counter-increment: scene;
 		}
-		.part-header,
-		.add-part  {
+		.scene-header,
+		.add-scene  {
 			position: relative;
 			min-height: 2.75em;
 			border-radius: 3px;
@@ -118,28 +126,28 @@
 			padding: 1em;
 			box-sizing: border-box;
 		}
-		.add-part {
+		.add-scene {
 			border: 1px solid #ccc;
 		}
-		.part.dragged {
+		.scene.dragged {
 			border: 2px solid #005249;
 		}
-		.part.dragged .management {
+		.scene.dragged .management {
 			display: none;
 		}
-		.part-title {
+		.scene-title {
 			display: inline-block;
 			padding: .5em;
 			margin: 0 4.5em 0 0;
 			font-size: 13px;
 			font-weight: 700;
 		}
-		.part-overview {
+		.scene-overview {
 			max-width: 40em;
 			margin: 0 1.5em 0 0;
 			padding: .25em .5em .75em;
 		}
-		.part-handle {
+		.scene-handle {
 			border: .8em dotted #00796B;
 			background: #005249;
 			position: absolute;
@@ -147,11 +155,11 @@
 			left: -1.4em;
 			border-radius: .6em 0 0 .6em;
 		}
-		.part-delete {
+		.scene-delete {
 			padding: .5em;
 			right: -3em;
 		}
-		.part-close {
+		.scene-close {
 			position: absolute;
 			right: .25em;
 			top: 0; bottom: 0;
@@ -168,21 +176,21 @@
 			user-select: none;
 		}
 
-		.part-header {
+		.scene-header {
 			display: flex;
 			flex-direction: row;
 		}
-		.part-header_content {
+		.scene-header_content {
 			flex: 1;
 			position: relative;
 			border: 1px solid #ccc;
 			border-left-width: .5em;
 			padding: .25em 1em;
 		}
-		.hidenumbers.hidetexts.hidemanagement .part-header_content {
+		.hidenumbers.hidetexts.hidemanagement .scene-header_content {
 			border: 0;
 		}
-		.part-header_content::before {
+		.scene-header_content::before {
 			font-weight: 700;
 			position: absolute;
 			top: 0; bottom: 0;
@@ -191,14 +199,14 @@
 			align-items: center;
 			justify-content: center;
 		}
-		.part-header_content::before {
-			content: "PART "counter(part, decimal-leading-zero);
+		.scene-header_content::before {
+			content: "SCENE "counter(scene, decimal-leading-zero);
 			right: 2em;
 		}
-		.part-header_buttons {
+		.scene-header_buttons {
 			display: flex;
 		}
-		.part-header_buttons .btn {
+		.scene-header_buttons .btn {
 			display: flex;
 			flex: 1;
 			align-items: center;
@@ -210,30 +218,34 @@
 			margin: 0 0 0 .5em;
 		}
 
-		/* CASES */
+		/* 
+		 *
+		 * FRAMES
+		 *
+		*/
 
-		.cases {
+		.frames {
 			display: flex;
 			flex-flow: row wrap;
 			overflow: hidden;
 			transition: height .2s ease;
 		}
-		.cases:empty {
+		.frames:empty {
 			border: 1px dashed #ccc;
 		}
-		.cases:empty::before {
+		.frames:empty::before {
 			content: "empty";
 			color: #777;
 			width: 100%;
 			padding: 1em;
 			text-align: center;
 		}
-		.closed .cases {
+		.closed .frames {
 			height: 0;
 			min-height: 0;
 			border: 0;
 		}
-		.case {
+		.frame {
 			box-sizing: border-box;
 			float: left;
 			display: inline-block;
@@ -251,18 +263,18 @@
 			padding: 0 .25%;
 			width: 12.5%;
 		}
-		.overview .col.part-header {
+		.overview .col.scene-header {
 			width: 25%;
 		}
-		.case.ispano {
+		.frame.ispano {
 			width: 100% !important;
 		}
-		.overview .case.ispano {
+		.overview .frame.ispano {
 			width: 100% !important;
 		}
 		@media only screen and (max-width : 1900px) {
-			.overview .col.part-header,
-			.col.part-header {
+			.overview .col.scene-header,
+			.col.scene-header {
 				width: 33.33%;
 			}
 		}
@@ -277,8 +289,8 @@
 				padding: 0 .5%;
 				width: 16.65%;
 			}
-			.overview .col.part-header,
-			.col.part-header {
+			.overview .col.scene-header,
+			.col.scene-header {
 				width: 50%;
 			}
 		}
@@ -289,8 +301,8 @@
 			.overview .col {
 				width: 25%;
 			}
-			.overview .col.part-header,
-			.col.part-header {
+			.overview .col.scene-header,
+			.col.scene-header {
 				width: 100%;
 			}
 		}
@@ -301,52 +313,52 @@
 			.overview .col {
 				width: 50%;
 			}
-			.part-title {
+			.scene-title {
 				margin: 0;
 			}
-			.part-header_content::before {
+			.scene-header_content::before {
 				position: static;
 				padding-top: .5em;
 			}
 		}
 
 		/* numbers */
-		.case {
-			counter-reset: case 1;
-			counter-increment: shot shot-total case-total;
+		.frame {
+			counter-reset: frame 1;
+			counter-increment: shot shot-total frame-total;
 		}
-		.case+.case.sameshot {
+		.frame+.frame.sameshot {
 			counter-reset: none;
-			counter-increment: shot-total case case-total;
+			counter-increment: shot-total frame frame-total;
 		}
-		.case-nbr {
+		.frame-nbr {
 			position: relative;
     		padding: 0 1em;
 			font: 300 .7em arial;
 			color: #A0A0A0;
 		}
-		.case-nbr::before,
-		.case-nbr::after {
+		.frame-nbr::before,
+		.frame-nbr::after {
 			position: absolute;
 			padding: .75em 1.5em;
 		}
-		.case-nbr::before {
+		.frame-nbr::before {
 			left: 0;
 			content: counter(shot-total, decimal-leading-zero);
 		}
-		.case + .sameshot .case-nbr::before {
+		.frame + .sameshot .frame-nbr::before {
 			content: none;
 		}
-		.case-nbr::after {
+		.frame-nbr::after {
 			right: 0;
-			content: " PART "counter(part, decimal-leading-zero)
+			content: " scene "counter(scene, decimal-leading-zero)
 					 " SHOT "counter(shot, decimal-leading-zero);
 		}
-		.case + .sameshot .case-nbr::after {
-			content: "("counter(case)")";
+		.frame + .sameshot .frame-nbr::after {
+			content: "("counter(frame)")";
 		}
 		/* cuts indicators */
-		.case .case-img::before {
+		.frame .frame-img::before {
 			content: " ";
 			position: absolute;
 			top: 50%; bottom: 50%;
@@ -355,38 +367,38 @@
 			z-index: -1;
 			transition: all .2s ease;
 		}
-		.case+.case.sameshot .case-img::before {
+		.frame+.frame.sameshot .frame-img::before {
 			top: 0; bottom: 0;
 			background: #9c9c9c;
 		}
-		.case.dragged .case-img::before {
+		.frame.dragged .frame-img::before {
 			content: none;
 		}
-		.case:first-child .btn-sameshot {
+		.frame:first-child .btn-sameshot {
 			display: none;
 		}
-		/* case content */
-		.case-img {
+		/* frame content */
+		.frame-img {
 			position: relative;
 			line-height: 0;
 			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 		}
-		.case-img img {
+		.frame-img img {
 			width: 100%;
 			transition: all .1s ease;
 			z-index: 1;
 		}
-		.case-img img.dragenter {
+		.frame-img img.dragenter {
 			outline: 1em solid #00796B;
 			outline-offset: -1em;
 		}
-		.case.dropped {
+		.frame.dropped {
 			animation: drop .4s ease-in-out;
 		}
-		.case.notimage {
+		.frame.notimage {
 			animation: error .2s;
 		}
-		.case-text {
+		.frame-text {
 			position: relative;
 			padding: 1em;
 			line-height: 1.3;
@@ -395,11 +407,11 @@
 			font-size: 13px;
 			z-index: 2;
 		}
-		.overview .case-text {
+		.overview .frame-text {
 			font-size: 11px;
 		}
-		.case-text p,
-		.case-text div {
+		.frame-text p,
+		.frame-text div {
 			padding: .5em 0;
 		}
 		/* switches */
@@ -420,27 +432,27 @@
 		.overlay {
 			animation: reveal .2s;
 		}
-		.case {
+		.frame {
 			animation: reveal .2s;
 			transition: all .2s ease;
 		}
-		.case.remove {
+		.frame.remove {
 			min-width: 0;
 			width: 0;
 			opacity: 0;
 		}
-		.part-header::before,
-		.part-overview,
-		.case-text,
-		.case-nbr {
+		.scene-header::before,
+		.scene-overview,
+		.frame-text,
+		.frame-nbr {
 			max-height: 15em;
 			opacity: 1;
 			transition: all .2s ease;
 		}
-		.hidetexts .part-overview,
-		.hidetexts .case-text,
-		.hidenumbers .case-nbr,
-		.hidenumbers .part-header_content::before {
+		.hidetexts .scene-overview,
+		.hidetexts .frame-text,
+		.hidenumbers .frame-nbr,
+		.hidenumbers .scene-header_content::before {
 			opacity: 0;
 			max-height: 0;
 			padding-top: 0;
@@ -449,11 +461,15 @@
 			margin-bottom: 0;
 		}
 
-		/* BUTTONS */
+		/* 
+		 *
+		 * BUTTONS
+		 *
+		*/
 
 		.btn,
 		.btn:visited {
-			text-transform: uppercase;
+			text-transform: frame;
 			cursor: pointer;
 			text-decoration: none;
 			color: #00796B;
@@ -489,7 +505,11 @@
 			justify-content: center;
 		}
 
-		/* icons and texts */
+		/* 
+		 *
+		 * ICONS & TEXTS
+		 *
+		*/
 
 		.toggle::before {
 			content: "☑";
@@ -497,41 +517,41 @@
 		.toggle.off::before {
 			content: "☐";
 		}
-		.add-part::after {
-			content: "Add a new part";
+		.add-scene::after {
+			content: "Add a new scene";
 		}
-		.add-case::after {
+		.add-frame::after {
 			content: "+>";
 		}
-		.add-case-before::after {
+		.add-frame-before::after {
 			content: "<+";
 		}
-		.part-close::after {
+		.scene-close::after {
 			content: "▴";
 		}
-		.part.closed .part-close::after {
+		.scene.closed .scene-close::after {
 			content: "▾";
 		}
-		.toggle-parts::after {
-			content: "▾ Open all parts";
+		.toggle-scenes::after {
+			content: "▾ Open all scenes";
 		}
-		.toggle-parts.close::after {
-			content: "▴ Close all parts";
+		.toggle-scenes.close::after {
+			content: "▴ Close all scenes";
 		}
-		.part-delete::after,
+		.scene-delete::after,
 		.overlay .delete::after {
 			content: "✕";
 		}
 		.overlay .btn-pano::after {
 			content: "⇔";
 		}
-		.case.ispano .btn-pano::after {
+		.frame.ispano .btn-pano::after {
 			content: "⇐⇒";
 		}
 		.overlay .btn-sameshot::after {
 			content: "--";
 		}
-		.case.sameshot .btn-sameshot::after {
+		.frame.sameshot .btn-sameshot::after {
 			content: "||";
 		}
 	</style>
@@ -548,32 +568,32 @@
 		</ul>
 	</header>
 	<div class="story">
-		<div class="btn toggle-parts close"></div>
-		<ul class="parts sortable" data-sortable-id="0" aria-dropeffect="move"></ul>
-		<div class="btn add add-part col management"></div>
+		<div class="btn toggle-scenes close"></div>
+		<ul class="scenes sortable" data-sortable-id="0" aria-dropeffect="move"></ul>
+		<div class="btn add add-scene col management"></div>
 	</div>
 	<script id="template" type="text/x-custom-template">
-	<li class="part">
-		<header class="part-header col">
-			<div class="part-header_content">
-				<h1 class="part-title" contenteditable="true">Title</h1>
-				<p class="part-overview" contenteditable="true">Overview</p>
-				<div class="part-handle management"></div>
-				<div class="part-close"></div>
+	<li class="scene">
+		<header class="scene-header col">
+			<div class="scene-header_content">
+				<h1 class="scene-title" contenteditable="true">Title</h1>
+				<p class="scene-overview" contenteditable="true">Overview</p>
+				<div class="scene-handle management"></div>
+				<div class="scene-close"></div>
 			</div>
-			<div class="part-header_buttons management">
-				<div class="btn part-delete"></div>
-				<div class="btn add-case-before"></div>
-				<div class="btn add-case"></div>
+			<div class="scene-header_buttons management">
+				<div class="btn scene-delete"></div>
+				<div class="btn add-frame-before"></div>
+				<div class="btn add-frame"></div>
 			</div>
 		</header>
-		<ul class="cases sortable connected"><!--
-			--><li class="case col">
-				<div class="case-img">
+		<ul class="frames sortable connected"><!--
+			--><li class="frame col">
+				<div class="frame-img">
 					<img src="data:image/gif;base64,R0lGODlhEAAJAKIAAMzMzJaWlrGxsaOjo76+vpycnMXFxaqqqiwAAAAAEAAJAAADCwi63P4wykmrvRgmADs=">
 				</div>
-				<div class="case-text" contenteditable="true">caption</div>
-				<div class="case-nbr"></div>
+				<div class="frame-text" contenteditable="true">caption</div>
+				<div class="frame-nbr"></div>
 			</li><!--
 		--></ul>
 	</li>
@@ -627,22 +647,22 @@
 			story.classList.toggle(tgt.dataset.toggle);
 		};
 
-		// parts toggles
+		// scenes toggles
 		document.querySelector('body').addEventListener('click', function(e) {
 			var tgt = getTarget(e);
-			if(tgt.classList.contains('part-close')) {
+			if(tgt.classList.contains('scene-close')) {
 				tgt.parentNode.parentNode.parentNode.classList.toggle('closed');
 			}
 		});
-		document.querySelector('.toggle-parts').onclick = function (e){
+		document.querySelector('.toggle-scenes').onclick = function (e){
 			var target = '.closed';
 			if(this.classList.contains('close'))
 				target = ':not(' + target + ')';
-			var parts = story.querySelectorAll('.part'+target);
+			var scenes = story.querySelectorAll('.scene'+target);
 			this.classList.toggle('close');
-			if(parts === null) return;
-			for (var i = 0; i < parts.length; i++) {
-				parts[i].classList.toggle('closed');
+			if(scenes === null) return;
+			for (var i = 0; i < scenes.length; i++) {
+				scenes[i].classList.toggle('closed');
 			}
 		};
  
