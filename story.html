@@ -59,33 +59,31 @@
 
 		.header {
 			position: fixed;
-			background: #fff;
 			top: 0;
-			right: 0;
-			left: 0;
-			z-index: 999;
+			right: 0; left: 0;
+
+			flex-flow: row wrap;
+			align-items: baseline;
+
+			background: #fff;
 			box-shadow: 0 0 1px;
-			padding: .5em;
+			padding: 1.5em .5em .5em;
 			overflow: auto;
-		}
-		.header.static {
-			position: static;
-			box-shadow: none;
+			z-index: 999;
 		}
 		.header * {
-			margin: 0;
 			padding: 0;
-			display: inline-block;
+			margin: 0;
 		}
-		.header h1 {
-			padding: .25em .5em;
+		.header-title {
+			float: left;
+			padding: 0 .5em;
 		}
 		.header ul {
 			float: right;
-			margin: 1.1em 0;
-		}
-		.header .btn {
-			padding: 0 1em;
+			display: flex;
+			flex-flow: row wrap;
+			list-style: none;
 		}
 		.toggle::before {
 			font-weight: 300;
@@ -117,17 +115,13 @@
 			counter-reset: shot;
 			counter-increment: scene;
 		}
-		.scene-header,
-		.add-scene  {
+		.scene-header {
 			position: relative;
 			min-height: 2.75em;
 			border-radius: 3px;
 			margin: 1em;
 			padding: 1em;
 			box-sizing: border-box;
-		}
-		.add-scene {
-			border: 1px solid #ccc;
 		}
 		.scene.dragged {
 			border: 2px solid #005249;
@@ -205,17 +199,10 @@
 		}
 		.scene-header_buttons {
 			display: flex;
+			align-items: center;
 		}
 		.scene-header_buttons .btn {
-			display: flex;
-			flex: 1;
-			align-items: center;
-			justify-content: center;
 			font-size: 1.5em;
-			border: 1px solid #ccc;
-			border-radius: 3px;
-			padding: .5em;
-			margin: 0 0 0 .5em;
 		}
 
 		/* 
@@ -410,10 +397,6 @@
 		.overview .frame-text {
 			font-size: 11px;
 		}
-		.frame-text p,
-		.frame-text div {
-			padding: .5em 0;
-		}
 		/* switches */
 		.nomanagement .management {
 			display: none;
@@ -469,12 +452,28 @@
 
 		.btn,
 		.btn:visited {
-			text-transform: frame;
-			cursor: pointer;
-			text-decoration: none;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			height: 1.5em;
+			max-width: 10em;
+			padding: .5em 1em;
+			margin: 0 0 .5em .5em;
+			overflow: hidden;
+			
 			color: #00796B;
 			font-weight: 700;
 			font-size: 1.2em;
+			text-transform: uppercase;
+			text-decoration: none;
+			cursor: pointer;
+
+			border: 1px solid #ccc;
+			border-radius: 3px;
+			box-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+			transition: all .1s ease;
+
 			-webkit-user-select: none;  
 			-moz-user-select: none;    
 			-ms-user-select: none; 
@@ -482,6 +481,47 @@
 		}
 		.btn:hover {
 			color: #FF5722;
+			box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+		}
+		.btn-link {
+			border: none;
+			box-shadow: none;
+		}
+		.btn-link:hover {
+			box-shadow: none;
+		}
+
+		.btn-edit {
+			width: 5.5em;
+			background: hsl(173, 100%, 27%);
+			border: 0;
+			color: white;
+		}
+		.btn-edit:hover {
+			background: hsl(173, 90%, 30%);
+			color: white;
+		}
+		.btn-edit::before {
+			transition: all .1s ease;
+		}
+		.btn-edit:hover::before {
+			transform: scale(1.25);
+		}
+		.btn-edit.off {
+			background: hsl(193, 100%, 34%);
+		}
+		.btn-edit.off:hover {
+			background: hsl(193, 90%, 37%);
+		}
+		.btn-edit::before {
+			font-size: 2em;
+		}
+		.btn-edit.off {
+		}
+		.btn-export {
+		}
+		.btn-export::after {
+			content: "◥";
 		}
 		.overlay {
 			position: absolute;
@@ -517,6 +557,11 @@
 		.toggle.off::before {
 			content: "☐";
 		}
+		.btn-edit.off::before { content: "✎"; }
+		.btn-edit.off::after { content: "edit"; }
+		.btn-edit::before { content: "◉"; }
+		.btn-edit::after { content: "view"; }
+
 		.add-scene::after {
 			content: "Add a new scene";
 		}
@@ -558,17 +603,18 @@
 </head>
 <body>
 	<header class="header">
-		<div class="header-title" contenteditable="true"><h1>Storyboard</h1></div>
+		<h1 class="header-title" contenteditable="true">Storyboard</h1>
 		<ul>
-			<li><div class="btn toggle management" data-toggle="hidemanagement">Manage</div></li>
-			<li><div class="btn toggle" data-toggle="hidetexts">Texts</div></li>
-			<li><div class="btn toggle" data-toggle="hidenumbers">Numbers</div></li>
-			<li><div class="btn toggle off" data-toggle="overview">Overview</div></li>
-			<li><a class="btn" href="https://github.com/nliautaud/storynator" target="_blank">Github</a></li>
+			<li><div class="btn btn-link toggle" data-toggle="hidetexts">Texts</div></li>
+			<li><div class="btn btn-link toggle" data-toggle="hidenumbers">Numbers</div></li>
+			<li><div class="btn btn-link toggle off" data-toggle="overview">Overview</div></li>
+			<li><a class="btn btn-link" href="https://github.com/nliautaud/storynator" target="_blank">Github</a></li>
+			<li><div class="btn btn-edit toggle management" data-toggle="hidemanagement"></div></li>
+			<li><div draggable="true" class="btn btn-export management"></div></li>
 		</ul>
 	</header>
 	<div class="story">
-		<div class="btn toggle-scenes close"></div>
+		<div class="btn btn-link toggle-scenes close"></div>
 		<ul class="scenes sortable" data-sortable-id="0" aria-dropeffect="move"></ul>
 		<div class="btn add add-scene col management"></div>
 	</div>
@@ -643,6 +689,7 @@
 		// header options toggle
 		document.querySelector('.header ul').onclick = function (e){
 			var tgt = getTarget(e);
+			if(!tgt.classList.contains('toggle')) return;
 			tgt.classList.toggle('off');
 			story.classList.toggle(tgt.dataset.toggle);
 		};

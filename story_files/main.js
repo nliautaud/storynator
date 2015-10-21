@@ -1,6 +1,6 @@
 $(function() {
 	var part_tpl = $('#template').html();
-	var case_tpl = $(part_tpl).find('.case').wrap('<p>').parent().html();
+	var case_tpl = $(part_tpl).find('.frame').wrap('<p>').parent().html();
 	var overlay_tpl = $('#overlay-tpl').html();
 
 	var body = $('body'),
@@ -8,38 +8,76 @@ $(function() {
 		story = $('.story'),
 		dragcase = false,
 		changes = false,
-		linkedCases = null;
+		isExport = false,
+		linkedFrames = null;
 
 	// activate management and contenteditable
 	body.removeClass('nomanagement');
 	$('*[contenteditable]').attr('contenteditable', true);
 
+
+
+	//*/// import / export
+
+	if($('.btn-export').length === 0) {
+		header.find('ul')
+			.append('<li><div draggable="true" class="btn btn-export management"></div></li>');
+	}
+	$('.btn-export').on('dragstart', function (event) {
+		isExport = true;
+		event.originalEvent.dataTransfer.setData("text/html", story.html());
+	});
+	$(window).on('dragover', function(e){
+		e.preventDefault();
+	});
+	$(window).on('drop', function(event){
+		// import
+		if(!isExport) {
+			var data = event.originalEvent.dataTransfer.getData("text/html");
+			story.html(data);
+		}
+		isExport = false;
+		event.preventDefault();
+	});
+
+
+
+	//*/// changes
+
 	function setChanged() {
 		if(!changes) body.addClass('changed');
 		changes = true;
 	}
+	body.delegate('*[contenteditable]', 'input', function(e){
+		setChanged();
+	});
+	$(window).bind('beforeunload', function(){
+		if(changes) return 'Any changes to the storyboard will be lost.';
+	});
+
+
 
 	//*/// sortable
 
-	Sortable.create(document.querySelector('.parts'), {
+	Sortable.create(document.querySelector('.scenes'), {
 		animation: 200,
-		draggable: '.part',
-		handle: '.part-handle',
+		draggable: '.scene',
+		handle: '.scene-handle',
 		ghostClass: 'dragged',
 	});
 	var sortableParts = [];
-	function initCasesSort() {
+	function initFramesSort() {
 		// destroy old ones
 		for (var i = 0; i < sortableParts.length; i++) {
 			sortableParts[i].destroy();
 		}
 		sortableParts.length = 0;
 		// make new ones
-		[].forEach.call(document.querySelectorAll('.cases'), function (el) {
+		[].forEach.call(document.querySelectorAll('.frames'), function (el) {
 			sortableParts.push(Sortable.create(el, {
-				group: 'cases',
-				draggable: '.case',
-				handle: '.case-img',
+				group: 'frames',
+				draggable: '.frame',
+				handle: '.frame-img',
 				chosenClass: 'dragged',
 				ghostClass: 'dragged',
 				animation: 0,
@@ -59,7 +97,7 @@ $(function() {
 	}
 
 	function tagSiblingsOf(item) {
-		// tag the cases which are in the same shot
+		// tag the frames which are in the same shot
 		// that the given item (cf. manageMoves)
 		item.nextUntil(':not(.sameshot)')
 			.addClass('linked after');
@@ -71,8 +109,8 @@ $(function() {
 	}
 	function manageMoves(item) {
 		// manage global behaviors of :
-		// - cases moved in their shot,
-		// - cases moved in/out a shot,
+		// - frames moved in their shot,
+		// - frames moved in/out a shot,
 		// - all a shot moved at once.
 		var linked = $('.linked'),
 			next = item.next(),
@@ -109,35 +147,37 @@ $(function() {
 		}
 	}
 
-	initCasesSort();
+	initFramesSort();
+
+
 
 	//*/// drop image
 
-	story.delegate('.case', 'dragenter', function(e){
+	story.delegate('.frame', 'dragenter', function(e){
 		$('.overlay').remove();
 	});
-	story.delegate('.case img', 'dragenter', function(e){
+	story.delegate('.frame img', 'dragenter', function(e){
 		if(!dragcase) {
 			e.stopPropagation();
 			e.preventDefault();
 			$(this).addClass('dragenter');
 		}
 	});
-	story.delegate('.case img', 'dragleave', function(e){
+	story.delegate('.frame img', 'dragleave', function(e){
 		if(!dragcase) $(this).removeClass('dragenter');
 	});
-	story.delegate('.case img', 'dragover', function(e){
+	story.delegate('.frame img', 'dragover', function(e){
 		if(!dragcase) {
 			e.stopPropagation();
 			e.preventDefault();
 		}
 	});
-	story.delegate('.case img', 'drop', function(e){
+	story.delegate('.frame img', 'drop', function(e){
 		if(!dragcase) {
 			e.preventDefault();
 			var file = e.originalEvent.dataTransfer.files[0];
 			var img = $(this),
-				tcase = img.parents('.case');
+				tcase = img.parents('.frame');
 			img.removeClass('dragenter');
 
 			// not a supported image
@@ -190,40 +230,30 @@ $(function() {
 			}, false);
 		}
 	});
-	/* prevent opening file when missing target */
-	$(window).on('dragover', function(e){
-		e.preventDefault();
-	});
-	$(window).on('drop', function(e){
-		e.preventDefault();
-	});
-	/* alert before quitting when changes may be lost */
-	body.delegate('*[contenteditable]', 'input', function(e){
-		setChanged();
-	});
-	$(window).bind('beforeunload', function(){
-		if(changes) return 'Any changes to the storyboard will be lost.';
-	});
+
+
 
 	//*/// add
 
-	story.delegate('.add-part', 'click', function(e){
-		$(part_tpl).appendTo('.parts').hide().slideDown(200);
-		initCasesSort();
+	story.delegate('.add-scene', 'click', function(e){
+		$(part_tpl).appendTo('.scenes').hide().slideDown(200);
+		initFramesSort();
 		setChanged();
 	});
-	story.delegate('.add-case-before', 'click', function(e){
-		$(this).closest('.part').find('.cases').prepend(case_tpl);
+	story.delegate('.add-frame-before', 'click', function(e){
+		$(this).closest('.scene').find('.frames').prepend(case_tpl);
 		setChanged();
 	});
-	story.delegate('.add-case', 'click', function(e){
-		$(this).closest('.part').find('.cases').append(case_tpl);
+	story.delegate('.add-frame', 'click', function(e){
+		$(this).closest('.scene').find('.frames').append(case_tpl);
 		setChanged();
 	});
+
+
 
 	//*/// case overlay
 
-	story.delegate('.case-img', 'click', function(e){
+	story.delegate('.frame-img', 'click', function(e){
 		$('.overlay').remove();
 		$(this).prepend(overlay_tpl);
 		e.stopPropagation();
@@ -232,23 +262,25 @@ $(function() {
 		$('.overlay').remove();
 	});
 	story.delegate('.overlay .delete', 'click', function(e){
-		var $case = $(this).closest('.case');
+		var $case = $(this).closest('.frame');
 		$case.addClass('remove');
 		setTimeout(function(){
 			$case.remove();
 		}, 200);
 		setChanged();
 	});
-	story.delegate('.case *[data-toggle]', 'click', function(e){
+	story.delegate('.frame *[data-toggle]', 'click', function(e){
 		var $this = $(this);
-		$this.closest('.case').toggleClass($this.data('toggle'));
+		$this.closest('.frame').toggleClass($this.data('toggle'));
 		setChanged();
 	});
 
+
+
 	//*/// part delete
 
-	story.delegate('.part-delete', 'click', function(e){
-		var part = $(this).closest('.part');
+	story.delegate('.scene-delete', 'click', function(e){
+		var part = $(this).closest('.scene');
 		part.addClass('hidemanagement')
 			.animate({
 				opacity: 0, height: 0
@@ -257,6 +289,8 @@ $(function() {
 				setChanged();
 			});
 	});
+
+
 
 	//*/// shortcuts
 
