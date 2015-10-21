@@ -285,7 +285,10 @@ $(function() {
 	});
 	story.delegate('.frame *[data-toggle]', 'click', function(e){
 		var $this = $(this);
-		$this.closest('.frame').toggleClass($this.data('toggle'));
+		$this.closest('.frame')
+			.toggleClass($this.data('toggle'))
+			.find('img')
+				.removeAttr('style');
 		setChanged();
 	});
 
