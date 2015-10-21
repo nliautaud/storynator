@@ -39,6 +39,7 @@ $(function() {
 				story.html(data).promise().done(function(){
 					setTimeout(function () {
 						$this.removeClass('loading');
+						setChanged();
 					}, 500);
 				});
 			}
