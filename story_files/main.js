@@ -19,27 +19,32 @@ $(function() {
 
 	//*/// import / export
 
-	if($('.btn-export').length === 0) {
-		header.find('ul')
-			.append('<li><div draggable="true" class="btn btn-export management"></div></li>');
-	}
-	$('.btn-export').on('dragstart', function (event) {
-		isExport = true;
-		event.originalEvent.dataTransfer.setData("text/html", story.html());
-	});
-	$(window).on('dragover', function(e){
-		e.preventDefault();
-	});
-	$(window).on('drop', function(event){
-		// import
-		if(!isExport) {
-			var data = event.originalEvent.dataTransfer.getData("text/html");
-			story.html(data);
-		}
-		isExport = false;
-		event.preventDefault();
-	});
-
+	$('.btn-edit')
+		.on('dragstart', function (event) {
+			isExport = true;
+			event.originalEvent.dataTransfer.setData("text/html", story.html());
+			$(this).addClass('export');
+		}).on('dragenter', function (event) {
+			if(!isExport) $(this).addClass('import');
+		}).on('dragleave', function (event) {
+			if(!isExport) $(this).removeClass('import');
+		}).on('dragend', function(event){
+			$(this).removeClass('export');
+		}).on('drop', function(event){
+			// import
+			if(!isExport) {
+				var data = event.originalEvent.dataTransfer.getData("text/html");
+				$this = $(this);
+				$this.toggleClass('loading import');
+				story.html(data).promise().done(function(){
+					setTimeout(function () {
+						$this.removeClass('loading');
+					}, 500);
+				});
+			}
+			isExport = false;
+			event.preventDefault();
+		});
 
 
 	//*/// changes
@@ -229,6 +234,13 @@ $(function() {
 				};
 			}, false);
 		}
+	});
+
+	$(window).on('dragover', function(e){
+		e.preventDefault();
+	});
+	$(window).on('drop', function(event){
+		event.preventDefault();
 	});
 
 
