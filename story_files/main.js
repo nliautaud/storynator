@@ -267,8 +267,9 @@ $(function() {
 	//*/// case overlay
 
 	story.delegate('.frame-img', 'click', function(e){
-		$('.overlay').remove();
-		$(this).prepend(overlay_tpl);
+		var overlay = $('.overlay');
+		if(overlay.length) overlay.remove();
+		else $(this).prepend(overlay_tpl);
 		e.stopPropagation();
 	});
 	$(window).on('click', function() {
