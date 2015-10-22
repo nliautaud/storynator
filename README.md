@@ -22,61 +22,78 @@ Open the [demo][demo] and start editing.
 
 When you're ready to save your changes, juste save the page (like just ``Ctrl+S`` or ``Cmd+S``). 
 
-Downloaded, you can do it again : open-it, edit-it and save-it (overwrite the old one if you want). You can share it too.
+To continue editing, open the storyboard that you've just downloaded, edit-it and save-it again !
+
+### Adding elements
+
+In edit mode, you'll see some hollow blocs with dashed borders. They're new scenes and new frames waiting to be created. Start to edit them, and they will instantly became fresh new elements.
+
+You can also drag an hollow element to somewhere you'd like a new one, or directly drop some images onto a hollow frame.
+
+If you want to quickly add a bunch of empty frames, you may use the buttons next to the scene header. One append them at the end, and the other insert them at the begining (you don't have to scroll to the bottom for that).
+
+To delete a scene, use the button next to its header.
+By selecting a frame you'll reveal a delete button and some other options : 
+- ``||`` or ``--`` to switch the link to the previous shot (see [shots](#shots))
+- ``<==>`` to toggle the image width limitation (see [images](#images))
+
+### Writing
+
+The texts are directly editables.
+
+Depending on your browser you may use the usual keyboard shortcuts to undo/redo text changes (ex. ``ctrl+z`` or ``⌘+z``) and apply formatting like bold, italic or underline (ex. ``ctrl+b`` or ``⌘+b``).
+
+### Reorder frames and parts
+
+Drag & drop things.
+
+Parts have a handle next to their title.
+
+### Loading images
+
+Drop image files onto a frame to load them. You may drop a single file to load or overwrite a single image, or drop a bunch of files to create new frames.
+
+The image files must be in ``jpg``,``png`` or ``gif`` format. Once reduced to a proper size, they are directly included into the storyboard file.
+
+The frames width are limited by default to be nicely layout in regular columns. When an image is especially larger than the others, for a traveling shot for exemple, that limitation may be inapropriated. The panoramic option available by selecting a frame allow an image to lock its height on the height of the surrounding frames. That option is automaticaly enabled when a dropped image is at least to times larger than tall.
+
+### Shots
+
+By default, each frame define a distinct shot.
+
+By using the associated option of the frame overlay, you can define that a frame is part of the same shot than the previous one, and so define a shot illustrated by several frames. These relations are then displayed and numbered in a different manner.
+
+The system helps maintaining such relations when moving frames around :
+- you can move all the frames of a shot by moving the first one
+- you can move a frame to the head of its own shot by moving it before the first one
+- you can insert a frame into an existing shot by moving it between the first and the last one
+- you can extract a frame of a shot by moving it a little further
+
+### Display options
+
+- *Texts* : show / hide parts and frames texts.
+- *Texts* : show / hide parts and frames texts.
+- *Numbers* : show / hide parts and frames numbers.
+- *Overview* : display frames two times smaller.
+- *Edit/View* : toggle editing or viewing mode.
+
+The parts may be folded or opened by clicking on the arrow next to their title.
+
+### Sharing & copying
+
+All you've got is composed of a .html file and a directory :
 
 ```
 story.html
 story_files/
 ```
-The storyboard is self-contained in the single html file. So it may be just distributed, copied, sent by mail or synchronised trough Dropbox, BitSync, or shared on its own in any other way. 
+The storyboard itself is self-contained in the single html file. That mean that it may be distributed, copied, sent by mail or synchronised trough Dropbox, BitSync, or shared on its own in any other way.
 
 The sibling directory contain only the system files that allow to edit the storyboard content. Thus, a shared storyboard may be editable depending on whether you choose to include this directory or not. Note that its name rely on the browser and OS implementations, so different browsers and OS may have different behaviors and may use a slightly different name. 
 
-### Display options
+A solitary storyboard file, without its sibling directory, will look like the view mode (without the edit button).
 
-- *Texts* : show / hide parts and cases texts.
-- *Numbers* : show / hide parts and cases numbers.
-- *Overview* : display cases two times smaller.
-- *Edit/View* : toggle editing or viewing mode.
-
-The parts may be folded or opened by clicking on the arrow next to their title.
-
-### Editing
-
-The texts are directly editables. Depending on your browser you may use the usual keyboard shortcuts to undo/redo text changes (ex. ``ctrl+z`` or ``⌘+z``) and apply formatting like bold, italic or underline (ex. ``ctrl+b`` or ``⌘+b``).
-
-Click on the cases to show more options :
-- Define the case as part of the same shot than the previous case (see [shots](#shots))
-- Disable/enable the case width limitation (see [images](#images))
-- Delete the case
-
-### Loading images
-
-Just drop image files to load them into the cases.
-
-They must be in ``jpg``,``png`` or ``gif`` format. They are reduced to a proper size and directly included into the storyboard file.
-
-The cases width are limited by default to be nicely layout in regular columns. When a dropped image is at least to times larger than tall, that limit is disabled. That behavior may be then manually controlled trough the case options. 
-
-### Reorder cases and parts
-
-Drag & drop things.
-
-Parts have a handle next to their title. It may be useful to fold them before moving them around.
-
-### Shots
-
-By default, each case define a distinct shot.
-
-By using the associated option of the case overlay, you can define that a case is part of the same shot than the previous one, and so define a shot illustrated by several cases. These relations are then displayed and numbered in a different manner.
-
-Some behaviors helps to maintain such relations when moving cases around :
-- you can move all the cases of a shot by moving the first one
-- you can move a case to the head of its own shot by moving it before the first one
-- you can insert a case into an existing shot by moving it between the first and the last one
-- you can extract a case of a shot by moving it a little further
-
-### Update
+### Updating
 
 The edit/view button is also an import/export tool which allow to copy the content of a storyboard file into another, and may be used as an easy update process.
 
