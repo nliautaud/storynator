@@ -71,7 +71,7 @@ The system helps maintaining such relations when moving frames around :
 
 ### Display options
 
-- *Texts* : show / hide parts and frames texts.
+- *Open/close all* : toggle all the scenes.
 - *Texts* : show / hide parts and frames texts.
 - *Numbers* : show / hide parts and frames numbers.
 - *Overview* : display frames two times smaller.
