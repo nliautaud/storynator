@@ -129,8 +129,8 @@ $(function() {
 			haveSameshot = item.hasClass('sameshot');
 
 		// moved shadow, or after shadow
-		if(item.hasClass('frame-shadow')) unShadow(item);
-		if(prev.hasClass('frame-shadow')) unShadow(prev);
+		if(item.hasClass('frame-shadow')) revealShadow(item);
+		if(prev.hasClass('frame-shadow')) revealShadow(prev);
 
 		// item was in a shot
 		if(linked.length != 0) {
@@ -163,7 +163,7 @@ $(function() {
 
 
 
-	//*/// drop image
+	//*/// drop images
 
 	story.delegate('.frame', 'dragenter', delOverlay);
 	story.delegate('.frame img', 'dragenter', function(e){
@@ -182,19 +182,28 @@ $(function() {
 			e.preventDefault();
 		}
 	});
-	story.delegate('.frame-shadow img', 'drop', function(event){
-		loadImage(event, $(this));
-		unShadow($(this));
-	});
 	story.delegate('.frame img', 'drop', function(event){
-		loadImage(event, $(this));
-	});
-
-	function loadImage (event, img) {
 		if(dragcase) return;
 		event.preventDefault();
+		var files = event.originalEvent.dataTransfer.files,
+			target = $(this),
+			frame, newframe;
+		for (var i = 0; i < files.length; i++){
+			var load = loadImage(files[i], target);
+			if(!load) continue;
+			frame = target.closest('.frame');
+			if(frame.hasClass('frame-shadow')) 
+				newframe = revealShadow(target);
+			else if(i < files.length -1 ) {
+				newframe = newFrame();
+				frame.after(newframe);
+			}
+			target = newframe.find('img');
+		}
+		loadImage(event.originalEvent.dataTransfer.files[0], $(this));
+	});
 
-		var file = event.originalEvent.dataTransfer.files[0];
+	function loadImage (file, img) {
 		var frame = img.parents('.frame');
 		img.removeClass('dragenter');
 
@@ -205,11 +214,9 @@ $(function() {
 			setTimeout(function () {
 				frame.removeClass('notimage');
 			}, 200);
-			return;
+			return false;
 		}
-
 		// let's go
-		setChanged();
 		var reader = new FileReader();
 		reader.readAsDataURL(file);
 		reader.addEventListener('loadend', function (e, f) {
@@ -246,6 +253,7 @@ $(function() {
 				img.attr('src', canvas.toDataURL(file.type, 0.25));
 			};
 		}, false);
+		return true;
 	}
 
 	$(window).on('dragover', function(e){
@@ -265,24 +273,34 @@ $(function() {
 		setChanged();
 	});
 	story.delegate('.add-frame-before', 'click', function(e){
-		var frame = $(frame_tpl).removeClass('frame-shadow management');
-		$(this).closest('.scene').find('.frames').prepend(frame);
+		$(this).closest('.scene').find('.frames').prepend(newFrame());
 		setChanged();
 	});
 	story.delegate('.add-frame', 'click', function(e){
 		var scene = $(this).closest('.scene'),
 			shadow = scene.find('.frame-shadow');
-		if(!shadow.length) shadow = scene.find('.frames').append(frame_tpl);
-		unShadow(shadow);
+		if(!shadow.length) shadow = scene.find('.frames').append(newShadow());
+		revealShadow(shadow);
 	});
 	body.delegate('.frame-shadow *[contenteditable]', 'input', function(e){
-		unShadow($(this));
+		revealShadow($(this));
 	});
+	function newShadow () {
+		return $(frame_tpl);
+	}
+	function newFrame () {
+		return unShadow(newShadow());
+	}
 	function unShadow (frame) {
+		return frame.removeClass('frame-shadow management');
+	}
+	function revealShadow (frame) {
 		if(!frame.hasClass('frame')) frame = frame.parents('.frame');
-		frame.removeClass('frame-shadow management');
-		frame.parent().append(frame_tpl);
+		unShadow(frame);
+		var newframe = $(frame_tpl);
+		frame.parent().append(newframe);
 		setChanged();
+		return newframe;
 	}
 
 
