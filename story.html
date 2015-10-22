@@ -316,11 +316,18 @@
 			counter-reset: none;
 			counter-increment: shot-total frame frame-total;
 		}
+		.frame-shadow {
+			counter-reset: none;
+			counter-increment: none;
+		}
 		.frame-nbr {
 			position: relative;
     		padding: 0 1em;
 			font: 300 .7em arial;
 			color: #A0A0A0;
+		}
+		.frame-shadow .frame-nbr {
+			display: none;
 		}
 		.frame-nbr::before,
 		.frame-nbr::after {
@@ -363,10 +370,19 @@
 			display: none;
 		}
 		/* frame content */
-		.frame-img {
+		.frame-img,
+		.frame-text {
 			position: relative;
-			line-height: 0;
 			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+		}
+		.frame-shadow .frame-img,
+		.frame-shadow .frame-text {
+			box-shadow: 0 1px 2px rgba(0, 0, 0, 0);
+			box-shadow: none;
+			background: none;
+		}
+		.frame-img {
+			line-height: 0;
 		}
 		.ispano .frame-img {
 			overflow-x: auto;
@@ -384,6 +400,15 @@
 			outline: 1em solid #00796B;
 			outline-offset: -1em;
 		}
+		.frame-shadow .frame-img {
+			border: 1px dashed #ccc;
+		}
+		.frame-shadow img {
+			opacity: .3;
+		}
+		.frame-shadow img.dragenter {
+			opacity: 1;
+		}
 		.frame.dropped {
 			animation: drop .4s ease-in-out;
 		}
@@ -391,10 +416,8 @@
 			animation: error .2s;
 		}
 		.frame-text {
-			position: relative;
 			padding: 1em;
 			line-height: 1.3;
-			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 			background: #FBFBFB;
 			font-size: 13px;
 			z-index: 2;
@@ -407,10 +430,9 @@
 			display: none;
 		}
 		.management {
-			max-height: 10em;
 			opacity: 1;
 			visibility: visible;
-			transition: max-height .2s ease, opacity .2s ease, visibility 0 .2s linear;
+			transition: opacity .2s ease, visibility 0 .2s linear;
 		}
 		.hidemanagement .management {
 			max-height: 0;
@@ -435,7 +457,7 @@
 		.frame-nbr {
 			max-height: 30em;
 			opacity: 1;
-			transition: all .2s ease;
+			transition: max-height .2s ease, opacity .2s ease;
 		}
 		.hidetexts .scene-overview,
 		.hidetexts .frame-text,
@@ -638,7 +660,7 @@
 			</div>
 		</header>
 		<ul class="frames sortable connected"><!--
-			--><li class="frame col">
+			--><li class="frame frame-shadow col management">
 				<div class="frame-img">
 					<img src="data:image/gif;base64,R0lGODlhEAAJAKIAAMzMzJaWlrGxsaOjo76+vpycnMXFxaqqqiwAAAAAEAAJAAADCwi63P4wykmrvRgmADs=">
 				</div>
