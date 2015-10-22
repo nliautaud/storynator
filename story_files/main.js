@@ -266,6 +266,7 @@ $(function() {
 
 	//*/// case overlay
 
+<<<<<<< HEAD
 	story.delegate('.frame-img', 'click', function(e){
 		var overlay = $('.overlay');
 		if(overlay.length) overlay.remove();
@@ -273,7 +274,17 @@ $(function() {
 		e.stopPropagation();
 	});
 	$(window).on('click', function() {
+=======
+	function overlay (el){
+		var existing = $('.overlay');
+		if(existing.length) existing.remove();
+		else el.parent().prepend(overlay_tpl);
+	}
+	$(window).on('click', function(event) {
+>>>>>>> refs/remotes/origin/master
 		$('.overlay').remove();
+		var target = $(event.target);
+		if(target.is('img')) overlay(target);
 	});
 	story.delegate('.overlay .delete', 'click', function(e){
 		var $case = $(this).closest('.frame');

@@ -4,7 +4,11 @@ A simple storyboard editor, with drag and drop and direct text editing.
 
 [![Demo](chrome-frame.png)][demo]
 
+<<<<<<< HEAD
 [demo]: https://cdn.rawgit.com/nliautaud/storynator/bdaec6abc6b2fd13178be0d2533780d2185a5f9e/story.html
+=======
+[demo]: https://cdn.rawgit.com/nliautaud/storynator/5fafa1f45a2b7f466bc3a81d9ed1890a3c48ec36/story.html
+>>>>>>> refs/remotes/origin/master
 
 ### Features
 
@@ -34,10 +38,10 @@ The sibling directory contain only the system files that allow to edit the story
 
 ### Display options
 
-- *Manage* : show / hide management buttons and indicators.
 - *Texts* : show / hide parts and cases texts.
 - *Numbers* : show / hide parts and cases numbers.
 - *Overview* : display cases two times smaller.
+- *Edit/View* : toggle editing or viewing mode.
 
 The parts may be folded or opened by clicking on the arrow next to their title.
 
@@ -75,3 +79,11 @@ Some behaviors helps to maintain such relations when moving cases around :
 - you can move a case to the head of its own shot by moving it before the first one
 - you can insert a case into an existing shot by moving it between the first and the last one
 - you can extract a case of a shot by moving it a little further
+
+### Update
+
+The edit/view button is also an import/export tool which allow to copy the content of a storyboard file into another, and may be used as an easy update process.
+
+Open the fresh new version of the [demo][demo] in a window, your storyboard in another one, and drag the edit button of your storyboard onto the edit button of the empty one.
+
+[![Update process](update.gif)][demo]

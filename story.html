@@ -367,6 +367,7 @@
 			position: relative;
 			line-height: 0;
 			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+			overflow: hidden;
 		}
 		.ispano .frame-img {
 			overflow-x: auto;
@@ -433,7 +434,7 @@
 		.scene-overview,
 		.frame-text,
 		.frame-nbr {
-			max-height: 15em;
+			max-height: 30em;
 			opacity: 1;
 			transition: all .2s ease;
 		}
@@ -464,9 +465,15 @@
 			z-index: 999;
 		}
 		.overlay+img{
+<<<<<<< HEAD
 			-webkit-filter: blur(1px);
 			-moz-filter: blur(1px);
 			filter: blur(1px);
+=======
+			-webkit-filter: blur(5px);
+			-moz-filter: blur(5px);
+			filter: blur(5px);
+>>>>>>> refs/remotes/origin/master
 		}
 
 		/* 
