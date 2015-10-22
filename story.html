@@ -47,6 +47,9 @@
 			border: 1px solid #bdc3c7;
 			border-radius: 6px;
 		}
+		ul {
+			list-style: none;
+		}
 		.story {
 			counter-reset: scene shot -1 shot-total frame frame-total;
 			padding: 1em 1%;
@@ -100,14 +103,9 @@
 		 *
 		*/
 
-		.story .scenes,
-		.story .scenes ul {
-			margin: 0;
-			padding: 0;
-			list-style: none;
-		}
 		.story .scenes {
-			padding: 3em 0;
+			padding: 1em 0;
+			margin: 0;
 		}
 		.scene,
 		.add-scene {
@@ -117,64 +115,28 @@
 			counter-increment: scene;
 		}
 		.scene-header {
+			display: flex;
+			flex-direction: row;
 			position: relative;
 			min-height: 2.75em;
 			border-radius: 3px;
-			margin: 1em;
+			margin: 1em 1em 0;
 			padding: 1em;
 			box-sizing: border-box;
-		}
-		.scene.dragged {
-			border: 2px solid #005249;
 		}
 		.scene.dragged .management {
 			display: none;
 		}
-		.scene-title {
-			display: inline-block;
-			padding: .5em;
-			margin: 0 4.5em 0 0;
-			font-size: 13px;
-			font-weight: 700;
+		.scene.shadow .scene-header_content {
+			border-style: dashed dashed dashed solid;
 		}
-		.scene-overview {
-			max-width: 40em;
-			margin: 0 1.5em 0 0;
-			padding: .25em .5em .75em;
-		}
-		.scene-handle {
-			border: .8em dotted #00796B;
-			background: #005249;
-			position: absolute;
-			top: -1px; bottom: -1px;
-			left: -1.4em;
-			border-radius: .6em 0 0 .6em;
-		}
-		.scene-delete {
-			padding: .5em;
-			right: -3em;
-		}
-		.scene-close {
-			position: absolute;
-			right: .25em;
-			top: 0; bottom: 0;
-			display: flex;
-			flex: 1;
-			align-items: center;
-			justify-content: center;
-			color: #ccc;
-			cursor: pointer;
-			font-size: 2em;
-			-webkit-user-select: none;  
-			-moz-user-select: none;    
-			-ms-user-select: none; 
-			user-select: none;
+		.scene.shadow .frames,
+		.scene.shadow .scene-header_buttons,
+		.scene.shadow:only-child .scene-handle,
+		.scene.shadow .scene-close {
+			display: none;
 		}
 
-		.scene-header {
-			display: flex;
-			flex-direction: row;
-		}
 		.scene-header_content {
 			flex: 1;
 			position: relative;
@@ -198,12 +160,58 @@
 			content: "SCENE "counter(scene, decimal-leading-zero);
 			right: 2em;
 		}
+		.scene.shadow .scene-header_content::before {
+			content: "NEW SCENE";
+		}
 		.scene-header_buttons {
 			display: flex;
 			align-items: center;
+			justify-content: center;
 		}
 		.scene-header_buttons .btn {
 			font-size: 1.5em;
+		}
+		.scene-title {
+			display: inline-block;
+			padding: .5em;
+			margin: 0 4.5em 0 0;
+			font-size: 13px;
+			font-weight: 700;
+		}
+		.scene-overview {
+			max-width: 40em;
+			margin: 0 1.5em 0 0;
+			padding: .25em .5em .75em;
+		}
+		.scene-handle {
+			background: #008A7A;
+			position: absolute;
+			top: -1px; bottom: -1px;
+			left: -1em; width: 1em;
+			border-radius: .3em 0 0 .3em;
+		}
+		.scene.shadow .scene-handle {
+			background: #ccc;
+		}
+		.scene-delete {
+			padding: .5em;
+			right: -3em;
+		}
+		.scene-close {
+			position: absolute;
+			right: .25em;
+			top: 0; bottom: 0;
+			display: flex;
+			flex: 1;
+			align-items: center;
+			justify-content: center;
+			color: #ccc;
+			cursor: pointer;
+			font-size: 2em;
+			-webkit-user-select: none;  
+			-moz-user-select: none;    
+			-ms-user-select: none; 
+			user-select: none;
 		}
 
 		/* 
@@ -212,11 +220,13 @@
 		 *
 		*/
 
-		.frames {
+		ul.frames {
 			display: flex;
 			flex-flow: row wrap;
 			overflow: hidden;
 			transition: height .2s ease;
+			margin: 1.5em;
+			padding: 0;
 		}
 		.frames:empty {
 			border: 1px dashed #ccc;
@@ -228,10 +238,12 @@
 			padding: 1em;
 			text-align: center;
 		}
+		.closed-tmp .frames,
 		.closed .frames {
 			height: 0;
 			min-height: 0;
 			border: 0;
+			margin: 0;
 		}
 		.frame {
 			box-sizing: border-box;
@@ -239,67 +251,62 @@
 			max-width: 100%;
 			display: inline-block;
 			position: relative;
-		}
-		.col {
 			margin: .5% 0 1.5em;
-			padding: 0 .5%;
-			width: 25%;
-			transition: all .15s ease;
 		}
-		.overview .col {
+		.overview .frame {
 			margin-top: .25%;
 			padding: 0 .25%;
-			width: 12.5%;
 		}
-		.overview .col.scene-header {
-			width: 25%;
+		.col {
+			padding: 0 .5%;
+			transition: all .15s ease;
 		}
-		.frame.col.ispano {
-			width: auto;
-		}
-		@media only screen and (max-width : 1900px) {
-			.overview .col.scene-header,
-			.col.scene-header {
-				width: 33.33%;
+
+		@media only screen and (min-width : 2000px) {
+			.col 			{ width: 20%; }
+			.overview .col 	{ width: 10%; }
+			.overview .col.scene-header {
+				width: 25%;
 			}
+			.frame.col.ispano {
+				width: auto;
+			}
+		}
+		@media only screen and (max-width : 2000px) {
+			.col 			{ width: 25%; }
+			.overview .col 	{ width: 12.5%; }
+			.col.scene-header { width: 50%; }
+			.overview .col.scene-header { width: 33.33%; }
+			.frame.col.ispano { width: auto; }
 		}
 		@media only screen and (max-width : 1500px) {
-			.col {
+			.col 			{ width: 33%; }
+			.overview .col 	{ width: 16.65%; }
+			.frame {
 				margin-top: 1%;
 				padding: 0 1%;
-				width: 33.33%;
 			}
-			.overview .col {
+			.overview .frame {
 				margin-top: .5%;
 				padding: 0 .5%;
-				width: 16.65%;
-			}
-			.overview .col.scene-header,
-			.col.scene-header {
-				width: 50%;
 			}
 		}
 		@media only screen and (max-width : 1000px) {
-			.col {
-				width: 50%;
-			}
-			.overview .col {
-				width: 25%;
-			}
+			.col 			{ width: 50%; }
+			.overview .col 	{ width: 25%; }
 			.overview .col.scene-header,
 			.col.scene-header {
-				width: 100%;
+				width: auto;
 			}
 		}
 		@media only screen and (max-width : 600px) {
-			.col {
-				width: 100%;
-			}
-			.overview .col {
-				width: 50%;
-			}
+			.col 			{ width: 100%; }
+			.overview .col 	{ width: 50%; }
 			.scene-title {
 				margin: 0;
+			}
+			.scene-header {
+				flex-direction: column;
 			}
 			.scene-header_content::before {
 				position: static;
@@ -316,7 +323,7 @@
 			counter-reset: none;
 			counter-increment: shot-total frame frame-total;
 		}
-		.frame-shadow {
+		.frame.shadow {
 			counter-reset: none;
 			counter-increment: none;
 		}
@@ -326,7 +333,7 @@
 			font: 300 .7em arial;
 			color: #A0A0A0;
 		}
-		.frame-shadow .frame-nbr {
+		.frame.shadow .frame-nbr {
 			display: none;
 		}
 		.frame-nbr::before,
@@ -375,8 +382,8 @@
 			position: relative;
 			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 		}
-		.frame-shadow .frame-img,
-		.frame-shadow .frame-text {
+		.frame.shadow .frame-img,
+		.frame.shadow .frame-text {
 			box-shadow: 0 1px 2px rgba(0, 0, 0, 0);
 			box-shadow: none;
 			background: none;
@@ -400,13 +407,13 @@
 			outline: 1em solid #00796B;
 			outline-offset: -1em;
 		}
-		.frame-shadow .frame-img {
+		.frame.shadow .frame-img {
 			border: 1px dashed #ccc;
 		}
-		.frame-shadow img {
+		.frame.shadow img {
 			opacity: .3;
 		}
-		.frame-shadow img.dragenter {
+		.frame.shadow img.dragenter {
 			opacity: 1;
 		}
 		.frame.dropped {
@@ -505,7 +512,7 @@
 			height: 1.5em;
 			max-width: 10em;
 			padding: .5em 1em;
-			margin: 0 0 .5em .5em;
+			margin: 0 0 0 .5em;
 			overflow: hidden;
 			
 			color: #00796B;
@@ -605,10 +612,10 @@
 			content: "▾";
 		}
 		.toggle-scenes::after {
-			content: "▾ Open all scenes";
+			content: "▾ Reveal all";
 		}
 		.toggle-scenes.close::after {
-			content: "▴ Close all scenes";
+			content: "▴ Fold all";
 		}
 		.scene-delete::after,
 		.overlay .delete::after {
@@ -632,6 +639,7 @@
 	<header class="header">
 		<h1 class="header-title" contenteditable="true">Storyboard</h1>
 		<ul>
+			<li><div class="btn btn-link toggle-scenes close"></div></li>
 			<li><div class="btn btn-link toggle" data-toggle="hidetexts">Texts</div></li>
 			<li><div class="btn btn-link toggle" data-toggle="hidenumbers">Numbers</div></li>
 			<li><div class="btn btn-link toggle" data-toggle="overview">Overview</div></li>
@@ -640,12 +648,10 @@
 		</ul>
 	</header>
 	<div class="story overview">
-		<div class="btn btn-link toggle-scenes close"></div>
 		<ul class="scenes sortable" data-sortable-id="0" aria-dropeffect="move"></ul>
-		<div class="btn add add-scene col management"></div>
 	</div>
 	<script id="template" type="text/x-custom-template">
-	<li class="scene">
+	<li class="scene shadow management">
 		<header class="scene-header col">
 			<div class="scene-header_content">
 				<h1 class="scene-title" contenteditable="true">Title</h1>
@@ -660,7 +666,7 @@
 			</div>
 		</header>
 		<ul class="frames sortable connected"><!--
-			--><li class="frame frame-shadow col management">
+			--><li class="frame shadow col management">
 				<div class="frame-img">
 					<img src="data:image/gif;base64,R0lGODlhEAAJAKIAAMzMzJaWlrGxsaOjo76+vpycnMXFxaqqqiwAAAAAEAAJAAADCwi63P4wykmrvRgmADs=">
 				</div>

@@ -6,8 +6,8 @@ $(function() {
 	var body = $('body'),
 		header = $('.header'),
 		story = $('.story'),
-		dragcase = false,
-		changes = false,
+		isDragging = false,
+		haveChanged = false,
 		isExport = false,
 		linkedFrames = null;
 
@@ -51,24 +51,39 @@ $(function() {
 	//*/// changes
 
 	function setChanged() {
-		if(!changes) body.addClass('changed');
-		changes = true;
+		if(!haveChanged) body.addClass('changed');
+		haveChanged = true;
 	}
 	body.delegate('*[contenteditable]', 'input', function(e){
 		setChanged();
 	});
 	$(window).bind('beforeunload', function(){
-		if(changes) return 'Any changes to the storyboard will be lost.';
+		if(haveChanged) return 'Any changes to the storyboard will be lost.';
 	});
 
 
 	//*/// sortable
 
 	Sortable.create(document.querySelector('.scenes'), {
-		animation: 200,
+		animation: 100,
 		draggable: '.scene',
 		handle: '.scene-handle',
 		ghostClass: 'dragged',
+		onStart: function (evt) {
+			isDragging = true;
+			$('.scene').addClass('closed-tmp');
+		},
+		onEnd: function (evt) {
+			isDragging = false;
+			$('.scene').removeClass('closed-tmp');
+			// moved shadow, or after shadow
+			var item = $(evt.item);
+			if(item.hasClass('shadow')) revealShadowScene(item);
+			if(item.prev().hasClass('shadow')) revealShadowScene(item.prev());
+		},
+		onSort: function (evt) {
+			setChanged();
+		}
 	});
 	var sortableParts = [];
 	function initFramesSort() {
@@ -87,12 +102,12 @@ $(function() {
 				ghostClass: 'dragged',
 				animation: 0,
 				onStart: function (evt) {
-					dragcase = true;
+					isDragging = true;
 					tagSiblingsOf($(evt.item));
 					delOverlay();
 				},
 				onEnd: function (evt) {
-					dragcase = false;
+					isDragging = false;
 					manageMoves($(evt.item));
 				},
 				onSort: function (evt) {
@@ -129,8 +144,8 @@ $(function() {
 			haveSameshot = item.hasClass('sameshot');
 
 		// moved shadow, or after shadow
-		if(item.hasClass('frame-shadow')) revealShadow(item);
-		if(prev.hasClass('frame-shadow')) revealShadow(prev);
+		if(item.hasClass('shadow')) revealShadowFrame(item);
+		if(prev.hasClass('shadow')) revealShadowFrame(prev);
 
 		// item was in a shot
 		if(linked.length != 0) {
@@ -167,23 +182,23 @@ $(function() {
 
 	story.delegate('.frame', 'dragenter', delOverlay);
 	story.delegate('.frame img', 'dragenter', function(e){
-		if(!dragcase) {
+		if(!isDragging) {
 			e.stopPropagation();
 			e.preventDefault();
 			$(this).addClass('dragenter');
 		}
 	});
 	story.delegate('.frame img', 'dragleave', function(e){
-		if(!dragcase) $(this).removeClass('dragenter');
+		if(!isDragging) $(this).removeClass('dragenter');
 	});
 	story.delegate('.frame img', 'dragover', function(e){
-		if(!dragcase) {
+		if(!isDragging) {
 			e.stopPropagation();
 			e.preventDefault();
 		}
 	});
 	story.delegate('.frame img', 'drop', function(event){
-		if(dragcase) return;
+		if(isDragging) return;
 		event.preventDefault();
 		var files = event.originalEvent.dataTransfer.files,
 			target = $(this),
@@ -192,8 +207,8 @@ $(function() {
 			var load = loadImage(files[i], target);
 			if(!load) continue;
 			frame = target.closest('.frame');
-			if(frame.hasClass('frame-shadow')) 
-				newframe = revealShadow(target);
+			if(frame.hasClass('shadow')) 
+				newframe = revealShadowFrame(target);
 			else if(i < files.length -1 ) {
 				newframe = newFrame();
 				frame.after(newframe);
@@ -267,6 +282,12 @@ $(function() {
 
 	//*/// add
 
+	shadowScene = story.find('.scene.shadow');
+	if(!shadowScene.length) shadowScene = story.find('.scenes').append(newShadowScene());
+	story.delegate('.scene.shadow .scene-header *[contenteditable]', 'input', function(e){
+		revealShadowScene($(this));
+	});
+
 	story.delegate('.add-scene', 'click', function(e){
 		$(scene_tpl).appendTo('.scenes').hide().slideDown(200);
 		initFramesSort();
@@ -278,29 +299,43 @@ $(function() {
 	});
 	story.delegate('.add-frame', 'click', function(e){
 		var scene = $(this).closest('.scene'),
-			shadow = scene.find('.frame-shadow');
-		if(!shadow.length) shadow = scene.find('.frames').append(newShadow());
-		revealShadow(shadow);
+			shadow = scene.find('.frame.shadow');
+		if(!shadow.length) shadow = scene.find('.frames').append(newShadowFrame());
+		revealShadowFrame(shadow);
 	});
-	body.delegate('.frame-shadow *[contenteditable]', 'input', function(e){
-		revealShadow($(this));
+	body.delegate('.frame.shadow *[contenteditable]', 'input', function(e){
+		revealShadowFrame($(this));
 	});
-	function newShadow () {
+	function newShadowFrame () {
 		return $(frame_tpl);
 	}
 	function newFrame () {
-		return unShadow(newShadow());
+		return unShadow(newShadowFrame());
 	}
-	function unShadow (frame) {
-		return frame.removeClass('frame-shadow management');
+	function newShadowScene () {
+		return $(scene_tpl);
 	}
-	function revealShadow (frame) {
-		if(!frame.hasClass('frame')) frame = frame.parents('.frame');
-		unShadow(frame);
-		var newframe = $(frame_tpl);
-		frame.parent().append(newframe);
+	function newScene () {
+		return unShadow(newShadowScene());
+	}
+	function unShadow (el) {
+		return el.removeClass('shadow management');
+	}
+	function revealShadowScene (el) {
+		if(!el.hasClass('scene')) el = el.closest('.scene');
+		var newel = $(scene_tpl);
+		el.parent().append(newel);
+		unShadow(el);
 		setChanged();
-		return newframe;
+		return newel;
+	}
+	function revealShadowFrame (el) {
+		if(!el.hasClass('frame')) el = el.closest('.frame');
+		var newel = $(frame_tpl);
+		el.parent().append(newel);
+		unShadow(el);
+		setChanged();
+		return newel;
 	}
 
 
@@ -318,7 +353,7 @@ $(function() {
 	$(window).on('click', function(event) {
 		delOverlay();
 		var target = $(event.target);
-		if(target.is('img') && target.parents('.frame-shadow').length === 0) {
+		if(target.is('img') && target.parents('.frame.shadow').length === 0) {
 			overlay(target);
 		}
 	});
