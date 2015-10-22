@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- saved from url=(0036)file:///E:/Git/storynator/story.html -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -235,10 +236,10 @@
 		.frame {
 			box-sizing: border-box;
 			float: left;
+			max-width: 100%;
 			display: inline-block;
 			position: relative;
 		}
-		/* sizing */
 		.col {
 			margin: .5% 0 1.5em;
 			padding: 0 .5%;
@@ -253,11 +254,8 @@
 		.overview .col.scene-header {
 			width: 25%;
 		}
-		.frame.ispano {
-			width: 100% !important;
-		}
-		.overview .frame.ispano {
-			width: 100% !important;
+		.frame.col.ispano {
+			width: auto;
 		}
 		@media only screen and (max-width : 1900px) {
 			.overview .col.scene-header,
@@ -371,10 +369,17 @@
 			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 			overflow: hidden;
 		}
+		.ispano .frame-img {
+			overflow-x: auto;
+			overflow-y: hidden;
+		}
 		.frame-img img {
 			width: 100%;
 			transition: all .1s ease;
 			z-index: 1;
+		}
+		.ispano .frame-img img {
+			width: auto;
 		}
 		.frame-img img.dragenter {
 			outline: 1em solid #00796B;
@@ -460,9 +465,15 @@
 			z-index: 999;
 		}
 		.overlay+img{
+<<<<<<< HEAD
+			-webkit-filter: blur(1px);
+			-moz-filter: blur(1px);
+			filter: blur(1px);
+=======
 			-webkit-filter: blur(5px);
 			-moz-filter: blur(5px);
 			filter: blur(5px);
+>>>>>>> refs/remotes/origin/master
 		}
 
 		/* 
@@ -603,18 +614,18 @@
 		}
 	</style>
 </head>
-<body>
+<body class="changed" style="padding-top: 62px;">
 	<header class="header">
 		<h1 class="header-title" contenteditable="true">Storyboard</h1>
 		<ul>
 			<li><div class="btn btn-link toggle" data-toggle="hidetexts">Texts</div></li>
 			<li><div class="btn btn-link toggle" data-toggle="hidenumbers">Numbers</div></li>
-			<li><div class="btn btn-link toggle off" data-toggle="overview">Overview</div></li>
+			<li><div class="btn btn-link toggle" data-toggle="overview">Overview</div></li>
 			<li><a class="btn btn-link" href="https://github.com/nliautaud/storynator" target="_blank">Github</a></li>
-			<li><div draggable="true" class="btn btn-edit toggle management" data-toggle="hidemanagement"></div></li></li>
+			<li><div draggable="true" class="btn btn-edit toggle management" data-toggle="hidemanagement"></div></li>
 		</ul>
 	</header>
-	<div class="story">
+	<div class="story overview">
 		<div class="btn btn-link toggle-scenes close"></div>
 		<ul class="scenes sortable" data-sortable-id="0" aria-dropeffect="move"></ul>
 		<div class="btn add add-scene col management"></div>
@@ -655,7 +666,7 @@
 	<script src="./story_files/jquery-2.1.4.min.js"></script>
 	<script src="./story_files/Sortable.min.js"></script>
 	<script src="./story_files/main.js"></script>
-	<script charset="utf-8" async defer>
+	<script charset="utf-8" async="" defer="">
 
 		// Interface helpers and toggles
 		// management is enabled by story_files/main.js
@@ -687,6 +698,31 @@
 		window.onresize = setHeaderSpace;
 		window.onload = setHeaderSpace;
 
+		// panoramic images height
+		var setPanoHeight = function() {
+			var panos = story.querySelectorAll('.ispano');
+			for (var i = 0; i < panos.length; i++) {
+				var prev = panos[i].previousElementSibling,
+					next = panos[i].nextElementSibling;
+				if(!prev && !next) return;
+				if(prev) prev = prev.querySelector('img');
+				if(next) next = next.querySelector('img');
+				var h;
+				if(prev) {
+					if(next) h = Math.min(prev.clientHeight, next.clientHeight);
+					else h = prev.clientHeight;
+				} else h = next.clientHeight;
+
+				panos[i].querySelector('img').style.height = h+'px';
+				var img = panos[i].querySelector('img');
+			}
+			// update height time to time
+			setTimeout(function () {
+				setPanoHeight();
+			}, 200);
+		};
+		setPanoHeight();
+
 		// header options toggle
 		document.querySelector('.header ul').onclick = function (e){
 			var tgt = getTarget(e);
@@ -715,5 +751,5 @@
 		};
  
 	</script>
-</body>
-</html>
+
+</body></html>
