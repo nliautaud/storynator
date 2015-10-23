@@ -197,11 +197,10 @@ $(function() {
 
 	//*/// add
 
-	var scenes = $('.scene');
-	scenes.each(function () {
+	$('.scene:not(.shadow)').each(function () {
 		revealScene($(this));
 	});
-	if(scenes.length === 0) addShadowScene();
+	addShadowScene();
 
 	story.delegate('.scene.shadow .scene-header *[contenteditable]', 'input', function(e){
 		revealScene($(this));
