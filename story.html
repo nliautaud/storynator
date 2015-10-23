@@ -759,11 +759,19 @@
 		window.onload = setHeaderSpace;
 
 		// panoramic images height
+		function siblingNot (el, cl, next) {
+			do {
+				if(next) el = el.nextElementSibling;
+				else el = el.previousElementSibling;
+				if(!cl) return el;
+			} while(el && el.classList.contains(cl));
+			return el;
+		}
 		var setPanoHeight = function() {
 			var panos = story.querySelectorAll('.ispano');
 			for (var i = 0; i < panos.length; i++) {
-				var prev = panos[i].previousElementSibling,
-					next = panos[i].nextElementSibling;
+				var prev = siblingNot(panos[i], 'ispano');
+				var next = siblingNot(panos[i], 'ispano', true);
 				if(!prev && !next) return;
 				if(prev) prev = prev.querySelector('img');
 				if(next) next = next.querySelector('img');
