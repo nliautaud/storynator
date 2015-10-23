@@ -287,6 +287,12 @@
 			max-width: 100%;
 			margin-bottom: 1.5em;
 		}
+		.frame.col.ispano {
+			/* ie will fallback with scrollbars */
+			width: -webkit-min-content;
+			width: -moz-min-content;
+			width: min-content;
+		}
 		.overview .frame {
 			padding: 0 .25%;
 		}
@@ -299,16 +305,12 @@
 			.col 			{ width: 20%; }
 			.overview .col 	{ width: 10%; }
 			.col.scene-header { width: 25%; }
-			.frame.col.ispano {
-				width: auto;
-			}
 		}
 		@media only screen and (max-width : 2000px) {
 			.col 			{ width: 25%; }
 			.overview .col 	{ width: 12.5%; }
 			.overview .col.scene-header,
 			.col.scene-header { width: 50%; }
-			.frame.col.ispano { width: auto; }
 		}
 		@media only screen and (max-width : 1500px) {
 			.col 			{ width: 33%; }
