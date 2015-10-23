@@ -299,9 +299,7 @@
 		@media only screen and (min-width : 2000px) {
 			.col 			{ width: 20%; }
 			.overview .col 	{ width: 10%; }
-			.overview .col.scene-header {
-				width: 25%;
-			}
+			.col.scene-header { width: 25%; }
 			.frame.col.ispano {
 				width: auto;
 			}
@@ -309,13 +307,15 @@
 		@media only screen and (max-width : 2000px) {
 			.col 			{ width: 25%; }
 			.overview .col 	{ width: 12.5%; }
+			.overview .col.scene-header,
 			.col.scene-header { width: 50%; }
-			.overview .col.scene-header { width: 33.33%; }
 			.frame.col.ispano { width: auto; }
 		}
 		@media only screen and (max-width : 1500px) {
 			.col 			{ width: 33%; }
 			.overview .col 	{ width: 16.65%; }
+			.overview .col.scene-header,
+			.col.scene-header { width: 75%; }
 			.frame {
 				padding: 0 1%;
 			}
@@ -327,12 +327,10 @@
 			.col 			{ width: 50%; }
 			.overview .col 	{ width: 25%; }
 			.overview .col.scene-header,
-			.col.scene-header {
-				width: auto;
-			}
+			.col.scene-header { width: auto; }
 		}
 		@media only screen and (max-width : 600px) {
-			.col 			{ width: 100%; }
+			.col 			{ width: auto; }
 			.overview .col 	{ width: 50%; }
 			.scene-title {
 				margin: 0;
