@@ -23,7 +23,10 @@ $(function() {
 	$('.btn-edit')
 		.on('dragstart', function (event) {
 			isExport = true;
-			event.originalEvent.dataTransfer.setData("text/html", story.html());
+			var data = event.originalEvent.dataTransfer;
+			data.setData('text/html', story.html());
+			data.setData('title', getTitle());
+			console.log('export', getTitle());
 			$(this).addClass('export');
 		}).on('dragenter', function (event) {
 			if(!isExport) $(this).addClass('import');
@@ -34,10 +37,12 @@ $(function() {
 		}).on('drop', function(event){
 			// import
 			if(!isExport) {
-				var data = event.originalEvent.dataTransfer.getData("text/html");
+				var data = event.originalEvent.dataTransfer;
 				$this = $(this);
 				$this.toggleClass('loading import');
-				story.html(data).promise().done(function(){
+				setTitle(data.getData('title'))
+				console.log('imported',data.getData('title'));
+				story.html(data.getData('text/html')).promise().done(function(){
 					setTimeout(function () {
 						$this.removeClass('loading');
 						setChanged();
@@ -65,10 +70,14 @@ $(function() {
 		setTitle();
 		console.log('(content have changed)');
 	}
-	function setTitle () {
-		var prefix = '',
-			title = $('.header-title').text() || 'Untitled';
-		if(haveChanged) prefix = '(not saved) ';
+	function getTitle () {
+		return $('.header-title').text() || 'Untitled';
+	}
+	function setTitle (title) {
+		if(typeof title === 'string') {
+			$('.header-title').text(title);
+		} else title = getTitle();
+		var prefix = haveChanged ? '(not saved) ' : '';
 		document.title = prefix + title;
 	}
 	body.delegate('*[contenteditable]', 'input', setChanged);
