@@ -98,7 +98,7 @@ $(function() {
 
 	//*/// drop images
 
-	story.delegate('.frame', 'dragenter', delOverlay);
+	story.delegate('.frame', 'dragenter', delOverlays);
 	story.delegate('.frame img', 'dragenter', function(e){
 		if(!isDragging) {
 			e.stopPropagation();
@@ -237,7 +237,7 @@ $(function() {
 		return unShadow(newShadowScene());
 	}
 	function isShadow (el) {
-		return el.hasClass('shadow');
+		return el.hasClass('shadow') || el.parents('.shadow').length !== 0;
 	}
 	function unShadow (el) {
 		return el.removeClass('shadow management');
@@ -283,35 +283,36 @@ $(function() {
 
 
 
-	//*/// case overlay
+	//*/// frames overlay
 
-	function overlay (el){
-		var existing = $('.overlay');
-		if(existing.length) existing.remove();
-		else el.parent().prepend(overlay_tpl);
-	}
-	function delOverlay(){
+	function delOverlays(){
 		$('.overlay').remove();
 	}
 	$(window).on('click', function(event) {
-		delOverlay();
 		var target = $(event.target);
-		if(target.is('img') && target.parents('.frame.shadow').length === 0) {
-			overlay(target);
+		if(target.is('.overlay')) {
+			var overlays = $('.overlay');
+			if(overlays.length == 1 || event.shiftKey) {
+				target.remove();
+			} else overlays.not(target).remove();
+			return;
+		}
+		if(!event.shiftKey) delOverlays();
+		if(target.is('img') && !isShadow(target)){
+			target.parent().prepend(overlay_tpl);
 		}
 	});
 	story.delegate('.overlay .delete', 'click', function(e){
-		var $case = $(this).closest('.frame');
-		$case.addClass('remove');
+		var frames = $('.overlay').parents('.frame');
+		frames.addClass('remove');
 		setTimeout(function(){
-			$case.remove();
+			frames.remove();
 		}, 200);
 		setChanged();
 	});
 	story.delegate('.frame *[data-toggle]', 'click', function(e){
-		var $this = $(this);
-		$this.closest('.frame')
-			.toggleClass($this.data('toggle'))
+		$('.overlay').parents('.frame')
+			.toggleClass($(this).data('toggle'))
 			.find('img')
 				.removeAttr('style');
 		setChanged();
@@ -375,7 +376,7 @@ $(function() {
 				onStart: function (evt) {
 					isDragging = true;
 					tagSiblingsOf($(evt.item));
-					delOverlay();
+					delOverlays();
 				},
 				onEnd: function (evt) {
 					isDragging = false;
