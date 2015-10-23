@@ -4,7 +4,7 @@ A simple storyboard editor, with drag and drop and direct text editing.
 
 [![Demo](chrome-frame.png)][demo]
 
-[demo]: https://cdn.rawgit.com/nliautaud/storynator/add95db15c6fb391b720da93f55374f4c80a6b57/story.html
+[demo]: https://cdn.rawgit.com/nliautaud/storynator/b2d500ac5fbf984b3a61a64a9e2fd19473331538/story.html
 
 ### Features
 
@@ -32,6 +32,8 @@ You can also drag an hollow element to somewhere you'd like a new one, or direct
 
 If you want to quickly add a bunch of empty frames, you may use the buttons next to the scene header. One append them at the end, and the other insert them at the begining (you don't have to scroll to the bottom for that).
 
+By default, each frame define a distinct shot. By using the associated option of the frame overlay, you can define that a frame is part of the same shot than the previous one, and so define a shot illustrated by several frames. These relations are then displayed and numbered in a different manner.
+
 To delete a scene, use the button next to its header.
 By selecting a frame you'll reveal a delete button and some other options : 
 - ``||`` or ``--`` to switch the link to the previous shot (see [shots](#shots))
@@ -45,9 +47,13 @@ Depending on your browser you may use the usual keyboard shortcuts to undo/redo 
 
 ### Reorder frames and parts
 
-Drag & drop things.
+Drag & drop things by grabbing the images or the handle next to the scenes titles.
 
-Parts have a handle next to their title.
+You can move frames between scenes too. The relations between frames will be taken into account when moving them around :
+- move all the frames of a shot by moving the first one
+- move a frame to the head of its own shot by moving it before the first one
+- insert a frame into an existing shot by moving it between the first and the last one
+- extract a frame from a shot by moving it a little further
 
 ### Loading images
 
