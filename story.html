@@ -612,7 +612,8 @@
 			background: hsl(173, 100%, 25%);
 		}
 		.btn-edit::before {
-			font-size: 2em;
+			font-size: 2.25em;
+			margin-top: -.05em;
 			padding: 0;
 		}
 		.btn-edit::after { 
@@ -622,22 +623,22 @@
 			transition: max-width .1s ease-in-out,
 						padding-left .1s ease-in-out;
 		}
-		.btn-edit.hover::after { 
+		.btn-edit.hover::after,
+		.btn-edit.import::after,
+		.btn-edit.export::after,
+		.btn-edit.loading::after { 
 			padding-left: .5em;
 			max-width: 5em;
 			transition: max-width .2s ease,
 						padding-left .3s ease;
 		}
 		.btn-edit.import,
-		.btn-edit.import.off,
 		.btn-edit.export,
-		.btn-edit.export.off,
-		.btn-edit.loading,
-		.btn-edit.loading.off {
-			border-color: transparent;
-			background: hsl(33, 90%, 50%);
-			box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
-			color: white;
+		.btn-edit.loading {
+			border-color: transparent !important;
+			background: hsl(33, 90%, 50%) !important;
+			box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+			color: white !important;
 		}
 
 
@@ -671,8 +672,8 @@
 		.btn-edit.import::after { content: "Import"; }
 		.btn-edit.export::before { content: "◥"; }
 		.btn-edit.export::after { content: "Export"; }
-		.btn-edit.loading::before { content: "•"; }
-		.btn-edit.loading::after { content: "Loading"; }
+		.btn-edit.loading::before { content: "◼"; }
+		.btn-edit.loading::after { content: "Load..."; }
 
 		.add-frame::after {
 			content: "+>";
