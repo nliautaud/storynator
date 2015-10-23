@@ -51,15 +51,32 @@ $(function() {
 
 	//*/// changes
 
-	function setChanged() {
-		if(!haveChanged) body.addClass('changed');
-		haveChanged = true;
+	function setSaved() {
+		if(!haveChanged) return;
+		body.removeClass('changed');
+		haveChanged = false;
+		setTitle();
+		console.log('(file probably saved)');
 	}
-	body.delegate('*[contenteditable]', 'input', function(e){
-		setChanged();
-	});
+	function setChanged() {
+		if(haveChanged) return;
+		body.addClass('changed');
+		haveChanged = true;
+		setTitle();
+		console.log('(content have changed)');
+	}
+	function setTitle () {
+		var prefix = '',
+			title = $('.header-title').text() || 'Untitled';
+		if(haveChanged) prefix = '(not saved) ';
+		document.title = prefix + title;
+	}
+	body.delegate('*[contenteditable]', 'input', setChanged);
+	$('.header-title').on('input', setTitle);
+
 	$(window).bind('beforeunload', function(){
-		if(haveChanged) return 'Any changes to the storyboard will be lost.';
+		if(haveChanged)
+			return 'Any changes to the storyboard will be lost.';
 	});
 
 
@@ -226,6 +243,7 @@ $(function() {
 		if(isShadow(scene)) {
 			unShadow(scene);
 			console.log('reveal a scene');
+			setChanged();
 		}
 		// add a new shadow frame if needed
 		var shadowframe = scene.find('.shadow');
@@ -233,7 +251,6 @@ $(function() {
 			scene.find('.frames').append(newShadowFrame());
 			console.log('add a new shadow frame');
 		}
-		setChanged();
 		return addShadowScene();
 	}
 	function revealFrame (frame) {
@@ -242,6 +259,7 @@ $(function() {
 		if(isShadow(frame)) {
 			unShadow(frame);
 			console.log('reveal a frame');
+			setChanged();
 		}
 		revealScene(frame);
 		return frame.parent().find('.shadow');
@@ -429,12 +447,14 @@ $(function() {
 		});
 	}
 	$(window).on('keydown', function(event) {
-		if (event.ctrlKey || event.metaKey) {
-			switch (String.fromCharCode(event.which).toLowerCase()) {
+		if (!event.ctrlKey && !event.metaKey) return;
+		var key = String.fromCharCode(event.which).toLowerCase();
+		switch (key) {
 			case 'q':
 				cleanup();
 				alert('cleaned');
-			}
+			case 's':
+				setSaved();
 		}
 	});
 });
