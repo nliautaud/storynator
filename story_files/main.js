@@ -22,7 +22,13 @@ $(function() {
 
 	$('.btn-edit')
 		.attr('draggable', true)
-		.on('dragstart', function (event) {
+		.on('mouseenter', function (event) {
+			$(this).addClass('hover');
+		}).on('mouseleave', function (event) {
+			$(this).removeClass('hover');
+		}).on('click', function (event) {
+			$(this).removeClass('hover');
+		}).on('dragstart', function (event) {
 			isExport = true;
 			var data = event.originalEvent.dataTransfer;
 			data.setData('text/html', story.html());

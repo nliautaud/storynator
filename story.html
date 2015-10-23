@@ -580,34 +580,53 @@
 			text-transform: none;
 		}
 
-		.btn-edit {
+		.btn-edit,
+		.btn-edit:hover {
 			width: 5.5em;
 			box-shadow: none;
-			border-color: transparent;
-			background: hsl(191, 70%, 40%);
-			color: white;
+			background: hsl(255, 0, 98%);
 			transition: all .1s ease;
+
+			color: hsl(191, 70%, 40%);
 		}
-		.btn-edit:hover {
-			box-shadow: inset 0 -1px 2px rgba(0, 0, 0, 0.08);
-			background: hsl(191, 70%, 42%);
+		.btn-edit.hover {
+			border-color: transparent;
+			box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1),
+						0 1px 1px rgba(0, 0, 0, 0.1);
 			color: white;
+
+			background: hsl(191, 70%, 42%);
 		}
-		.btn-edit:active {
+		.btn-edit.hover:active {
 			box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 			background: hsl(191, 70%, 38%);
 		}
 		.btn-edit.off {
-			background: hsl(173, 100%, 27%);
+			color: hsl(173, 100%, 27%);
 		}
-		.btn-edit.off:hover {
+		.btn-edit.off.hover {
+			color: white;
 			background: hsl(173, 100%, 29%);
 		}
-		.btn-edit.off:active {
+		.btn-edit.off.hover:active {
 			background: hsl(173, 100%, 25%);
 		}
 		.btn-edit::before {
 			font-size: 2em;
+			padding: 0;
+		}
+		.btn-edit::after { 
+			overflow: hidden;
+			padding-left: 0;
+			max-width: 0;
+			transition: max-width .1s ease-in-out,
+						padding-left .1s ease-in-out;
+		}
+		.btn-edit.hover::after { 
+			padding-left: .5em;
+			max-width: 5em;
+			transition: max-width .2s ease,
+						padding-left .3s ease;
 		}
 		.btn-edit.import,
 		.btn-edit.import.off,
@@ -634,10 +653,20 @@
 		.toggle.off::before {
 			content: "☐";
 		}
-		.btn-edit.off::before { content: "✎"; }
-		.btn-edit.off::after { content: "edit"; }
-		.btn-edit::before { content: "◉"; }
-		.btn-edit::after { content: "view"; }
+		.btn-edit::before,
+		.btn-edit.off.hover::before { 
+			content: "✎";
+		}
+		.btn-edit.off::after {
+			content: "edit";
+		}
+		.btn-edit.off::before,
+		.btn-edit.hover::before { 
+			content: "◉";
+		}
+		.btn-edit::after { 
+			content: "view";
+		}
 		.btn-edit.import::before { content: "◣"; }
 		.btn-edit.import::after { content: "Import"; }
 		.btn-edit.export::before { content: "◥"; }
