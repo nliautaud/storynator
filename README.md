@@ -4,7 +4,7 @@ A simple storyboard editor, with drag and drop and direct text editing.
 
 [![Demo](chrome-frame.png)][demo]
 
-[demo]: https://cdn.rawgit.com/nliautaud/storynator/123e6ecb30e1195eb8e9877cb0b14c29a8468f9e/story.html
+[demo]: https://cdn.rawgit.com/nliautaud/storynator/3c37a0fd0632993a08788bb65b5efcdfe40e8864/story.html
 
 ### Features
 
@@ -32,12 +32,16 @@ You can also drag an hollow element to somewhere you'd like a new one, or direct
 
 If you want to quickly add a bunch of empty frames, you may use the buttons next to the scene header. One append them at the end, and the other insert them at the begining (you don't have to scroll to the bottom for that).
 
-By default, each frame define a distinct shot. By using the associated option of the frame overlay, you can define that a frame is part of the same shot than the previous one, and so define a shot illustrated by several frames. These relations are then displayed and numbered in a different manner.
-
 To delete a scene, use the button next to its header.
-By selecting a frame you'll reveal a delete button and some other options : 
-- ``||`` or ``--`` to switch the link to the previous shot (see [shots](#shots))
-- ``<==>`` to toggle the image width limitation (see [images](#images))
+
+By clicking on a frame you'll reveal an overlay with the frames options :
+- ``✕`` delete the selected frames
+- ``--`` link the selected frames to the previous shot
+- ``⇔`` toggle the selected frames width limitation (see [images](#images))
+
+You can select multiple frames with the ``shift`` key.
+
+By default, each frame of the storyboard define a distinct shot. By linking a frame to its predecessor trough the frame options you define that it's still the same shot, and thus define a shot illustrated by several frames. The shots will be numbered accordingly, and may be displayed differently.
 
 ### Writing
 
@@ -61,7 +65,7 @@ Drop image files onto a frame to load them. You may drop a single file to load o
 
 The image files must be in ``jpg``,``png`` or ``gif`` format. Once reduced to a proper size, they are directly included into the storyboard file.
 
-The frames width are limited by default to be nicely layout in regular columns. When an image is especially larger than the others, for a traveling shot for exemple, that limitation may be inapropriated. The panoramic option available by selecting a frame allow an image to lock its height on the height of the surrounding frames. That option is automaticaly enabled when a dropped image is at least to times larger than tall.
+By default, the frames width are set to be nicely layout in regular columns. When an image is especially larger than the others, for a traveling shot for exemple, that limitation may be inapropriated. By disabling that limitation trough the frames options, the image will mimic the height of its surrounding frames. That option is automaticaly enabled when a dropped image is at least to times larger than tall.
 
 ### Shots
 
