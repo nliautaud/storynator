@@ -43,7 +43,7 @@ Drop image files onto a frame to load them. You may drop a single file to load o
 
 The image files must be in ``jpg``,``png`` or ``gif`` format. Once reduced to a proper size, they are directly included into the storyboard file.
 
-By default, the frames width are set to be nicely layout in regular columns. When an image is especially larger than the others, for a traveling shot for exemple, that limitation may be inapropriated. By disabling that limitation trough the frames options, the image will mimic the height of its surrounding frames. That option is automaticaly enabled when a dropped image is at least to times larger than tall.
+By default, the frames width are set to be nicely layout in regular columns. When an image is especially larger than the others, for a traveling shot for example, that limitation may be inapropriated. By disabling that limitation trough the frames options, the image will mimic the height of its surrounding frames. That option is automaticaly enabled when a dropped image is at least two times larger than tall.
 
 ### Writing
 
@@ -58,19 +58,7 @@ Drag & drop things by grabbing the images or the handle next to the scenes title
 You can only move the frames one by one, but moving the first one of a shot will move the other ones as well. The relations between frames will be taken into account when moving them around :
 - moving a frame into an existing shot insert it as expected.
 - extracting a frame from a shot by moving it further do not break the shot.
-- moving a frame before the first one of its own shot is not treated as an extraction.
-
-### Shots
-
-By default, each frame define a distinct shot.
-
-By using the associated option of the frame overlay, you can define that a frame is part of the same shot than the previous one, and so define a shot illustrated by several frames. These relations are then displayed and numbered in a different manner.
-
-The system helps maintaining such relations when moving frames around :
-- you can move all the frames of a shot by moving the first one
-- you can move a frame to the head of its own shot by moving it before the first one
-- you can insert a frame into an existing shot by moving it between the first and the last one
-- you can extract a frame of a shot by moving it a little further
+- moving a frame before the first one of its own shot will keep it in the shot.
 
 ### Display options
 
