@@ -35,7 +35,7 @@
     		border-radius: 3px;
     		transition: all .2s ease;
 		}
-		*[contenteditable]::-moz-focus-inner { border: 0; }
+		*[contenteditable]::-moz-focus-inner { border-color: transparent; }
 
 
 		/* 
@@ -189,7 +189,7 @@
 			padding: .25em 1em;
 		}
 		.hidenumbers.hidetexts.hidemanagement .scene-header_content {
-			border: 0;
+			border-color: transparent;
 		}
 		.scene-header_buttons {
 			display: flex;
@@ -279,7 +279,7 @@
 		.closed .frames {
 			height: 0;
 			min-height: 0;
-			border: 0;
+			border-color: transparent;
 			margin: 0;
 		}
 		.frame {
@@ -431,7 +431,8 @@
 			box-shadow: 0 1px 2px rgba(0, 0, 0, 0);
 			box-shadow: none;
 			background: none;
-			border: none;
+			border-color: transparent;
+			flex: 0;
 		}
 		.frame-img img {
 			width: 100%;
@@ -446,7 +447,7 @@
 			outline-offset: -1em;
 		}
 		.frame.shadow .frame-img {
-			border: 1px dashed #ccc;
+			outline: 1px dashed #ccc;
 		}
 		.frame.shadow img {
 			opacity: .3;
@@ -574,7 +575,7 @@
 			color: #FF5722;
 		}
 		.btn-link {
-			border: none;
+			border-color: transparent;
 			box-shadow: none;
 		}
 		.btn-link:hover {
@@ -704,7 +705,7 @@
 	<li class="scene shadow management">
 		<header class="scene-header col">
 			<div class="scene-header_content">
-				<h1 class="scene-title" contenteditable="true">Title</h1>
+				<h1 class="scene-title" contenteditable="true">Untitled scene</h1>
 				<p class="scene-overview" contenteditable="true">Overview</p>
 				<div class="scene-handle management"></div>
 				<div class="scene-close"></div>
