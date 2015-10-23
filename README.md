@@ -4,7 +4,7 @@ A simple storyboard editor, with drag and drop and direct text editing.
 
 [![Demo](chrome-frame.png)][demo]
 
-[demo]: https://cdn.rawgit.com/nliautaud/storynator/5593e26d51a75629d056b3e94497fb9919373399/story.html
+[demo]: https://cdn.rawgit.com/nliautaud/storynator/d098f123608bcbaafd8068cc4567a05bfe1033d8/story.html
 
 ### Features
 
