@@ -21,6 +21,7 @@ $(function() {
 	//*/// import / export
 
 	$('.btn-edit')
+		.attr('draggable', true)
 		.on('dragstart', function (event) {
 			isExport = true;
 			var data = event.originalEvent.dataTransfer;
