@@ -2,8 +2,9 @@
 <!-- saved from url=(0036)file:///E:/Git/storynator/story.html -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title></title>
+	<title>Untitled</title>
 	<link rel="stylesheet" href="">
 	<style type="text/css" media="screen">
 		@import url(https://fonts.googleapis.com/css?family=Anonymous+Pro:400,700);
@@ -26,11 +27,44 @@
 			to {opacity: 1;}
 		}
 
+
+		/* 
+		 *
+		 * FONTS
+		 *
+		*/
+
+		html {
+			font: 400 13px/1.25 "Anonymous Pro";
+		}
+		.header-title {
+			font-size: 1.3rem;
+		}
+		.scene-overview,
+		.overview .frame {
+			font-size: .85rem;
+		}
+		.scene-close::before,
+		.frame-nbr {
+			font: .7rem/1 arial;
+			color: #A0A0A0;
+		}
+		.story h1 {
+			font-size: 1rem;
+		}
+
+
+
+		/* 
+		 *
+		 * HEADER
+		 *
+		*/
+
 		body {
 			padding: 0;
 			margin: 0;
 			box-sizing: border-box;
-			font: 400 11px/1.25 "Anonymous Pro";
 		}
 		body.changed::before {
 			content: "There is unsaved modifications";
@@ -41,7 +75,7 @@
 			margin: .5em;
 			z-index: 999;
 			padding: .5em 1em;
-			font-family: Lato,Helvetica,Arial,sans-serif;
+			font: .85rem arial;
 			line-height: 1.467;
 			color: #bdc3c7;
 			border: 1px solid #bdc3c7;
@@ -52,14 +86,8 @@
 		}
 		.story {
 			counter-reset: scene shot -1 shot-total frame frame-total;
-			padding: 1em 1%;
+			padding: 3em 5%;
 		}
-
-		/* 
-		 *
-		 * HEADER
-		 *
-		*/
 
 		.header {
 			position: fixed;
@@ -68,10 +96,10 @@
 
 			flex-flow: row wrap;
 			align-items: baseline;
-
+			
 			background: #fff;
-			box-shadow: 0 0 1px;
-			padding: 1.5em .5em .5em;
+			box-shadow: 0 1px 1px rgba(0, 0, 0, .2);
+			padding: 1em 5% 0;
 			overflow: auto;
 			z-index: 999;
 		}
@@ -80,21 +108,31 @@
 			margin: 0;
 		}
 		.header-title {
+			box-sizing: border-box;
 			float: left;
-			padding: 0 .5em;
+			min-width: 10em;
+			max-width: 100%;
+			padding: .25em .5em;
+			margin: .2rem 0 1.2rem;
+		}
+		.header-title:empty::before {
+			content: "Storyboard";
+			color: #ccc;
+		}
+		.header ul,
+		.header li,
+		.header .btn-edit {
+			float: right;
+		}
+		.header .btn-edit {
+			margin: 0 0 1rem 3%;
 		}
 		.header ul {
-			float: right;
-			display: flex;
-			flex-flow: row wrap;
-			list-style: none;
+			margin-top: .1rem;
 		}
 		.toggle::before {
 			font-weight: 300;
 			padding-right: .5em;
-		}
-		.toggle.off::before {
-			content: "☐";
 		}
 
 		/* 
@@ -104,13 +142,11 @@
 		*/
 
 		.story .scenes {
-			padding: 1em 0;
+			padding: 0;
 			margin: 0;
 		}
-		.scene,
-		.add-scene {
+		.scene {
 			position: relative;
-			clear: both;
 			counter-reset: shot;
 			counter-increment: scene;
 		}
@@ -120,8 +156,8 @@
 			position: relative;
 			min-height: 2.75em;
 			border-radius: 3px;
-			margin: 1em 1em 0;
-			padding: 1em;
+			margin: 1em 0 0 -.5em;
+			padding: 1em 0;
 			box-sizing: border-box;
 		}
 		.scene.dragged .management {
@@ -145,35 +181,15 @@
 		.hidenumbers.hidetexts.hidemanagement .scene-header_content {
 			border: 0;
 		}
-		.scene-header_content::before {
-			font-weight: 700;
-			position: absolute;
-			top: 0; bottom: 0;
-			margin: 0;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
-		.scene-header_content::before {
-			content: "SCENE "counter(scene, decimal-leading-zero);
-			right: 2em;
-		}
-		.scene.shadow .scene-header_content::before {
-			content: "NEW SCENE";
-		}
 		.scene-header_buttons {
 			display: flex;
 			align-items: center;
 			justify-content: center;
 		}
-		.scene-header_buttons .btn {
-			font-size: 1.5em;
-		}
 		.scene-title {
 			display: inline-block;
 			padding: .5em;
 			margin: 0 4.5em 0 0;
-			font-size: 13px;
 			font-weight: 700;
 		}
 		.scene-overview {
@@ -197,19 +213,32 @@
 		}
 		.scene-close {
 			position: absolute;
-			right: .25em;
-			top: 0; bottom: 0;
+			right: 0; top: 0; bottom: 0;
+			padding: .5em .5em .25em;
+
 			display: flex;
 			flex: 1;
 			align-items: center;
 			justify-content: center;
-			color: #ccc;
+
 			cursor: pointer;
-			font-size: 2em;
 			-webkit-user-select: none;  
 			-moz-user-select: none;    
 			-ms-user-select: none; 
 			user-select: none;
+		}
+		.scene-close::after {
+			position: relative;
+			top: -.05em;
+			font-size: 1.9em;
+			color: #ccc;
+		}
+		.scene-close::before {
+			margin-right: 1em;
+			content: "SCENE "counter(scene, decimal-leading-zero);
+		}
+		.scene.shadow .scene-close::before {
+			content: "NEW SCENE";
 		}
 
 		/* 
@@ -223,7 +252,7 @@
 			flex-flow: row wrap;
 			overflow: hidden;
 			transition: height .2s ease;
-			margin: 1.5em;
+			margin: 1.5em 0;
 			padding: 0;
 		}
 		.frames:empty {
@@ -245,14 +274,14 @@
 		}
 		.frame {
 			box-sizing: border-box;
-			float: left;
-			max-width: 100%;
-			display: inline-block;
 			position: relative;
-			margin: .5% 0 1.5em;
+			display: inline-block;
+			display: flex;
+			flex-flow: column;
+			max-width: 100%;
+			margin-bottom: 1.5em;
 		}
 		.overview .frame {
-			margin-top: .25%;
 			padding: 0 .25%;
 		}
 		.col {
@@ -281,11 +310,9 @@
 			.col 			{ width: 33%; }
 			.overview .col 	{ width: 16.65%; }
 			.frame {
-				margin-top: 1%;
 				padding: 0 1%;
 			}
 			.overview .frame {
-				margin-top: .5%;
 				padding: 0 .5%;
 			}
 		}
@@ -310,6 +337,13 @@
 				position: static;
 				padding-top: .5em;
 			}
+			body {
+				padding-top: 0 !important;
+			}
+			.header {
+				position: static;
+				box-shadow: none;
+			}
 		}
 
 		/* numbers */
@@ -327,9 +361,8 @@
 		}
 		.frame-nbr {
 			position: relative;
-    		padding: 0 1em;
-			font: 300 .7em arial;
-			color: #A0A0A0;
+			height: 1em;
+			margin: .5rem;
 		}
 		.frame.shadow .frame-nbr {
 			display: none;
@@ -337,7 +370,6 @@
 		.frame-nbr::before,
 		.frame-nbr::after {
 			position: absolute;
-			padding: .75em 1.5em;
 		}
 		.frame-nbr::before {
 			left: 0;
@@ -348,7 +380,7 @@
 		}
 		.frame-nbr::after {
 			right: 0;
-			content: " scene "counter(scene, decimal-leading-zero)
+			content: " SCENE "counter(scene, decimal-leading-zero)
 					 " SHOT "counter(shot, decimal-leading-zero);
 		}
 		.frame + .sameshot .frame-nbr::after {
@@ -375,23 +407,21 @@
 			display: none;
 		}
 		/* frame content */
-		.frame-img,
-		.frame-text {
+		.frame-img {
 			position: relative;
+			line-height: 0;
 			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+		}
+		.ispano .frame-img {
+			overflow-x: auto;
+			overflow-y: hidden;
 		}
 		.frame.shadow .frame-img,
 		.frame.shadow .frame-text {
 			box-shadow: 0 1px 2px rgba(0, 0, 0, 0);
 			box-shadow: none;
 			background: none;
-		}
-		.frame-img {
-			line-height: 0;
-		}
-		.ispano .frame-img {
-			overflow-x: auto;
-			overflow-y: hidden;
+			border: none;
 		}
 		.frame-img img {
 			width: 100%;
@@ -421,14 +451,16 @@
 			animation: error .2s;
 		}
 		.frame-text {
-			padding: 1em;
+			flex: 1;
+			padding: 1rem;
+			margin-top: 1rem;
 			line-height: 1.3;
-			background: #FBFBFB;
-			font-size: 13px;
+			background: #fff;
+			border: 1px solid #eee;
 			z-index: 2;
 		}
 		.overview .frame-text {
-			font-size: 11px;
+			padding: .5rem;
 		}
 		/* switches */
 		.nomanagement .management {
@@ -462,7 +494,7 @@
 		.frame-nbr {
 			max-height: 30em;
 			opacity: 1;
-			transition: max-height .2s ease, opacity .2s ease;
+			transition: all .2s ease;
 		}
 		.hidetexts .scene-overview,
 		.hidetexts .frame-text,
@@ -510,12 +542,11 @@
 			height: 1.5em;
 			max-width: 10em;
 			padding: .5em 1em;
-			margin: 0 0 0 .5em;
+			margin-left: .5em;
 			overflow: hidden;
 			
 			color: #00796B;
 			font-weight: 700;
-			font-size: 1.2em;
 			text-transform: uppercase;
 			text-decoration: none;
 			cursor: pointer;
@@ -539,26 +570,38 @@
 		.btn-link:hover {
 			box-shadow: none;
 		}
+		a.btn-link {
+			text-transform: none;
+		}
 
 		.btn-edit {
 			width: 5.5em;
-			background: hsl(173, 100%, 27%);
-			border: 0;
+			box-shadow: none;
+			border-color: transparent;
+			background: hsl(191, 70%, 40%);
 			color: white;
-			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+			transition: all .1s ease;
 		}
 		.btn-edit:hover {
-			background: hsl(173, 90%, 30%);
+			box-shadow: inset 0 -1px 2px rgba(0, 0, 0, 0.08);
+			background: hsl(191, 70%, 42%);
 			color: white;
+		}
+		.btn-edit:active {
+			box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+			background: hsl(191, 70%, 38%);
+		}
+		.btn-edit.off {
+			background: hsl(173, 100%, 27%);
+		}
+		.btn-edit.off:hover {
+			background: hsl(173, 100%, 29%);
+		}
+		.btn-edit.off:active {
+			background: hsl(173, 100%, 25%);
 		}
 		.btn-edit::before {
 			font-size: 2em;
-		}
-		.btn-edit.off {
-			background: hsl(193, 100%, 34%);
-		}
-		.btn-edit.off:hover {
-			background: hsl(193, 90%, 37%);
 		}
 		.btn-edit.import,
 		.btn-edit.import.off,
@@ -566,8 +609,10 @@
 		.btn-edit.export.off,
 		.btn-edit.loading,
 		.btn-edit.loading.off {
+			border-color: transparent;
 			background: hsl(33, 90%, 50%);
 			box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+			color: white;
 		}
 
 
@@ -594,9 +639,6 @@
 		.btn-edit.loading::before { content: "•"; }
 		.btn-edit.loading::after { content: "Loading"; }
 
-		.add-scene::after {
-			content: "Add a new scene";
-		}
 		.add-frame::after {
 			content: "+>";
 		}
@@ -635,14 +677,14 @@
 </head>
 <body class="changed" style="padding-top: 62px;">
 	<header class="header">
-		<h1 class="header-title" contenteditable="true">Storyboard</h1>
+		<h1 class="header-title" contenteditable="true"></h1>
+		<div draggable="true" class="btn btn-edit toggle management" data-toggle="hidemanagement"></div>
 		<ul>
-			<li><div class="btn btn-link toggle-scenes close"></div></li>
-			<li><div class="btn btn-link toggle" data-toggle="hidetexts">Texts</div></li>
-			<li><div class="btn btn-link toggle" data-toggle="hidenumbers">Numbers</div></li>
-			<li><div class="btn btn-link toggle" data-toggle="overview">Overview</div></li>
 			<li><a class="btn btn-link" href="https://github.com/nliautaud/storynator" target="_blank">Github</a></li>
-			<li><div draggable="true" class="btn btn-edit toggle management" data-toggle="hidemanagement"></div></li>
+			<li><div class="btn btn-link toggle" data-toggle="hidenumbers">Numbers</div></li>
+			<li><div class="btn btn-link toggle" data-toggle="hidetexts">Texts</div></li>
+			<li><div class="btn btn-link toggle" data-toggle="overview">Overview</div></li>
+			<li><div class="btn btn-link toggle-scenes close"></div></li>
 		</ul>
 	</header>
 	<div class="story overview">
@@ -694,9 +736,9 @@
 
 		function getTarget (e) {
 			e = e || window.event;
-		    var targ = e.target || e.srcElement;
-		    if (targ.nodeType == 3) targ = targ.parentNode; // defeat Safari bug
-		    return targ;
+			var targ = e.target || e.srcElement;
+			if (targ.nodeType == 3) targ = targ.parentNode; // defeat Safari bug
+			return targ;
 		}
 
 		// disable management and contenteditable.
@@ -742,7 +784,7 @@
 		setPanoHeight();
 
 		// header options toggle
-		document.querySelector('.header ul').onclick = function (e){
+		document.querySelector('.header').onclick = function (e){
 			var tgt = getTarget(e);
 			if(!tgt.classList.contains('toggle')) return;
 			tgt.classList.toggle('off');
