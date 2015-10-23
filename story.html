@@ -27,6 +27,16 @@
 			to {opacity: 1;}
 		}
 
+		.showedit *[contenteditable],
+		*[contenteditable]:focus {
+			outline: 0px solid transparent;
+    		outline: 5px auto -webkit-focus-ring-color;
+    		box-shadow: 0 0 3px #008AFF !important;
+    		border-radius: 3px;
+    		transition: all .2s ease;
+		}
+		*[contenteditable]::-moz-focus-inner { border: 0; }
+
 
 		/* 
 		 *
