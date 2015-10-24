@@ -4,7 +4,7 @@ A simple storyboard editor, with drag and drop and direct text editing.
 
 [![Demo](chrome-frame.png)][demo]
 
-[demo]: https://cdn.rawgit.com/nliautaud/storynator/3c37a0fd0632993a08788bb65b5efcdfe40e8864/story.html
+[demo]: https://rawgit.com/nliautaud/storynator/master/story.html
 
 Storynator is a self-contained program and editable document which aims to write and layout a simple storyboard with the speed of light, to display it and browse it on a dynamic way, to simplify small edits and to stimulate big changes and structural experiments, while being as shareable as a simple PDF.
 
