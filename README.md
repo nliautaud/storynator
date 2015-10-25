@@ -16,16 +16,16 @@ Storynator is an autonomous tool and dynamic document which aims to simplify wri
 - Filter elements, change the layout & search content
 - Open it on any device & platform
 - That's a simple file. Send it, copy it, synchronize it
-- Feel free to do wathever you want with it
+- Feel free to do whathever you want with it
 
 You want to contribute ? Help making this thing better by checking out the [GitHub repository][github] and submitting pull requests or reporting issues. Or you could just leave a message on ``tlk.io/storynator``.
 
 
 ### Getting started
 
-Open the [demo][demo] and start editing. Everything take place on your browser, and on your browser only, even when using the demo link : no single action (including loading images) is recorded, uploaded trough internet, nor stored anywhere.
+Open the [demo][demo] and start editing. Everything takes place on your browser, and on your browser only, even when using the demo link : no single action (including loading images) is recorded, uploaded trough internet, nor stored anywhere.
 
-When you're ready to save your changes, juste save the page on your computer (like just ``Ctrl+S`` or ``Cmd+S``). That saved file is autonomus, and may be opened from your computer, edited, and saved, again.
+When you're ready to save your changes, juste save the page on your computer (like just ``Ctrl+S`` or ``Cmd+S``). That saved file is autonomous, and may be opened from your computer, edited, and saved, again.
 
 ### Adding elements
 
