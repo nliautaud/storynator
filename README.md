@@ -16,7 +16,7 @@ Storynator is an autonomous tool and dynamic document which aims to simplify wri
 - Filter elements, change the layout & search content
 - Open it on any device & platform
 - That's a simple file. Send it, copy it, synchronize it
-- Feel free to do whathever you want with it
+- Feel free to do whatever you want with it
 
 You want to contribute ? Help making this thing better by checking out the [GitHub repository][github] and submitting pull requests or reporting issues. Or you could just leave a message on ``tlk.io/storynator``.
 
