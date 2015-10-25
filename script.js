@@ -14,21 +14,28 @@ $.ajax({
 			html	  = converter.makeHtml(data);
 		html = hierarchicalize(html, true);
 
-		$('#wrapper').html(html);
-		$('h1').first()
-			.attr('contentEditable', true)
-			.keydown(function(event){
-				if(event.keyCode == 13) {
-					event.preventDefault();
-					return false;
-				}
-			}).on('input', function (e) {
-				$(this).width((0.05+$(this).text().length*0.55)+'em');
-			}).on('keypress', function (e) {
-				return ($(this).text().length <= 9);
-			});
+		// load content
+		$('#wrapper').html(html).promise().done(function(){
+			$(this).parent().removeClass('loading');
+		});
+
 	}
 });
+
+// play with title
+$('#title')
+	.attr('contentEditable', true)
+	.keydown(function(event){
+		if(event.keyCode == 13) {
+			event.preventDefault();
+			return false;
+		}
+	}).on('input', function (e) {
+		$(this).width((0.05+$(this).text().length*0.55)+'em');
+	}).on('keypress', function (e) {
+		return ($(this).text().length <= 9);
+	});
+
 /**
  * Transform HTML using flat headers (ex. markdown output)
  * into a hierarchically nested HTML structure.

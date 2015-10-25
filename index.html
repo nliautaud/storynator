@@ -4,6 +4,7 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1">
 		<title>Storynator - A simple storyboard editor</title>
+		<link href='https://fonts.googleapis.com/css?family=Anonymous+Pro:400,700|Raleway:300,500,700' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="style.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/octicons/3.1.0/octicons.min.css">
 		<link rel="apple-touch-icon" sizes="57x57" href="icons/57x57.png?v=1">
@@ -27,10 +28,13 @@
 		<meta name="msapplication-config" content="icons/browserconfig.xml?v=1">
 		<meta name="theme-color" content="#34495e">
 	</head>
-	<body>
-		<div id="wrapper">
-			<img src="img/spinner.gif" alt="spinner" class="spinner">
-		</div>
+	<body class="loading">
+		<header id="header" class="hc1">
+			<h1 id="title">Storynator</h1>
+			<p>a simple storyboard editor</p>
+			<p><a href="https://rawgit.com/nliautaud/storynator/master/story.html"><img src="img/main-750w.png" srcset="img/main-1500w.png 2x" alt=""></a></p>
+		</header>
+		<div id="wrapper"></div>
 		<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 		<script src="https://cdn.rawgit.com/showdownjs/showdown/1.3.0/dist/showdown.min.js"></script>
 		<script src="script.js"></script>
