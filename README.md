@@ -1,20 +1,25 @@
 #Storynator
 
-A simple storyboard editor, with drag and drop and direct text editing.
+a simple storyboard editor
 
-[![Demo](chrome-frame.png)][demo]
+[<img src="img/main-750w.png" srcset="img/main-1500w.png 2x" alt="">][demo]
 
 [demo]: https://rawgit.com/nliautaud/storynator/master/story.html
+[github]: https://github.com/nliautaud/storynator/
 
-Storynator is a self-contained program and editable document which aims to write and layout a simple storyboard with the speed of light, to display it and browse it on a dynamic way, to simplify small edits and to stimulate big changes and structural experiments, while being as shareable as a simple PDF.
+### 
 
-- Add scenes and frames, drop images files
-- Write things directly
-- Reorder scenes and shots by drag & drop
-- See how everything is numbered automaticaly
-- Open your document on any device, choose what element to display
-- Send your storyboard to somebody or synchronize and edit it with your team
-- Change the layout & design if you want. That's just HTML and CSS. 
+Storynator is an autonomous tool and dynamic document which aims to simplify writing, browsing and editing a storyboard to stimulate collaboration, creative changes and structural experiments.
+
+- Just drag & drop
+- Click and write, load images and move things
+- Filter elements, change the layout & search content
+- Open it on any device & platform
+- That's a simple file. Send it, copy it, synchronize it
+- Feel free to do wathever you want with it
+
+You want to contribute ? Help making this thing better by checking out the [GitHub repository][github] and submitting pull requests or reporting issues. Or you could just leave a message on ``tlk.io/storynator``.
+
 
 ### Getting started
 
@@ -26,6 +31,8 @@ When you're ready to save your changes, juste save the page on your computer (li
 
 In edit mode, you'll see some hollow blocs with dashed borders. They're new scenes and new frames waiting to be created. Start to edit them, and they will instantly became fresh new elements. Start to write some text, drag them to somewhere you'd like a new one, or just drop some images onto the hollow frames.
 
+<img src="img/shadow.png" alt="">
+
 If you want to quickly add a bunch of empty frames, you may use the buttons next to the scene header. One append them at the end, and the other insert them at the begining (so you don't have to scroll to the bottom for that).
 
 To delete a scene, use the button next to its header.
@@ -36,6 +43,8 @@ By clicking on a frame you'll reveal an overlay with options (you can select mul
 - ``⇔`` toggle the selected frames width limitation (see [images](#images))
 
 By default, each frame of the storyboard define a distinct shot. By linking a frame to its predecessor trough the frame options you define that it's still the same shot, and thus define a shot illustrated by several frames. The shots will be numbered accordingly, and may be displayed differently.
+
+<img src="img/shots.png" alt="">
 
 ### Loading images
 
@@ -92,4 +101,4 @@ The view/edit button is also an import/export tool which allow to copy the conte
 - Drag the edit button of your existing storyboard onto the edit button of the empty one.
 - Save the new version filled with your content onto your existing storyboard, and open your local storyboard.
 
-[![Update process](update.gif)][demo]
+[<img src="img/import.gif" alt="Update process">][demo]
