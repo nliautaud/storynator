@@ -2,10 +2,13 @@
 
 a simple storyboard editor
 
+[Project page][website]
+
 [<img src="img/main-750w.png" srcset="img/main-1500w.png 2x" alt="">][demo]
 
 [demo]: https://rawgit.com/nliautaud/storynator/master/story.html
 [github]: https://github.com/nliautaud/storynator/
+[website]: https://nliautaud.github.io/storynator/
 
 ### 
 
