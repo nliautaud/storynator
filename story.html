@@ -6,7 +6,10 @@
 	<title>Untitled</title>
 	<link rel="stylesheet" href="">
 	<style type="text/css" media="screen">
-		@import url(https://fonts.googleapis.com/css?family=Anonymous+Pro:400,700);
+		/**
+		 * Storynator document base style.
+		 * Made pretty by a theme (see next style).
+		*/
 
 		@-webkit-keyframes error {
 			00% {-webkit-transform: translateX(0);transform: translateX(0);}
@@ -55,66 +58,18 @@
 		}
 		*[contenteditable]::-moz-focus-inner { border-color: transparent; }
 
-
-		/* 
-		 *
-		 * FONTS
-		 *
-		*/
-
 		html {
-			font: 400 13px/1.25 "Anonymous Pro";
+			font: 300 14px/1.5 arial;
 		}
-		.header-title {
-			font-size: 1.3rem;
+		*[contenteditable] {
+			font-family: monospace;
 		}
-		.scene-overview,
-		.overview .frame {
-			font-size: .85rem;
-		}
-		.scene-close::before,
-		.frame-nbr {
-			font: .7rem/1 arial;
-			color: #A0A0A0;
-		}
-		.story h1 {
-			font-size: 1rem;
-		}
-
-
-
-		/* 
-		 *
-		 * HEADER
-		 *
-		*/
-
 		body {
 			padding: 0;
 			margin: 0;
-			box-sizing: border-box;
-		}
-		body.changed::before {
-			content: "There is unsaved modifications";
-			display: block;
-			background: white;
-			position: fixed;
-			right: 0;
-			margin: .5em;
-			z-index: 999;
-			padding: .5em 1em;
-			font: .85rem arial;
-			line-height: 1.467;
-			color: #bdc3c7;
-			border: 1px solid #bdc3c7;
-			border-radius: 6px;
 		}
 		ul {
 			list-style: none;
-		}
-		.story {
-			counter-reset: scene shot -1 shot-total frame frame-total;
-			padding: 3em 5%;
 		}
 
 		.header {
@@ -123,18 +78,12 @@
 			right: 0; left: 0;
 
 			-webkit-flex-flow: row wrap;
-
 			    -ms-flex-flow: row wrap;
-
 			        flex-flow: row wrap;
-			-webkit-box-align: baseline;
 			-webkit-align-items: baseline;
 			    -ms-flex-align: baseline;
 			        align-items: baseline;
-			
-			background: #fff;
-			box-shadow: 0 1px 1px rgba(0, 0, 0, .2);
-			padding: 1em 5% 0;
+
 			overflow: auto;
 			z-index: 999;
 		}
@@ -147,28 +96,24 @@
 			float: left;
 			min-width: 10em;
 			max-width: 100%;
-			padding: .25em .5em;
-			margin: .2rem 0 1.2rem;
 		}
 		.header-title:empty::before {
-			content: "Storyboard";
-			color: #ccc;
+			content: "Storynator";
 		}
 		.header ul,
 		.header li,
 		.header .btn-edit {
 			float: right;
 		}
-		.header .btn-edit {
-			margin: 0 0 1rem 3%;
-		}
-		.header ul {
-			margin-top: .1rem;
-		}
 		.toggle::before {
 			font-weight: 300;
 			padding-right: .5em;
 		}
+
+		.story {
+			counter-reset: scene shot -1 shot-total frame frame-total;
+		}
+
 
 		/* 
 		 *
@@ -176,31 +121,10 @@
 		 *
 		*/
 
-		.story .scenes {
-			padding: 0;
-			margin: 0;
-		}
 		.scene {
 			position: relative;
 			counter-reset: shot;
 			counter-increment: scene;
-		}
-		.scene-header {
-			display: -webkit-box;
-			display: -webkit-flex;
-			display: -ms-flexbox;
-			display: flex;
-			-webkit-box-orient: horizontal;
-			-webkit-box-direction: normal;
-			-webkit-flex-direction: row;
-			    -ms-flex-direction: row;
-			        flex-direction: row;
-			position: relative;
-			min-height: 2.75em;
-			border-radius: 3px;
-			margin: 1em 0 0 -.5em;
-			padding: 1em 0;
-			box-sizing: border-box;
 		}
 		.scene.dragged .management {
 			display: none;
@@ -209,80 +133,51 @@
 		.scene.shadow:only-child .scene-handle {
 			display: none;
 		}
+		.scene-header {
+			box-sizing: border-box;
 
+			display: -webkit-box;
+			display: -webkit-flex;
+			display: -ms-flexbox;
+			display: flex;
+			-webkit-flex-direction: row;
+			    -ms-flex-direction: row;
+			        flex-direction: row;
+			position: relative;
+		}
 		.scene-header_content {
-			-webkit-box-flex: 1;
+			position: relative;
 			-webkit-flex: 1;
 			    -ms-flex: 1;
 			        flex: 1;
-			position: relative;
-			border: 1px solid #ccc;
-			border-left-width: .5em;
-			padding: .25em 1em;
-		}
-		.hidenumbers.hidetexts.hidemanagement .scene-header_content {
-			border-color: transparent;
 		}
 		.scene-header_buttons {
 			display: -webkit-box;
 			display: -webkit-flex;
 			display: -ms-flexbox;
 			display: flex;
-			-webkit-box-align: center;
 			-webkit-align-items: center;
 			    -ms-flex-align: center;
 			        align-items: center;
-			-webkit-box-pack: center;
 			-webkit-justify-content: center;
 			    -ms-flex-pack: center;
 			        justify-content: center;
 		}
-		.scene-title {
-			display: inline-block;
-			padding: .5em;
-			margin: 0 4.5em 0 0;
-			font-weight: 700;
-		}
-		.scene-overview {
-			max-width: 40em;
-			margin: 0 1.5em 0 0;
-			padding: .25em .5em .75em;
-		}
-		.scene-handle {
-			background: #008A7A;
-			position: absolute;
-			top: -1px; bottom: -1px;
-			left: -1em; width: 1em;
-			border-radius: .3em 0 0 .3em;
-		}
-		.scene.shadow .scene-handle {
-			background: #ccc;
-		}
-		.scene-delete {
-			padding: .5em;
-			right: -3em;
-		}
 		.scene-close {
 			position: absolute;
 			right: 0; top: 0; bottom: 0;
-			padding: .5em .5em .25em;
 
 			display: -webkit-box;
-
 			display: -webkit-flex;
-
 			display: -ms-flexbox;
 
 			display: flex;
-			-webkit-box-flex: 1;
 			-webkit-flex: 1;
 			    -ms-flex: 1;
 			        flex: 1;
-			-webkit-box-align: center;
 			-webkit-align-items: center;
 			    -ms-flex-align: center;
 			        align-items: center;
-			-webkit-box-pack: center;
 			-webkit-justify-content: center;
 			    -ms-flex-pack: center;
 			        justify-content: center;
@@ -297,7 +192,6 @@
 			position: relative;
 			top: -.05em;
 			font-size: 1.9em;
-			color: #ccc;
 		}
 		.scene-close::before {
 			margin-right: 1em;
@@ -324,25 +218,14 @@
 			overflow: hidden;
 			-webkit-transition: height .2s ease;
 			        transition: height .2s ease;
-			margin: 1.5em 0;
-			padding: 0;
 		}
-		.frames:empty {
-			border: 1px dashed #ccc;
-		}
-		.frames:empty::before {
-			content: "empty";
-			color: #777;
-			width: 100%;
-			padding: 1em;
-			text-align: center;
-		}
-		.closed-tmp .frames,
+		.closed-tmp ul.frames,
 		.closed .frames {
 			height: 0;
 			min-height: 0;
-			border-color: transparent;
 			margin: 0;
+			padding: 0;
+			border-color: transparent;
 		}
 		.frame {
 			box-sizing: border-box;
@@ -376,55 +259,33 @@
 		@media only screen and (min-width : 2000px) {
 			.col 			{ width: 20%; }
 			.overview .col 	{ width: 10%; }
-			.col.scene-header { width: 25%; }
 		}
 		@media only screen and (max-width : 2000px) {
 			.col 			{ width: 25%; }
 			.overview .col 	{ width: 12.5%; }
-			.overview .col.scene-header,
-			.col.scene-header { width: 50%; }
 		}
 		@media only screen and (max-width : 1500px) {
 			.col 			{ width: 33%; }
 			.overview .col 	{ width: 16.65%; }
-			.overview .col.scene-header,
-			.col.scene-header { width: 75%; }
-			.frame {
-				padding: 0 1%;
-			}
-			.overview .frame {
-				padding: 0 .5%;
-			}
 		}
 		@media only screen and (max-width : 1000px) {
 			.col 			{ width: 50%; }
 			.overview .col 	{ width: 25%; }
-			.overview .col.scene-header,
-			.col.scene-header { width: auto; }
 		}
 		@media only screen and (max-width : 600px) {
-			.col 			{ width: auto; }
+			.col 			{ width: 100%; }
 			.overview .col 	{ width: 50%; }
-			.scene-title {
-				margin: 0;
-			}
-			.scene-header {
-				-webkit-box-orient: vertical;
-				-webkit-box-direction: normal;
-				-webkit-flex-direction: column;
-				    -ms-flex-direction: column;
-				        flex-direction: column;
-			}
-			.scene-header_content::before {
-				position: static;
-				padding-top: .5em;
-			}
 			body {
 				padding-top: 0 !important;
 			}
-			.header {
+			.header,
+			.scene-close {
 				position: static;
-				box-shadow: none;
+			}
+			.scene-header {
+				-webkit-flex-direction: column;
+				    -ms-flex-direction: column;
+				        flex-direction: column;
 			}
 		}
 
@@ -493,7 +354,6 @@
 		.frame-img {
 			position: relative;
 			line-height: 0;
-			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 		}
 		.ispano .frame-img {
 			overflow-x: auto;
@@ -505,7 +365,6 @@
 			box-shadow: none;
 			background: none;
 			border-color: transparent;
-			-webkit-box-flex: 0;
 			-webkit-flex: 0;
 			    -ms-flex: 0;
 			        flex: 0;
@@ -542,7 +401,6 @@
 			        animation: error .2s;
 		}
 		.frame-text {
-			-webkit-box-flex: 1;
 			-webkit-flex: 1;
 			    -ms-flex: 1;
 			        flex: 1;
@@ -622,11 +480,9 @@
 			-webkit-flex-flow: row-reverse wrap;
 			    -ms-flex-flow: row-reverse wrap;
 			        flex-flow: row-reverse wrap;
-			-webkit-box-align: center;
 			-webkit-align-items: center;
 			    -ms-flex-align: center;
 			        align-items: center;
-			-webkit-box-pack: center;
 			-webkit-justify-content: center;
 			    -ms-flex-pack: center;
 			        justify-content: center;
@@ -652,11 +508,9 @@
 			display: -webkit-flex;
 			display: -ms-flexbox;
 			display: flex;
-			-webkit-box-align: center;
 			-webkit-align-items: center;
 			    -ms-flex-align: center;
 			        align-items: center;
-			-webkit-box-pack: center;
 			-webkit-justify-content: center;
 			    -ms-flex-pack: center;
 			        justify-content: center;
@@ -667,14 +521,10 @@
 			margin-left: .5em;
 			overflow: hidden;
 			
-			color: #00796B;
-			font-weight: 700;
 			text-transform: uppercase;
 			text-decoration: none;
 			cursor: pointer;
 
-			border: 1px solid #ccc;
-			border-radius: 3px;
 			-webkit-transition: all .1s ease;
 			        transition: all .1s ease;
 
@@ -683,51 +533,29 @@
 			-ms-user-select: none; 
 			user-select: none;
 		}
-		.btn:hover {
-			color: #FF5722;
-		}
-		.btn-link {
-			border-color: transparent;
-			box-shadow: none;
-		}
-		.btn-link:hover {
-			box-shadow: none;
-		}
 		a.btn-link {
 			text-transform: none;
 		}
 
 		.btn-edit,
 		.btn-edit:hover {
-			width: 5.5em;
+			font: bold 1rem/1 arial;
+			width: 7em;
 			box-shadow: none;
 			background: hsl(255, 0, 98%);
 			-webkit-transition: all .1s ease;
 			        transition: all .1s ease;
 
-			color: hsl(191, 70%, 40%);
+			color: white;
+			background: #34495e;
+			border-radius: 3px;
 		}
 		.btn-edit.hover {
-			border-color: transparent;
 			box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1),
 						0 1px 1px rgba(0, 0, 0, 0.1);
-			color: white;
-
-			background: hsl(191, 70%, 42%);
 		}
-		.btn-edit.hover:active {
-			box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-			background: hsl(191, 70%, 38%);
-		}
-		.btn-edit.off {
-			color: hsl(173, 100%, 27%);
-		}
-		.btn-edit.off.hover {
-			color: white;
-			background: hsl(173, 100%, 29%);
-		}
-		.btn-edit.off.hover:active {
-			background: hsl(173, 100%, 25%);
+		.btn-edit:active {
+			background: #496B8E;
 		}
 		.btn-edit::before {
 			font-size: 2.25em;
@@ -745,24 +573,22 @@
 		}
 		.btn-edit.hover::after,
 		.btn-edit.import::after,
-		.btn-edit.export::after,
 		.btn-edit.loading::after { 
 			padding-left: .5em;
-			max-width: 5em;
-			-webkit-transition: max-width .2s ease,
+			max-width: 7em;
+			-webkit-transition:
+						max-width .2s ease,
 						padding-left .3s ease;
-			        transition: max-width .2s ease,
+			        transition:
+			        	max-width .2s ease,
 						padding-left .3s ease;
 		}
 		.btn-edit.import,
-		.btn-edit.export,
 		.btn-edit.loading {
-			border-color: transparent !important;
 			background: hsl(33, 90%, 50%) !important;
 			box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2) !important;
 			color: white !important;
 		}
-
 
 		/* 
 		 *
@@ -770,6 +596,9 @@
 		 *
 		*/
 
+		.changed .story::before {
+			content: "There is unsaved modifications";
+		}
 		.toggle::before {
 			content: "☑";
 		}
@@ -794,8 +623,8 @@
 		.btn-edit.import::after { content: "Import"; }
 		.btn-edit.export::before { content: "◥"; }
 		.btn-edit.export::after { content: "Export"; }
-		.btn-edit.loading::before { content: "◼"; }
-		.btn-edit.loading::after { content: "Load..."; }
+		.btn-edit.loading::before {content: "●"; }
+		.btn-edit.loading::after { content: "Loading"; }
 
 		.add-frame::after {
 			content: "+>";
@@ -832,6 +661,9 @@
 			content: "||";
 		}
 	</style>
+	<style id="theme" type="text/css" media="screen">
+		
+	</style>
 </head>
 <body>
 	<header class="header">
@@ -850,7 +682,7 @@
 	</div>
 	<script id="template" type="text/x-custom-template">
 	<li class="scene shadow management">
-		<header class="scene-header col">
+		<header class="scene-header">
 			<div class="scene-header_content">
 				<h1 class="scene-title" contenteditable="true">Untitled scene</h1>
 				<p class="scene-overview" contenteditable="true">Overview</p>
@@ -974,8 +806,7 @@
 			for (var i = 0; i < scenes.length; i++) {
 				scenes[i].classList.toggle('closed');
 			}
-		};
- 
+		}; 
 	</script>
 
 </body></html>

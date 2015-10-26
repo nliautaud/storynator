@@ -17,48 +17,77 @@ $(function() {
 	$('*[contenteditable]').attr('contenteditable', true);
 
 
-
-	//*/// import / export
+	//*/// edit button hovering
 
 	$('.btn-edit')
-		.attr('draggable', true)
 		.on('mouseenter', function (event) {
 			$(this).addClass('hover');
 		}).on('mouseleave', function (event) {
 			$(this).removeClass('hover');
 		}).on('click', function (event) {
 			$(this).removeClass('hover');
-		}).on('dragstart', function (event) {
-			isExport = true;
-			var data = event.originalEvent.dataTransfer;
-			data.setData('text/html', story.html());
-			data.setData('title', getTitle());
-			console.log('export', getTitle());
-			$(this).addClass('export');
-		}).on('dragenter', function (event) {
-			if(!isExport) $(this).addClass('import');
-		}).on('dragleave', function (event) {
-			if(!isExport) $(this).removeClass('import');
-		}).on('dragend', function(event){
-			$(this).removeClass('export');
-		}).on('drop', function(event){
-			// import
-			if(!isExport) {
-				var data = event.originalEvent.dataTransfer;
-				$this = $(this);
-				$this.toggleClass('loading import');
-				setTitle(data.getData('title'))
-				console.log('imported',data.getData('title'));
-				story.html(data.getData('text/html')).promise().done(function(){
-					setTimeout(function () {
-						$this.removeClass('loading');
-						setChanged();
-					}, 500);
-				});
-			}
-			isExport = false;
-			event.preventDefault();
 		});
+
+	//*/// theme & content import
+
+	$(document)
+		.on('dragover', function (event) {
+			if(!isDragging) $('.btn-edit').addClass('import');
+		}).on('dragleave', function (event) {
+			if(!isDragging) $('.btn-edit').removeClass('import');
+		}).on('drop', function(event){
+			if(isDragging) return;
+			$('.btn-edit').removeClass('import');
+			var files = event.originalEvent.dataTransfer.files;
+			if(files.length) {
+				var opt = {shift: event.shiftKey, name: files[0].name};
+				switch (files[0].type) {
+					case 'text/css' :
+						loadFile(files[0], themeCallback, opt);
+						event.preventDefault();
+						return false;
+					case 'text/html' :
+						loadFile(files[0], contentCallback, opt);
+						event.preventDefault();
+						return false;
+				}
+			}
+		});
+	function loadFile (file, callback, opt) {
+		$('.btn-edit').addClass('loading');
+		var reader = new FileReader();
+		reader.readAsText(file);
+		reader.onload = function (e) {
+			callback(e.target.result, opt);
+		};
+	}
+	function themeCallback (css, opt) {
+		if(opt.shift) css = $('#theme').html() + css;
+		replaceContent('#theme', css);
+		console.log('import theme', opt.name);
+	}
+	function contentCallback (html, opt) {
+		var imported = $('<div>').html(html),
+			story = imported.find('.story').first().html();
+		if(opt.shift)
+			story = $('.story').html() + story;
+		replaceContent('.story', story, function () {
+			var title = imported.find('.header-title').first().html();
+			setTitle(title);
+			console.log('import story "'+title+'" ('+opt.name+'"');
+		});
+	}
+	function replaceContent (sel, content, callback) {
+		$(sel).first()
+			.html(content)
+			.promise().done(function () {
+				setTimeout(function () {
+					$('.btn-edit').removeClass('loading');
+				}, 500);
+				if(callback) callback();
+				setChanged();
+			});
+	}
 
 
 	//*/// changes
@@ -133,6 +162,7 @@ $(function() {
 			}
 			target = newframe.find('img');
 		}
+		return false;
 	});
 
 	function loadImage (file, img) {
