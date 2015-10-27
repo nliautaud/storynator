@@ -1,0 +1,143 @@
+
+/**
+ * Minimal full-width theme
+ * 
+ * A theme override for storinator, the simple storyboard editor.
+ * Just drag this file on a storynator document, use shift to append.
+ *
+ * @author    Nicolas Liautaud
+ * @url       https://nliautaud.github.io/storynator/
+ * @license   MIT
+*/
+
+html {
+	font: 300 13px/1.25 "Consolas", "Andale Mono", "Courier New", monospace;
+}
+.btn-storynator a,
+.btn {
+	color: #00796B;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+a:hover,
+.btn:hover {
+	color: #FF5722;
+}
+.header {
+	padding: 1em 5% .4em;
+	background: #fff;
+	border-bottom: 1px solid #eee;
+    box-shadow: 0 1px 1px rgba(0,0,0,.15);
+}
+.header-title {
+	font-size: 1.5em;
+	margin: .4rem 0 1rem 0;
+}
+.header-title:empty::before {
+	color: #aaa;
+}
+.header-toggles {
+	margin-top: .7rem;
+}
+.header .btn {
+	border: 0;
+}
+.header .btn-storynator {
+	margin: 0 0 0 3%;
+}
+.header .btn-storynator,
+.header .btn-storynator a {
+	background: none;
+	border: 0;
+}
+.header .btn-edit,
+.header .btn-edit:hover,
+.header .btn-edit.hover {
+    margin: 0 0 .5rem 3%;
+	background: none;
+	border: 1px solid #ccc;
+}
+.header .btn-edit.hover {
+    box-shadow: 0 1px 2px rgba(0,0,0,.1);
+}
+.header .btn-edit:active {
+	background: #fcfcfc;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+}
+
+.story {
+    padding: 3em 5%;
+}
+
+.scene-header {
+	max-width: 60em;
+    margin: 1em 0 0 -.5em;
+}
+.scene-header_content {
+	padding: .25em 7em .5em 1em;
+	margin: .5em 0;
+	border: 1px solid #ccc;
+    border-left-width: .5em;
+}
+.shadow .scene-header_content {
+	border-style: dashed dashed dashed solid;
+}
+.scene-handle {
+    background: #008A7A;
+    position: absolute;
+    top: -1px; bottom: -1px;
+    left: -1em; width: 1em;
+    border-radius: .3em 0 0 .3em;
+}
+.scene-title {
+	margin: .1em;
+	padding: .5em;
+	font-size: 1em;
+}
+.scene-overview {
+	margin-top: .1rem;
+	padding: .25rem .5rem;
+	font-size: .8em;
+}
+.scene-close {
+	padding-right: 1em;
+}
+
+.frames {
+	margin: 1.5em 0;
+}
+.frame {
+	padding: 0 1%;
+}
+.overview .frame {
+	padding: 0 .5%;
+}
+.frame-text {
+	padding: 1rem;
+	margin-top: 1rem;
+	line-height: 1.3;
+	background: #fff;
+	border: 1px solid #eee;
+	z-index: 2;
+}
+.frame-nbr {
+	padding: .5em 0;
+}
+.changed .story::before,
+.scene-close,
+.frame-nbr {
+	font-size: .9em;
+	color: #ccc;
+}
+
+@media only screen and (max-width : 600px) {
+	.scene-header_content {
+		padding-right: 1em;
+	}
+	.scene-title {
+		text-align: center;
+	}
+	.overview .frame {
+		padding: 0 .5em;
+	}
+}

@@ -31,7 +31,9 @@ $(function() {
 	//*/// theme & content import
 
 	$(document)
-		.on('dragover', function (event) {
+		.on('dragstart', function (event) {
+			isDragging = true;
+		}).on('dragover', function (event) {
 			if(!isDragging) $('.btn-edit').addClass('import');
 		}).on('dragleave', function (event) {
 			if(!isDragging) $('.btn-edit').removeClass('import');
@@ -43,11 +45,11 @@ $(function() {
 				var opt = {shift: event.shiftKey, name: files[0].name};
 				switch (files[0].type) {
 					case 'text/css' :
-						loadFile(files[0], themeCallback, opt);
+						loadFile(files[0], cssCallback, opt);
 						event.preventDefault();
 						return false;
 					case 'text/html' :
-						loadFile(files[0], contentCallback, opt);
+						loadFile(files[0], htmlCallback, opt);
 						event.preventDefault();
 						return false;
 				}
@@ -61,12 +63,19 @@ $(function() {
 			callback(e.target.result, opt);
 		};
 	}
-	function themeCallback (css, opt) {
-		if(opt.shift) css = $('#theme').html() + css;
-		replaceContent('#theme', css);
-		console.log('import theme', opt.name);
+	function cssCallback (css, opt) {
+		var split = opt.name.split('.');
+		if(split.length !== 3) {
+			console.log('no namespace found on :', opt.name);
+			return;
+		}
+		name = split[1];
+		target = '#storynator_' + split[0];
+		if(opt.shift) css = $(target).html() + css;
+		replaceContent(target, css);
+		console.log('import', split[0], name);
 	}
-	function contentCallback (html, opt) {
+	function htmlCallback (html, opt) {
 		var imported = $('<div>').html(html),
 			story = imported.find('.story').first().html();
 		if(opt.shift)
