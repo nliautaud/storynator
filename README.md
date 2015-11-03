@@ -110,8 +110,6 @@ Appending storynator ``.html`` files with the ``shift`` key may be used to regro
 - Drag your existing storyboard file, for example ``my_story.html``, onto the empty one. The new document is filled with your storyboard content.
 - Save that updated document onto the existing file, and open your local storyboard.
 
-[<img src="img/import.gif" alt="Update process">][demo]
-
 ### Themes & translations
 
 Storynator styles can be overridden by dropping ``.css`` files. The files names are prefixed by a namespace, allowing to drop different types of styles without overriding other types, for example switching translations without altering the theme. Example files can be found in the ``styles/`` directory of the repository.
