@@ -127,12 +127,12 @@ code {
 	color: #080;
 }
 
-h3 {
+h2 {
 	font: 700 2rem/1 "Anonymous Pro", "Courier New", monospace;
 	margin: 0 0 2rem;
 	text-align: left;
 }
-.gettingstarted.hcontent h3 {
+.gettingstarted.hcontent h2 {
 	font: 300 4rem/1 "Raleway", arial;
 	font-size: 8vmin;
 	text-align: center;
@@ -175,12 +175,12 @@ h3 {
 	box-shadow: 0 1em 3em rgba(0,0,0,.4);
 }
 
-.h3 {
+.h2 {
 	background: #f5f5f5;
 	color: #555;
 	text-align: left;
 }
-.h3:nth-child(odd) {
+.h2:nth-child(odd) {
 	background: #eee;
 }
 
@@ -213,7 +213,7 @@ h3 {
 	border-width: 3px 0;
 	background: #fefefe;
 }
-.gettingstarted+.h3 {
+.gettingstarted+.h2 {
 	padding-top: 5em;
 }
 
