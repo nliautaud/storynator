@@ -140,7 +140,7 @@ $(function() {
 
 	//*/// drop images
 
-	story.delegate('.frame', 'dragenter', delOverlays);
+	story.delegate('.frame', 'dragenter', unselectFrames);
 	story.delegate('.frame img', 'dragenter', function(e){
 		if(!isDragging) {
 			e.stopPropagation();
@@ -326,10 +326,35 @@ $(function() {
 
 
 
-	//*/// frames overlay
+	//*/// frames selection & manipulation
 
-	function delOverlays(){
-		$('.overlay').remove();
+	function selectFrame (frame) {
+		frame.prepend(overlay_tpl);
+	}
+	function unselectFrames(el){
+		el = el || story;
+		el.find('.overlay').remove();
+	}
+	function getSelectedFrames(){
+		return $('.overlay').parents('.frame');
+	}
+	function deleteFrames(frames){
+		frames = frames || getSelectedFrames();
+		frames.addClass('remove');
+		setTimeout(function(){
+			frames.remove();
+		}, 200);
+		setChanged();
+	}
+	function duplicateFrames(frames){
+		frames = frames || getSelectedFrames();
+		frames.each(function(){
+			var newFrame = $(this).clone().insertAfter($(this));
+			unselectFrames(newFrame);
+			if(newFrame.next().hasClass('sameshot'))
+				newFrame.addClass('sameshot');
+		});
+		setChanged();
 	}
 	$(window).on('click', function(event) {
 		var target = $(event.target);
@@ -340,18 +365,10 @@ $(function() {
 			} else overlays.not(target).remove();
 			return;
 		}
-		if(!event.shiftKey) delOverlays();
+		if(!event.shiftKey) unselectFrames();
 		if(target.is('img') && !isShadow(target)){
-			target.parent().prepend(overlay_tpl);
+			selectFrame(target.parent());
 		}
-	});
-	story.delegate('.overlay .delete', 'click', function(e){
-		var frames = $('.overlay').parents('.frame');
-		frames.addClass('remove');
-		setTimeout(function(){
-			frames.remove();
-		}, 200);
-		setChanged();
 	});
 	story.delegate('.frame *[data-toggle]', 'click', function(e){
 		$('.overlay').parents('.frame')
@@ -360,6 +377,7 @@ $(function() {
 				.removeAttr('style');
 		setChanged();
 	});
+	story.delegate('.overlay .delete', 'click', deleteFrames);
 
 
 
@@ -419,7 +437,7 @@ $(function() {
 				onStart: function (evt) {
 					isDragging = true;
 					tagSiblingsOf($(evt.item));
-					delOverlays();
+					unselectFrames();
 				},
 				onEnd: function (evt) {
 					isDragging = false;
@@ -505,17 +523,23 @@ $(function() {
 		$.each(attrs, function(id, val){
 			$('*['+val+']').removeAttr(val);
 		});
+		alert('cleaned');
 	}
 	$(window).on('keydown', function(event) {
 		if (!event.ctrlKey && !event.metaKey) return;
 		var key = String.fromCharCode(event.which).toLowerCase();
 		switch (key) {
-			case 'q':
+			case 'q': 
+				event.preventDefault();
 				cleanup();
-				alert('cleaned');
-				break;
+				return false;
+			case 'd':
+				event.preventDefault();
+				duplicateFrames();
+				return false;
 			case 's':
 				setSaved();
+				break;
 		}
 	});
 });
