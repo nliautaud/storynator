@@ -1,0 +1,35 @@
+
+/**
+ * Dark version for Flat theme
+ * 
+ * A theme override for storinator, the simple storyboard editor.
+ * Just drag this file on a storynator document, use shift to append.
+ *
+ * @author    Nicolas Liautaud
+ * @url       https://nliautaud.github.io/storynator/
+ * @license   MIT
+*/
+
+body {
+	background: #333;
+}
+.scene {
+	background: #464343;
+}
+.scene-header {
+    background: #3A3939;
+    color: #eee;
+}
+.scene-header_buttons .btn {
+    border-color: #eee;
+    background: #ccc;
+}
+.frame-img,
+.frame-text {
+	background: #3A3939;
+	border-color: #3A3939;
+	color: #eee;
+}
+.frame.shadow .frame-img {
+    outline-color: #3A3939;
+}
