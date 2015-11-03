@@ -1,0 +1,31 @@
+
+/**
+ * English (included by default)
+ * 
+ * A translation override for storinator, the simple storyboard editor.
+ * Just drag this file on a storynator document, use shift to append.
+ *
+ * @author    Nicolas Liautaud
+ * @url       https://nliautaud.github.io/storynator/
+ * @license   MIT
+*/
+
+.header-title:empty::after { content: "Untitled storyboard"; }
+.scene-title:empty::after { content: "Untitled scene"; }
+.scene-overview:empty::after { content: "Scene overview"; }
+.shadow .scene-close::before { content: "new scene"; }
+
+.changed .story::before { content: "There is unsaved modifications"; }
+
+.toggle-nbr::after { content: "numbers"; }
+.toggle-txt::after { content: "texts"; }
+.toggle-ovw::after { content: "overview"; }
+.toggle-fsc::after { content: "fullscreen"; }
+.toggle-scn::after { content: "reveal all"; }
+.toggle-scn.off::after { content: "fold all"; }
+
+.btn-edit.off::after { content: "edit"; }
+.btn-edit::after {  content: "view"; }
+.btn-edit.import::after { content: "import"; }
+.btn-edit.export::after { content: "export"; }
+.btn-edit.loading::after { content: "loading"; }

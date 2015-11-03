@@ -16,49 +16,91 @@ $(function() {
 	body.removeClass('nomanagement');
 	$('*[contenteditable]').attr('contenteditable', true);
 
+	// compatibility
+	$('.col').removeClass('col');
 
 
-	//*/// import / export
+	//*/// edit button hovering
 
 	$('.btn-edit')
-		.attr('draggable', true)
 		.on('mouseenter', function (event) {
 			$(this).addClass('hover');
 		}).on('mouseleave', function (event) {
 			$(this).removeClass('hover');
 		}).on('click', function (event) {
 			$(this).removeClass('hover');
-		}).on('dragstart', function (event) {
-			isExport = true;
-			var data = event.originalEvent.dataTransfer;
-			data.setData('text/html', story.html());
-			data.setData('title', getTitle());
-			console.log('export', getTitle());
-			$(this).addClass('export');
-		}).on('dragenter', function (event) {
-			if(!isExport) $(this).addClass('import');
-		}).on('dragleave', function (event) {
-			if(!isExport) $(this).removeClass('import');
-		}).on('dragend', function(event){
-			$(this).removeClass('export');
-		}).on('drop', function(event){
-			// import
-			if(!isExport) {
-				var data = event.originalEvent.dataTransfer;
-				$this = $(this);
-				$this.toggleClass('loading import');
-				setTitle(data.getData('title'))
-				console.log('imported',data.getData('title'));
-				story.html(data.getData('text/html')).promise().done(function(){
-					setTimeout(function () {
-						$this.removeClass('loading');
-						setChanged();
-					}, 500);
-				});
-			}
-			isExport = false;
-			event.preventDefault();
 		});
+
+	//*/// theme & content import
+
+	$(document)
+		.on('dragstart', function (event) {
+			isDragging = true;
+		}).on('dragover', function (event) {
+			if(!isDragging) $('.btn-edit').addClass('import');
+		}).on('dragleave', function (event) {
+			if(!isDragging) $('.btn-edit').removeClass('import');
+		}).on('drop', function(event){
+			if(isDragging) return;
+			$('.btn-edit').removeClass('import');
+			var files = event.originalEvent.dataTransfer.files;
+			if(files.length) {
+				var opt = {shift: event.shiftKey, name: files[0].name};
+				switch (files[0].type) {
+					case 'text/css' :
+						loadFile(files[0], cssCallback, opt);
+						event.preventDefault();
+						return false;
+					case 'text/html' :
+						loadFile(files[0], htmlCallback, opt);
+						event.preventDefault();
+						return false;
+				}
+			}
+		});
+	function loadFile (file, callback, opt) {
+		$('.btn-edit').addClass('loading');
+		var reader = new FileReader();
+		reader.readAsText(file);
+		reader.onload = function (e) {
+			callback(e.target.result, opt);
+		};
+	}
+	function cssCallback (css, opt) {
+		var split = opt.name.split('.');
+		if(split.length !== 3) {
+			console.log('no namespace found on :', opt.name);
+			return;
+		}
+		name = split[1];
+		target = '#storynator_' + split[0];
+		if(opt.shift) css = $(target).html() + css;
+		replaceContent(target, css);
+		console.log('import', split[0], name);
+	}
+	function htmlCallback (html, opt) {
+		var imported = $('<div>').html(html),
+			story = imported.find('.story').first().html();
+		if(opt.shift)
+			story = $('.story').html() + story;
+		replaceContent('.story', story, function () {
+			var title = imported.find('.header-title').first().html();
+			setTitle(title);
+			initFramesSort();
+			console.log('import story "'+title+'" ('+opt.name+'"');
+		});
+	}
+	function replaceContent (sel, content, callback) {
+		$(sel).first()
+			.html(content)
+			.promise().done(function () {
+				setTimeout(function () {
+					$('.btn-edit').removeClass('loading');
+				}, 500);
+				if(callback) callback();
+				setChanged();
+			});
+	}
 
 
 	//*/// changes
@@ -98,7 +140,7 @@ $(function() {
 
 	//*/// drop images
 
-	story.delegate('.frame', 'dragenter', delOverlays);
+	story.delegate('.frame', 'dragenter', unselectFrames);
 	story.delegate('.frame img', 'dragenter', function(e){
 		if(!isDragging) {
 			e.stopPropagation();
@@ -133,6 +175,7 @@ $(function() {
 			}
 			target = newframe.find('img');
 		}
+		return false;
 	});
 
 	function loadImage (file, img) {
@@ -155,7 +198,7 @@ $(function() {
 		reader.readAsDataURL(file);
 		reader.addEventListener('loadend', function (e, f) {
 			var canvas = document.createElement('canvas'),
-				context = canvas.getContext('2d')
+				context = canvas.getContext('2d'),
 				image = new Image();
 			image.src = this.result;
 			image.onload = function() {
@@ -283,13 +326,41 @@ $(function() {
 
 
 
-	//*/// frames overlay
+	//*/// frames selection & manipulation
 
-	function delOverlays(){
-		$('.overlay').remove();
+	function selectFrame (frame) {
+		frame.prepend(overlay_tpl);
+	}
+	function unselectFrames(el){
+		el = el || story;
+		el.find('.overlay').remove();
+	}
+	function getSelectedFrames(){
+		return $('.overlay').parents('.frame');
+	}
+	function deleteFrames(frames){
+		if(!(frames instanceof jQuery))
+			frames = getSelectedFrames();
+		frames.addClass('remove');
+		setTimeout(function(){
+			frames.remove();
+		}, 200);
+		setChanged();
+	}
+	function duplicateFrames(frames){
+		if(!(frames instanceof jQuery))
+			frames = getSelectedFrames();
+		frames.each(function(){
+			var newFrame = $(this).clone().insertAfter($(this));
+			unselectFrames(newFrame);
+			if(newFrame.next().hasClass('sameshot'))
+				newFrame.addClass('sameshot');
+		});
+		setChanged();
 	}
 	$(window).on('click', function(event) {
 		var target = $(event.target);
+		if(target.is('.btn')) return;
 		if(target.is('.overlay')) {
 			var overlays = $('.overlay');
 			if(overlays.length == 1 || event.shiftKey) {
@@ -297,18 +368,10 @@ $(function() {
 			} else overlays.not(target).remove();
 			return;
 		}
-		if(!event.shiftKey) delOverlays();
+		if(!event.shiftKey) unselectFrames();
 		if(target.is('img') && !isShadow(target)){
-			target.parent().prepend(overlay_tpl);
+			selectFrame(target.parent());
 		}
-	});
-	story.delegate('.overlay .delete', 'click', function(e){
-		var frames = $('.overlay').parents('.frame');
-		frames.addClass('remove');
-		setTimeout(function(){
-			frames.remove();
-		}, 200);
-		setChanged();
 	});
 	story.delegate('.frame *[data-toggle]', 'click', function(e){
 		$('.overlay').parents('.frame')
@@ -317,6 +380,8 @@ $(function() {
 				.removeAttr('style');
 		setChanged();
 	});
+	story.delegate('.overlay .delete', 'click', deleteFrames);
+	story.delegate('.overlay .duplicate', 'click', duplicateFrames);
 
 
 
@@ -376,7 +441,7 @@ $(function() {
 				onStart: function (evt) {
 					isDragging = true;
 					tagSiblingsOf($(evt.item));
-					delOverlays();
+					unselectFrames();
 				},
 				onEnd: function (evt) {
 					isDragging = false;
@@ -422,7 +487,7 @@ $(function() {
 		if(prev.hasClass('shadow')) revealFrame(prev);
 
 		// item was in a shot
-		if(linked.length != 0) {
+		if(linked.length !== 0) {
 			// moved at the head of its shot
 			if(nextIsMyShot && !prevIsMyShot) {
 				item.removeClass('sameshot');
@@ -462,16 +527,30 @@ $(function() {
 		$.each(attrs, function(id, val){
 			$('*['+val+']').removeAttr(val);
 		});
+		alert('cleaned');
 	}
 	$(window).on('keydown', function(event) {
-		if (!event.ctrlKey && !event.metaKey) return;
 		var key = String.fromCharCode(event.which).toLowerCase();
 		switch (key) {
-			case 'q':
+			case '.': // suppr
+				event.preventDefault();
+				deleteFrames();
+				return false;
+		}
+		// ctrl
+		if (!event.ctrlKey && !event.metaKey) return;
+		switch (key) {
+			case 'q': 
+				event.preventDefault();
 				cleanup();
-				alert('cleaned');
+				return false;
+			case 'd':
+				event.preventDefault();
+				duplicateFrames();
+				return false;
 			case 's':
 				setSaved();
+				break;
 		}
 	});
 });
