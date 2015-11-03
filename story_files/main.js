@@ -526,8 +526,15 @@ $(function() {
 		alert('cleaned');
 	}
 	$(window).on('keydown', function(event) {
-		if (!event.ctrlKey && !event.metaKey) return;
 		var key = String.fromCharCode(event.which).toLowerCase();
+		switch (key) {
+			case '.': // suppr
+				event.preventDefault();
+				deleteFrames();
+				return false;
+		}
+		// ctrl
+		if (!event.ctrlKey && !event.metaKey) return;
 		switch (key) {
 			case 'q': 
 				event.preventDefault();
