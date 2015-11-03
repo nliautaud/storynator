@@ -54,8 +54,7 @@ body {
 	overflow: hidden;
 	white-space: nowrap;
 	width: 0;
-	min-width: .5em;
-	margin: 0 auto .5em;
+	margin: 0 auto;
 	font: 400 4rem/1.1 "Anonymous Pro", "Courier New", monospace;
 	font-size: 10vmin;
 	text-align: center;
@@ -71,6 +70,10 @@ body {
 }
 #title:focus {
 	border-right: 0;
+}
+#title:empty {
+    display: block !important;
+    max-width: .1em;
 }
 
 .hc1 p,
@@ -162,7 +165,7 @@ h2 {
 	font: 300 1.5rem/1.2 "Raleway", arial;
 	text-align: center;
 	max-width: 40em;
-	margin: 0 auto;
+	margin: 1em auto;
 }
 .hc1 a {
 	display: block;

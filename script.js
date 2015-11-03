@@ -31,9 +31,9 @@ $('#title')
 			return false;
 		}
 	}).on('input', function (e) {
-		$(this).width((0.05+$(this).text().length*0.55)+'em');
+		$(this).css('display', 'inline');
 	}).on('keypress', function (e) {
-		return ($(this).text().length <= 9);
+		return ($(this).text().length <= 10);
 	});
 
 /**
