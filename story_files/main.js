@@ -86,6 +86,7 @@ $(function() {
 		replaceContent('.story', story, function () {
 			var title = imported.find('.header-title').first().html();
 			setTitle(title);
+			initFramesSort();
 			console.log('import story "'+title+'" ('+opt.name+'"');
 		});
 	}
@@ -197,7 +198,7 @@ $(function() {
 		reader.readAsDataURL(file);
 		reader.addEventListener('loadend', function (e, f) {
 			var canvas = document.createElement('canvas'),
-				context = canvas.getContext('2d')
+				context = canvas.getContext('2d'),
 				image = new Image();
 			image.src = this.result;
 			image.onload = function() {
@@ -464,7 +465,7 @@ $(function() {
 		if(prev.hasClass('shadow')) revealFrame(prev);
 
 		// item was in a shot
-		if(linked.length != 0) {
+		if(linked.length !== 0) {
 			// moved at the head of its shot
 			if(nextIsMyShot && !prevIsMyShot) {
 				item.removeClass('sameshot');
@@ -512,6 +513,7 @@ $(function() {
 			case 'q':
 				cleanup();
 				alert('cleaned');
+				break;
 			case 's':
 				setSaved();
 		}
