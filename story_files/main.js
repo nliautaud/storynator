@@ -16,6 +16,9 @@ $(function() {
 	body.removeClass('nomanagement');
 	$('*[contenteditable]').attr('contenteditable', true);
 
+	// compatibility
+	$('.col').removeClass('col');
+
 
 	//*/// edit button hovering
 

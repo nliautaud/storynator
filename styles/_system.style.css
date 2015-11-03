@@ -241,8 +241,11 @@ ul.frames {
 	        flex-flow: column;
 	max-width: 100%;
 	margin-bottom: 1.5em;
+	padding: 0 .5%;
+	-webkit-transition: all .15s ease;
+	        transition: all .15s ease;
 }
-.frame.col.ispano {
+.frame.ispano {
 	/* ie will fallback with scrollbars */
 	width: -webkit-min-content;
 	width: -moz-min-content;
@@ -251,31 +254,26 @@ ul.frames {
 .overview .frame {
 	padding: 0 .25%;
 }
-.col {
-	padding: 0 .5%;
-	-webkit-transition: all .15s ease;
-	        transition: all .15s ease;
-}
 
 @media only screen and (min-width : 2000px) {
-	.col 			{ width: 20%; }
-	.overview .col 	{ width: 10%; }
+	.frame 			{ width: 20%; }
+	.overview .frame{ width: 10%; }
 }
 @media only screen and (max-width : 2000px) {
-	.col 			{ width: 25%; }
-	.overview .col 	{ width: 12.5%; }
+	.frame 			{ width: 25%; }
+	.overview .frame{ width: 12.5%; }
 }
 @media only screen and (max-width : 1500px) {
-	.col 			{ width: 33%; }
-	.overview .col 	{ width: 16.65%; }
+	.frame 			{ width: 33%; }
+	.overview .frame{ width: 16.65%; }
 }
 @media only screen and (max-width : 1000px) {
-	.col 			{ width: 50%; }
-	.overview .col 	{ width: 25%; }
+	.frame 			{ width: 50%; }
+	.overview .frame{ width: 25%; }
 }
 @media only screen and (max-width : 600px) {
-	.col 			{ width: 100%; }
-	.overview .col 	{ width: 50%; }
+	.frame 			{ width: 100%; }
+	.overview .frame{ width: 50%; }
 	body {
 		padding-top: 0 !important;
 	}
@@ -336,7 +334,7 @@ ul.frames {
 	top: 50%; bottom: 50%;
 	left: -10%; width: 20%;
 	background: transparent;
-	z-index: -1;
+	z-index: 1;
 	-webkit-transition: all .2s ease;
 	        transition: all .2s ease;
 }
@@ -370,10 +368,11 @@ ul.frames {
 	        flex: 0;
 }
 .frame-img img {
+	position: relative;
 	width: 100%;
+	z-index: 2;
 	-webkit-transition: all .1s ease;
 	        transition: all .1s ease;
-	z-index: 1;
 }
 .ispano .frame-img img {
 	width: auto;
