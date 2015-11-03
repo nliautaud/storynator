@@ -617,6 +617,7 @@ ul.frames {
 
 .scene-delete::after { content: "✕"; }
 .overlay .delete::after { content: "✕"; }
+.overlay .duplicate::after { content: "++"; }
 .overlay .btn-pano::after { content: "⇔"; }
 .frame.ispano .btn-pano::after { content: "⇐⇒"; }
 .overlay .btn-sameshot::after { content: "--"; }
@@ -966,6 +967,7 @@ ul.frames {
 	<script id="overlay-tpl" type="text/x-custom-template">
 		<div class="overlay">
 			<div class="btn delete"></div>
+			<div class="btn duplicate"></div>
 			<div class="btn btn-pano" data-toggle="ispano"></div>
 			<div class="btn btn-sameshot" data-toggle="sameshot"></div>
 		</div>

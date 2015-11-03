@@ -610,6 +610,7 @@ ul.frames {
 
 .scene-delete::after { content: "✕"; }
 .overlay .delete::after { content: "✕"; }
+.overlay .duplicate::after { content: "++"; }
 .overlay .btn-pano::after { content: "⇔"; }
 .frame.ispano .btn-pano::after { content: "⇐⇒"; }
 .overlay .btn-sameshot::after { content: "--"; }

@@ -339,7 +339,8 @@ $(function() {
 		return $('.overlay').parents('.frame');
 	}
 	function deleteFrames(frames){
-		frames = frames || getSelectedFrames();
+		if(!(frames instanceof jQuery))
+			frames = getSelectedFrames();
 		frames.addClass('remove');
 		setTimeout(function(){
 			frames.remove();
@@ -347,7 +348,8 @@ $(function() {
 		setChanged();
 	}
 	function duplicateFrames(frames){
-		frames = frames || getSelectedFrames();
+		if(!(frames instanceof jQuery))
+			frames = getSelectedFrames();
 		frames.each(function(){
 			var newFrame = $(this).clone().insertAfter($(this));
 			unselectFrames(newFrame);
@@ -358,6 +360,7 @@ $(function() {
 	}
 	$(window).on('click', function(event) {
 		var target = $(event.target);
+		if(target.is('.btn')) return;
 		if(target.is('.overlay')) {
 			var overlays = $('.overlay');
 			if(overlays.length == 1 || event.shiftKey) {
@@ -378,6 +381,7 @@ $(function() {
 		setChanged();
 	});
 	story.delegate('.overlay .delete', 'click', deleteFrames);
+	story.delegate('.overlay .duplicate', 'click', duplicateFrames);
 
 
 
