@@ -364,16 +364,6 @@ ul.frames {
 	overflow-x: auto;
 	overflow-y: hidden;
 }
-.frame.shadow .frame-img,
-.frame.shadow .frame-text {
-	box-shadow: 0 1px 2px rgba(0, 0, 0, 0);
-	box-shadow: none;
-	background: none;
-	border-color: transparent;
-	-webkit-flex: 0;
-	    -ms-flex: 0;
-	        flex: 0;
-}
 .frame-img img {
 	position: relative;
 	width: 100%;
@@ -815,30 +805,23 @@ ul.frames {
 	border: 1px solid #eee;
 }
 .frame-text {
+	border: 1px solid #eee;
+	padding: 1em 1rem;
 	-webkit-order: 3;
 	-ms-flex-order: 3;
 	    order: 3;
 }
 .frame-nbr {
+	margin: .5em 0;
 	-webkit-order: 2;
 	-ms-flex-order: 2;
 	    order: 2;
 }
-.frame-nbr,
-.frame-text {
-	padding: .5rem;
-}
-.overview .frame-nbr,
 .overview .frame-text {
-	padding: .2rem;
+	padding: .5em .5rem;
 }
 
 
-@media only screen and (min-width : 1800px) {
-	.story {
-		font-size: 1.2em;
-	}
-}
 @media only screen and (max-width : 1500px) {
 	.frame {
 		padding: 0 1%;
@@ -916,7 +899,7 @@ ul.frames {
 .btn-edit.export::after { content: "export"; }
 .btn-edit.loading::after { content: "loading"; }</style>
 </head>
-<body class="" style="padding-top: 66px;">
+<body class="" style="padding-top: 107px;">
 	<header class="header">
 		<h1 class="header-title" contenteditable="true"></h1>
 		<div class="btn btn-edit toggle management" data-toggle="hidemanagement"></div>

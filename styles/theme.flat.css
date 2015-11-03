@@ -181,30 +181,23 @@ ul.frames {
 	border: 1px solid #eee;
 }
 .frame-text {
+	border: 1px solid #eee;
+	padding: 1em 1rem;
 	-webkit-order: 3;
 	-ms-flex-order: 3;
 	    order: 3;
 }
 .frame-nbr {
+	margin: .5em 0;
 	-webkit-order: 2;
 	-ms-flex-order: 2;
 	    order: 2;
 }
-.frame-nbr,
-.frame-text {
-	padding: .5rem;
-}
-.overview .frame-nbr,
 .overview .frame-text {
-	padding: .2rem;
+	padding: .5em .5rem;
 }
 
 
-@media only screen and (min-width : 1800px) {
-	.story {
-		font-size: 1.2em;
-	}
-}
 @media only screen and (max-width : 1500px) {
 	.frame {
 		padding: 0 1%;
