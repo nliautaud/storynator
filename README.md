@@ -98,9 +98,11 @@ The sibling directory contain only the system files that allow to edit the story
 
 A solitary storyboard file, without its sibling directory, will look like the view mode (without the edit button).
 
-## Importing files
+## Importing / exporting
 
 You can import certain files by dropping them into the window. Dragging a storynator ``.html`` file would override the storyboard content, and dragging ``.css`` files would replace themes and translations. The file may also be appended by maintaining the ``shift`` key.
+
+You can export an image by dragging it outside the browser window, on your desktop for example.
 
 ###  Content import & update
 
