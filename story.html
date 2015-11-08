@@ -112,7 +112,7 @@ a {
 .header .toggle {
 	position: relative;
 }
-.header .toggle::before {
+.header-toggles .btn::before {
 	padding-right: .5em;
 }
 .toggle-scn::before {
@@ -133,11 +133,10 @@ a {
 	transition: opacity .5s ease;
 }
 
-
 /* numbering */
 
 .story {
-	counter-reset: total-scenes -1 total-shots total-frames;
+	counter-reset: total-scenes total-shots total-frames;
 }
 .scene {
 	counter-reset: scene-shot scene-frame;
@@ -151,7 +150,7 @@ a {
 	counter-reset: none;
 	counter-increment: frame scene-frame total-frames;
 }
-.frame.shadow {
+.shadow {
 	counter-reset: none;
 	counter-increment: none;
 }
@@ -252,15 +251,16 @@ ul.frames {
 	    -ms-flex-flow: row wrap;
 	        flex-flow: row wrap;
 	overflow: hidden;
-	-webkit-transition: height .2s ease;
-	        transition: height .2s ease;
+	-webkit-transition: all .1s ease;
+	        transition: all .1s ease;
 }
 .closed-tmp ul.frames,
 .closed .frames {
-	height: 0;
+	max-height: 0;
 	min-height: 0;
 	margin: 0;
-	padding: 0;
+	padding-top: 0;
+	padding-bottom: 0;
 	border-color: transparent;
 }
 .frame {
@@ -347,11 +347,6 @@ ul.frames {
 }
 .frame + .sameshot .frame-nbr::after {
 	content: "("counter(frame)")";
-}
-.frames::after {
-	position: absolute;
-	bottom: .5em;
-	right: 1em;
 }
 .shadow .frames::after {
 	content: none;
@@ -464,16 +459,19 @@ ul.frames {
 	        transition: all .2s ease;
 }
 .hidetexts .scene-overview,
-.hidetexts .frame-text,
+.hidetexts .frame-text {
+	opacity: 0;
+	max-height: 0 !important;
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
+	margin-top: 0 !important;
+	margin-bottom: 0 !important;
+}
+.hidenumbers.story::after,
 .hidenumbers .frames::after,
 .hidenumbers .frame-nbr,
-.hidenumbers .scene-header_content::before {
+.hidenumbers .scene-close::before {
 	opacity: 0;
-	max-height: 0;
-	padding-top: 0;
-	padding-bottom: 0;
-	margin-top: 0;
-	margin-bottom: 0;
 }
 
 .overlay {
@@ -824,10 +822,12 @@ a:hover,
 
 
 ul.frames {
-	padding: 4% 2% 2%;
+	padding: 4% 2% 4%;
 }
-.frame-img {
-	border: 1px solid #eee;
+.frames::after {
+	position: absolute;
+	bottom: 1em;
+    right: 1rem;
 }
 .frame-text {
 	border: 1px solid #eee;
