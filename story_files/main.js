@@ -454,6 +454,15 @@ $(function() {
 				},
 				onSort: function (evt) {
 					setChanged();
+				},
+				// download images by dragging frames outside browser
+				setData: function (dataTransfer, el) {
+					var b64 = $(el).find('img').attr('src'),
+						ext = b64.match(/^data:image\/([a-z]+)/)[1],
+						filename = b64.substring(30, 40),
+						prefix = 'text/html:'+filename+'.'+ext+':';
+					dataTransfer.setData('DownloadURL', prefix + b64);
+					console.log(prefix, b64);
 				}
 			}));
 		});
