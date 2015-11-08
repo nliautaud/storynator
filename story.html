@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- saved from url=(0036)file:///E:/Git/storynator/story.html -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no">
@@ -121,8 +122,38 @@ a {
 	top: -0.1em;
 }
 
+
+.loading .header-title,
+.story.loading {
+	opacity: 0;
+}
+.header-title,
 .story {
-	counter-reset: scene shot -1 shot-total frame frame-total;
+	opacity: 1;
+	transition: opacity .5s ease;
+}
+
+
+/* numbering */
+
+.story {
+	counter-reset: total-scenes -1 total-shots total-frames;
+}
+.scene {
+	counter-reset: scene-shot scene-frame;
+	counter-increment: total-scenes;
+}
+.frame {
+	counter-reset: frame 1;
+	counter-increment: scene-shot total-shots scene-frame total-frames;
+}
+.frame+.frame.sameshot {
+	counter-reset: none;
+	counter-increment: frame scene-frame total-frames;
+}
+.frame.shadow {
+	counter-reset: none;
+	counter-increment: none;
 }
 
 
@@ -134,8 +165,6 @@ a {
 
 .scene {
 	position: relative;
-	counter-reset: shot;
-	counter-increment: scene;
 }
 .scene.dragged .management {
 	display: none;
@@ -206,7 +235,6 @@ a {
 }
 .scene-close::before {
 	margin-right: 1em;
-	content: "SCENE "counter(scene, decimal-leading-zero);
 }
 
 /* 
@@ -296,18 +324,6 @@ ul.frames {
 }
 
 /* numbers */
-.frame {
-	counter-reset: frame 1;
-	counter-increment: shot shot-total frame-total;
-}
-.frame+.frame.sameshot {
-	counter-reset: none;
-	counter-increment: shot-total frame frame-total;
-}
-.frame.shadow {
-	counter-reset: none;
-	counter-increment: none;
-}
 .frame-nbr {
 	position: relative;
 	height: 1em;
@@ -321,18 +337,24 @@ ul.frames {
 }
 .frame-nbr::before {
 	left: 0;
-	content: counter(shot-total, decimal-leading-zero);
+	content: counter(total-shots, decimal-leading-zero);
 }
 .frame + .sameshot .frame-nbr::before {
 	content: none;
 }
 .frame-nbr::after {
 	right: 0;
-	content: " SCENE "counter(scene, decimal-leading-zero)
-			 " SHOT "counter(shot, decimal-leading-zero);
 }
 .frame + .sameshot .frame-nbr::after {
 	content: "("counter(frame)")";
+}
+.frames::after {
+	position: absolute;
+	bottom: .5em;
+	right: 1em;
+}
+.shadow .frames::after {
+	content: none;
 }
 /* cuts indicators */
 .frame .frame-img::before {
@@ -443,6 +465,7 @@ ul.frames {
 }
 .hidetexts .scene-overview,
 .hidetexts .frame-text,
+.hidenumbers .frames::after,
 .hidenumbers .frame-nbr,
 .hidenumbers .scene-header_content::before {
 	opacity: 0;
@@ -621,8 +644,7 @@ ul.frames {
 .overlay .btn-pano::after { content: "⇔"; }
 .frame.ispano .btn-pano::after { content: "⇐⇒"; }
 .overlay .btn-sameshot::after { content: "--"; }
-.frame.sameshot .btn-sameshot::after { content: "||"; }
-</style>
+.frame.sameshot .btn-sameshot::after { content: "||"; }</style>
 	<style id="storynator_theme" type="text/css">
 /**
  * Flat theme (included by default)
@@ -765,6 +787,8 @@ a:hover,
 	margin: .5em 0;
 }
 .scene-close::before,
+.frames::after,
+.story::after,
 .frame-nbr {
 	font-size: .7em;
 	line-height: 1;
@@ -885,6 +909,23 @@ ul.frames {
 .scene-overview:empty::after { content: "Scene overview"; }
 .shadow .scene-close::before { content: "new scene"; }
 
+.scene-close::before {
+	content: "SCENE "counter(total-scenes, decimal-leading-zero);
+}
+.frame-nbr::after {
+	content: " SCENE "counter(total-scenes, decimal-leading-zero)
+			 " SHOT " counter(scene-shot, decimal-leading-zero);
+}
+.frames::after {
+	content: counter(scene-shot) " SHOTS / "
+			 counter(scene-frame)" FRAMES ";
+}
+.story::after {
+	content: counter(total-scenes)" SCENES / "
+			 counter(total-shots) " SHOTS / "
+			 counter(total-frames)" FRAMES ";
+}
+
 .changed .story::before { content: "There is unsaved modifications"; }
 
 .toggle-nbr::after { content: "numbers"; }
@@ -900,7 +941,7 @@ ul.frames {
 .btn-edit.export::after { content: "export"; }
 .btn-edit.loading::after { content: "loading"; }</style>
 </head>
-<body class="" style="padding-top: 107px;">
+<body class="">
 	<header class="header">
 		<h1 class="header-title" contenteditable="true"></h1>
 		<div class="btn btn-edit toggle management" data-toggle="hidemanagement"></div>
@@ -913,30 +954,8 @@ ul.frames {
 		</ul>
 	</header>
 	<div class="story overview">
-		<ul class="scenes sortable"><li class="scene shadow management">
-		<header class="scene-header">
-			<div class="scene-header_content">
-				<h1 class="scene-title" contenteditable="true"></h1>
-				<p class="scene-overview" contenteditable="true"></p>
-				<div class="scene-handle management"></div>
-				<div class="scene-close"></div>
-			</div>
-			<div class="scene-header_buttons management">
-				<div class="btn scene-delete"></div>
-				<div class="btn add-frame-before"></div>
-				<div class="btn add-frame"></div>
-			</div>
-		</header>
-		<ul class="frames sortable connected"><!--
-			--><li class="frame shadow management">
-				<div class="frame-img">
-					<img src="data:image/gif;base64,R0lGODlhEAAJAKIAAMzMzJaWlrGxsaOjo76+vpycnMXFxaqqqiwAAAAAEAAJAAADCwi63P4wykmrvRgmADs=">
-				</div>
-				<div class="frame-text" contenteditable="true"></div>
-				<div class="frame-nbr"></div>
-			</li><!--
-		--></ul>
-	</li></ul>
+		<ul class="scenes sortable"></ul>
+	
 	</div>
 	<script id="template" type="text/x-custom-template">
 	<li class="scene shadow management">
@@ -975,13 +994,16 @@ ul.frames {
 	<script src="./story_files/jquery-2.1.4.min.js"></script>
 	<script src="./story_files/Sortable.min.js"></script>
 	<script src="./story_files/main.js"></script>
-	<script charset="utf-8" async="" defer="">
+	<script charset="utf-8">
 
 		// Interface helpers and toggles
 		// management is enabled by story_files/main.js
 
 		var story = document.querySelector('.story'),
 			header = document.querySelector('.header');
+
+		header.className += ' loading';
+		story.className += ' loading';
 
 		function getTarget (e) {
 			e = e || window.event;
@@ -1005,7 +1027,11 @@ ul.frames {
 			document.body.style.paddingTop = header.offsetHeight + 'px';
 		};
 		window.onresize = setHeaderSpace;
-		window.onload = setHeaderSpace;
+		window.onload = function (event) {
+			setHeaderSpace();
+			header.classList.toggle('loading');
+			story.classList.toggle('loading');
+		};
 		document.ondrop = function (event) {
 			setTimeout(function () {
 				setHeaderSpace();

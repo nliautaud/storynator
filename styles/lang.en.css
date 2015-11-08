@@ -15,6 +15,23 @@
 .scene-overview:empty::after { content: "Scene overview"; }
 .shadow .scene-close::before { content: "new scene"; }
 
+.scene-close::before {
+	content: "SCENE "counter(total-scenes, decimal-leading-zero);
+}
+.frame-nbr::after {
+	content: " SCENE "counter(total-scenes, decimal-leading-zero)
+			 " SHOT " counter(scene-shot, decimal-leading-zero);
+}
+.frames::after {
+	content: counter(scene-shot) " SHOTS / "
+			 counter(scene-frame)" FRAMES ";
+}
+.story::after {
+	content: counter(total-scenes)" SCENES / "
+			 counter(total-shots) " SHOTS / "
+			 counter(total-frames)" FRAMES ";
+}
+
 .changed .story::before { content: "There is unsaved modifications"; }
 
 .toggle-nbr::after { content: "numbers"; }

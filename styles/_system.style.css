@@ -104,7 +104,7 @@ a {
 .header .toggle {
 	position: relative;
 }
-.header .toggle::before {
+.header-toggles .btn::before {
 	padding-right: .5em;
 }
 .toggle-scn::before {
@@ -114,8 +114,37 @@ a {
 	top: -0.1em;
 }
 
+
+.loading .header-title,
+.story.loading {
+	opacity: 0;
+}
+.header-title,
 .story {
-	counter-reset: scene shot -1 shot-total frame frame-total;
+	opacity: 1;
+	transition: opacity .5s ease;
+}
+
+/* numbering */
+
+.story {
+	counter-reset: total-scenes total-shots total-frames;
+}
+.scene {
+	counter-reset: scene-shot scene-frame;
+	counter-increment: total-scenes;
+}
+.frame {
+	counter-reset: frame 1;
+	counter-increment: scene-shot total-shots scene-frame total-frames;
+}
+.frame+.frame.sameshot {
+	counter-reset: none;
+	counter-increment: frame scene-frame total-frames;
+}
+.shadow {
+	counter-reset: none;
+	counter-increment: none;
 }
 
 
@@ -127,8 +156,6 @@ a {
 
 .scene {
 	position: relative;
-	counter-reset: shot;
-	counter-increment: scene;
 }
 .scene.dragged .management {
 	display: none;
@@ -199,7 +226,6 @@ a {
 }
 .scene-close::before {
 	margin-right: 1em;
-	content: "SCENE "counter(scene, decimal-leading-zero);
 }
 
 /* 
@@ -217,15 +243,16 @@ ul.frames {
 	    -ms-flex-flow: row wrap;
 	        flex-flow: row wrap;
 	overflow: hidden;
-	-webkit-transition: height .2s ease;
-	        transition: height .2s ease;
+	-webkit-transition: all .1s ease;
+	        transition: all .1s ease;
 }
 .closed-tmp ul.frames,
 .closed .frames {
-	height: 0;
+	max-height: 0;
 	min-height: 0;
 	margin: 0;
-	padding: 0;
+	padding-top: 0;
+	padding-bottom: 0;
 	border-color: transparent;
 }
 .frame {
@@ -289,18 +316,6 @@ ul.frames {
 }
 
 /* numbers */
-.frame {
-	counter-reset: frame 1;
-	counter-increment: shot shot-total frame-total;
-}
-.frame+.frame.sameshot {
-	counter-reset: none;
-	counter-increment: shot-total frame frame-total;
-}
-.frame.shadow {
-	counter-reset: none;
-	counter-increment: none;
-}
 .frame-nbr {
 	position: relative;
 	height: 1em;
@@ -314,18 +329,19 @@ ul.frames {
 }
 .frame-nbr::before {
 	left: 0;
-	content: counter(shot-total, decimal-leading-zero);
+	content: counter(total-shots, decimal-leading-zero);
 }
 .frame + .sameshot .frame-nbr::before {
 	content: none;
 }
 .frame-nbr::after {
 	right: 0;
-	content: " SCENE "counter(scene, decimal-leading-zero)
-			 " SHOT "counter(shot, decimal-leading-zero);
 }
 .frame + .sameshot .frame-nbr::after {
 	content: "("counter(frame)")";
+}
+.shadow .frames::after {
+	content: none;
 }
 /* cuts indicators */
 .frame .frame-img::before {
@@ -435,15 +451,19 @@ ul.frames {
 	        transition: all .2s ease;
 }
 .hidetexts .scene-overview,
-.hidetexts .frame-text,
-.hidenumbers .frame-nbr,
-.hidenumbers .scene-header_content::before {
+.hidetexts .frame-text {
 	opacity: 0;
-	max-height: 0;
-	padding-top: 0;
-	padding-bottom: 0;
-	margin-top: 0;
-	margin-bottom: 0;
+	max-height: 0 !important;
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
+	margin-top: 0 !important;
+	margin-bottom: 0 !important;
+}
+.hidenumbers.story::after,
+.hidenumbers .frames::after,
+.hidenumbers .frame-nbr,
+.hidenumbers .scene-close::before {
+	opacity: 0;
 }
 
 .overlay {

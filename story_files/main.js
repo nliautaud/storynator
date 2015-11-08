@@ -267,6 +267,9 @@ $(function() {
 	body.delegate('.frame.shadow *[contenteditable]', 'input', function(e){
 		revealFrame($(this));
 	});
+	function delShadows () {
+		$('.shadow').remove();
+	}
 	function newShadowFrame () {
 		return $(frame_tpl);
 	}
@@ -519,15 +522,15 @@ $(function() {
 
 	//*/// shortcuts
 
-	function cleanup() {
-		var attrs = [
+	function cleanup(el) {
+		var list = [
 			'data-sortable-id', 'data-item-sortable-id',
 			'role', 'aria-grabbed', 'aria-dropeffect',
-			'draggable', 'style'];
-		$.each(attrs, function(id, val){
-			$('*['+val+']').removeAttr(val);
-		});
-		alert('cleaned');
+			'draggable', 'style'],
+			selectall = '*[' + list.join('], *[') + ']',
+			attrs = list.join(' ');
+		el = el || $(selectall);
+		el.removeAttr(attrs);
 	}
 	$(window).on('keydown', function(event) {
 		var key = String.fromCharCode(event.which).toLowerCase();
@@ -549,6 +552,8 @@ $(function() {
 				duplicateFrames();
 				return false;
 			case 's':
+				cleanup();
+				delShadows();
 				setSaved();
 				break;
 		}

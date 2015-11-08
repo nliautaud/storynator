@@ -15,6 +15,23 @@
 .scene-overview:empty::after { content: "Synopsis de la scène"; }
 .shadow .scene-close::before { content: "nouvelle scène"; }
 
+.scene-close::before {
+	content: "SCENE "counter(total-scenes, decimal-leading-zero);
+}
+.frame-nbr::after {
+	content: " SCENE "counter(total-scenes, decimal-leading-zero)
+			 " PLAN " counter(scene-shot, decimal-leading-zero);
+}
+.frames::after {
+	content: counter(scene-shot) " PLANS / "
+			 counter(scene-frame)" CASES ";
+}
+.story::after {
+	content: counter(total-scenes)" SCENES / "
+			 counter(total-shots) " PLANS / "
+			 counter(total-frames)" CASES ";
+}
+
 .changed .story::before { content: "Des modifications n'ont pas été sauvegardées"; }
 
 .toggle-nbr::after { content: "numéros"; }
