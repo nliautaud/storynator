@@ -17,6 +17,19 @@ $.ajax({
 		// load content
 		$('#wrapper').html(html).promise().done(function(){
 			$(this).parent().removeClass('loading');
+
+			// toc
+			$('<div id="toc"></div>')
+				.insertBefore('.hgroup.gettingstarted')
+				.toc({
+					'selectors': 'h1,h2,h3',
+					'container': '.storynator',
+					'smoothScrolling': true,
+					'prefix': 'toc',
+					'highlightOnScroll': true,
+					'highlightOffset': 600,
+				})
+				.sticky({topSpacing:0});
 		});
 
 	}
