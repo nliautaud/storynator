@@ -76,13 +76,21 @@ You can only move the frames one by one, but moving the first one of a shot will
 
 ## Display options
 
-- *Open/close all* : toggle all the scenes.
-- *Texts* : show / hide parts and frames texts.
-- *Numbers* : show / hide parts and frames numbers.
-- *Overview* : display frames two times smaller.
-- *Edit/View* : toggle editing or viewing mode.
+You can fold a particular scene by using the arrow next to its title, or toggle all the scenes with **Fold all** or **Reveal all** of the toolbar.
 
-The parts may be folded or opened by clicking on the arrow next to their title.
+The display modes allow to focus solely on visuals or texts by hiding the other :
+- **Images and texts** shows everything,
+- **Images only** focus on visuals by hiding frames captions and scenes overviews,
+- **Text only** focus on writings by hiding frames images.
+
+The following options may be enabled or disabled :
+- **Numbers** : show / hide numbering of scenes and shots.
+- **Overview** : display frames two times smaller.
+- **Fullscreen** : toggle full screen mode (you may use your browser shortcut too, like **F11**).
+
+The edit button allow to switch between editing (**✎**) or reading mode (**◉**) . In reading mode the editing tools like shadow elements or drag handles are hidden.
+
+The options you've selected will be saved with your document. The next time you or someone else open your document, it will be displayed in the saved state.
 
 ## Sharing & copying
 
