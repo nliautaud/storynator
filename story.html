@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- saved from url=(0036)file:///E:/Git/storynator/story.html -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no">
@@ -119,7 +118,7 @@ a {
 	font-size: 2em;
 	position: absolute;
 	left: -0.3em;
-	top: -0.1em;
+	top: 25%;
 }
 
 
@@ -132,6 +131,45 @@ a {
 	opacity: 1;
 	transition: opacity .5s ease;
 }
+
+
+.view-mode,
+.view-mode-options {
+	width: 13em;
+	overflow: hidden;
+	cursor: pointer;
+}
+.view-mode {
+    position:relative;
+	height: 4em;
+}
+.view-mode-options {
+    position:fixed;
+	max-height: 4em;
+    display: flex;
+    flex-direction: column;
+	z-index: 9999;
+	line-height: 1.5em;
+	overflow: hidden;
+	transition: max-height .1s ease;
+}
+.header-toggles .btn {
+	padding: 1.5em 1em;
+}
+.view-mode.show .view-mode-options {
+	max-height: 15em;
+}
+.view-img .btn[data-mode=view-img] { order: 1; }
+.view-txt .btn[data-mode=view-txt] { order: 1; }
+.view-img .btn[data-mode=view-all] { order: 2; }
+.view-txt .btn[data-mode=view-all] { order: 2; }
+.view-img .btn[data-mode=view-txt] { order: 3; }
+.view-txt .btn[data-mode=view-img] { order: 3; }
+.view-mode.show .btn[data-mode=view-all] { order: 1; }
+.view-mode.show .btn[data-mode=view-txt] { order: 2; }
+.view-mode.show .btn[data-mode=view-img] { order: 3; }
+
+
 
 /* numbering */
 
@@ -458,8 +496,10 @@ ul.frames {
 	-webkit-transition: all .2s ease;
 	        transition: all .2s ease;
 }
-.hidetexts .scene-overview,
-.hidetexts .frame-text {
+.view-img .scene-overview,
+.view-img .frame-text,
+.view-txt .frame-img,
+.view-txt .overlay {
 	opacity: 0;
 	max-height: 0 !important;
 	padding-top: 0 !important;
@@ -692,7 +732,7 @@ a:hover,
 	background: none;
 	font-size: 1.5rem;
 	font-weight: 700;
-	padding: .25em .5em;
+	padding: .4em .5em;
 	margin: 0 0 1rem;
 }
 .header-title:focus {
@@ -705,18 +745,18 @@ a:hover,
 }
 .header-toggles {
 	font-size: .8em;
-	margin: .9rem;
 }
 
 .btn {
 	color: #008A7A;
 }
 .btn-storynator {
-	margin: .1rem 1rem 0 0;
+	margin: .25rem 1rem .2rem;
 }
 .btn.btn-edit {
 	color: #fff;
 	margin: 0 0 .9rem;
+    padding: .4em;
 	border: 1px solid #2E3F50;
 }
 .btn-edit.hover {
@@ -729,6 +769,19 @@ a:hover,
 	background: #2E3F50;
 }
 
+.view-mode-options {
+    transition: max-height .1s ease, background .1s ease, box-shadow .1s ease;
+}
+.view-mode.show .view-mode-options {
+    background: #eee;
+	box-shadow: 0 1px 1px rgba(0,0,0,.4);
+}
+.view-mode.show .btn:not(:hover) {
+	color: #555 !important;
+}
+.view-mode.show .btn {
+	border-bottom: 1px solid #e4e4e4;
+}
 
 
 
@@ -929,11 +982,14 @@ ul.frames {
 .changed .story::before { content: "There is unsaved modifications"; }
 
 .toggle-nbr::after { content: "numbers"; }
-.toggle-txt::after { content: "texts"; }
 .toggle-ovw::after { content: "overview"; }
 .toggle-fsc::after { content: "fullscreen"; }
 .toggle-scn::after { content: "reveal all"; }
 .toggle-scn.off::after { content: "fold all"; }
+
+.select-view-all::after { content: "images & texts"; }
+.select-view-img::after { content: "images only"; }
+.select-view-txt::after { content: "texts only"; }
 
 .btn-edit.off::after { content: "edit"; }
 .btn-edit::after {  content: "view"; }
@@ -948,14 +1004,17 @@ ul.frames {
 		<div class="btn btn-storynator"><a href="https://nliautaud.github.io/storynator" target="_blank">S</a></div>
 		<ul class="header-toggles">
 			<li><div class="btn toggle toggle-nbr" data-toggle="hidenumbers"></div></li>
-			<li><div class="btn toggle toggle-txt" data-toggle="hidetexts"></div></li>
+			<li><div class="view-mode"><div class="view-mode-options">
+					<div data-mode="view-all" class="btn select-view-all"></div>
+					<div data-mode="view-img" class="btn select-view-img"></div>
+					<div data-mode="view-txt" class="btn select-view-txt"></div>
+				</div></div></li>
 			<li><div class="btn toggle toggle-ovw" data-toggle="overview"></div></li>
 			<li><div class="btn toggle toggle-scn off"></div></li>
 		</ul>
 	</header>
 	<div class="story overview">
 		<ul class="scenes sortable"></ul>
-	
 	</div>
 	<script id="template" type="text/x-custom-template">
 	<li class="scene shadow management">
@@ -1092,6 +1151,24 @@ ul.frames {
 				scenes[i].classList.toggle('closed');
 			}
 		};
+
+		// view mode toggle
+		var viewmode = document.querySelector('.view-mode');
+		viewmode.onclick = function (e){
+			viewmode.classList.toggle('show');
+			var mode = getTarget(e).dataset.mode,
+				bodyclass = document.body.classList;
+			if(bodyclass.contains(mode)) return;
+			bodyclass.remove('view-all');
+			bodyclass.remove('view-img');
+			bodyclass.remove('view-txt');
+			bodyclass.toggle(mode);
+		};
+		document.addEventListener('click', function (e) {
+			if(getTarget(e).dataset.mode === undefined)
+				viewmode.classList.remove('show');
+		});
+
 		// scenes toggles
 		document.querySelector('body').addEventListener('click', function(e) {
 			var tgt = getTarget(e);

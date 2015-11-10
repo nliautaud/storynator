@@ -47,7 +47,7 @@ a:hover,
 	background: none;
 	font-size: 1.5rem;
 	font-weight: 700;
-	padding: .25em .5em;
+	padding: .4em .5em;
 	margin: 0 0 1rem;
 }
 .header-title:focus {
@@ -60,18 +60,18 @@ a:hover,
 }
 .header-toggles {
 	font-size: .8em;
-	margin: .9rem;
 }
 
 .btn {
 	color: #008A7A;
 }
 .btn-storynator {
-	margin: .1rem 1rem 0 0;
+	margin: .25rem 1rem .2rem;
 }
 .btn.btn-edit {
 	color: #fff;
 	margin: 0 0 .9rem;
+    padding: .4em;
 	border: 1px solid #2E3F50;
 }
 .btn-edit.hover {
@@ -84,6 +84,19 @@ a:hover,
 	background: #2E3F50;
 }
 
+.view-mode-options {
+    transition: max-height .1s ease, background .1s ease, box-shadow .1s ease;
+}
+.view-mode.show .view-mode-options {
+    background: #eee;
+	box-shadow: 0 1px 1px rgba(0,0,0,.4);
+}
+.view-mode.show .btn:not(:hover) {
+	color: #555 !important;
+}
+.view-mode.show .btn {
+	border-bottom: 1px solid #e4e4e4;
+}
 
 
 

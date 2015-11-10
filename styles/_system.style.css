@@ -111,7 +111,7 @@ a {
 	font-size: 2em;
 	position: absolute;
 	left: -0.3em;
-	top: -0.1em;
+	top: 25%;
 }
 
 
@@ -124,6 +124,45 @@ a {
 	opacity: 1;
 	transition: opacity .5s ease;
 }
+
+
+.view-mode,
+.view-mode-options {
+	width: 13em;
+	overflow: hidden;
+	cursor: pointer;
+}
+.view-mode {
+    position:relative;
+	height: 4em;
+}
+.view-mode-options {
+    position:fixed;
+	max-height: 4em;
+    display: flex;
+    flex-direction: column;
+	z-index: 9999;
+	line-height: 1.5em;
+	overflow: hidden;
+	transition: max-height .1s ease;
+}
+.header-toggles .btn {
+	padding: 1.5em 1em;
+}
+.view-mode.show .view-mode-options {
+	max-height: 15em;
+}
+.view-img .btn[data-mode=view-img] { order: 1; }
+.view-txt .btn[data-mode=view-txt] { order: 1; }
+.view-img .btn[data-mode=view-all] { order: 2; }
+.view-txt .btn[data-mode=view-all] { order: 2; }
+.view-img .btn[data-mode=view-txt] { order: 3; }
+.view-txt .btn[data-mode=view-img] { order: 3; }
+.view-mode.show .btn[data-mode=view-all] { order: 1; }
+.view-mode.show .btn[data-mode=view-txt] { order: 2; }
+.view-mode.show .btn[data-mode=view-img] { order: 3; }
+
+
 
 /* numbering */
 
@@ -450,8 +489,10 @@ ul.frames {
 	-webkit-transition: all .2s ease;
 	        transition: all .2s ease;
 }
-.hidetexts .scene-overview,
-.hidetexts .frame-text {
+.view-img .scene-overview,
+.view-img .frame-text,
+.view-txt .frame-img,
+.view-txt .overlay {
 	opacity: 0;
 	max-height: 0 !important;
 	padding-top: 0 !important;
@@ -634,4 +675,4 @@ ul.frames {
 .overlay .btn-pano::after { content: "⇔"; }
 .frame.ispano .btn-pano::after { content: "⇐⇒"; }
 .overlay .btn-sameshot::after { content: "--"; }
-.frame.sameshot .btn-sameshot::after { content: "||"; }
+.frame.sameshot .btn-sameshot::after { content: "||"; }</style>
