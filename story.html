@@ -1003,13 +1003,14 @@ ul.frames {
 		<div class="btn btn-edit toggle management" data-toggle="hidemanagement"></div>
 		<div class="btn btn-storynator"><a href="https://nliautaud.github.io/storynator" target="_blank">S</a></div>
 		<ul class="header-toggles">
+			<li><div class="btn toggle toggle-fsc" data-toggle="fullscreen"></div></li>
+			<li><div class="btn toggle toggle-ovw" data-toggle="overview"></div></li>
 			<li><div class="btn toggle toggle-nbr" data-toggle="hidenumbers"></div></li>
 			<li><div class="view-mode"><div class="view-mode-options">
 					<div data-mode="view-all" class="btn select-view-all"></div>
 					<div data-mode="view-img" class="btn select-view-img"></div>
 					<div data-mode="view-txt" class="btn select-view-txt"></div>
 				</div></div></li>
-			<li><div class="btn toggle toggle-ovw" data-toggle="overview"></div></li>
 			<li><div class="btn toggle toggle-scn off"></div></li>
 		</ul>
 	</header>
@@ -1169,8 +1170,25 @@ ul.frames {
 				viewmode.classList.remove('show');
 		});
 
+		// fullscreen
+		function fullscreen (el) {
+			if(el.requestFullscreen) el.requestFullscreen();
+			else if(el.mozRequestFullScreen) el.mozRequestFullScreen();
+			else if(el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+			else if(el.msRequestFullscreen) el.msRequestFullscreen();
+		}
+		function exitFullscreen () {
+			if(document.exitFullscreen) document.exitFullscreen();
+			else if(document.mozCancelFullScreen) document.mozCancelFullScreen();
+			else if(document.webkitExitFullscreen) document.webkitExitFullscreen();
+		}
+		document.querySelector('.toggle-fsc').onclick = function (e){
+			if(getTarget(e).classList.contains('off')) exitFullscreen();
+			else fullscreen(document.documentElement);
+		};
+
 		// scenes toggles
-		document.querySelector('body').addEventListener('click', function(e) {
+		document.body.addEventListener('click', function(e) {
 			var tgt = getTarget(e);
 			if(tgt.classList.contains('scene-close')) {
 				tgt.parentNode.parentNode.parentNode.classList.toggle('closed');
