@@ -83,9 +83,13 @@ The display modes allow to focus solely on visuals or texts by hiding the other 
 - **Images only** focus on visuals by hiding frames captions and scenes overviews,
 - **Text only** focus on writings by hiding frames images.
 
+To focus on a global scale or on specific moments of your story, you can switch between several sizes of frames :
+- **Medium** shows a few frames by row, 
+- **Large** shows less, bigger frames, to focus on a shorter scale.
+- **Overview** shows more, smaller frames, to step back and have an overview.
+
 The following options may be enabled or disabled :
 - **Numbers** : show / hide numbering of scenes and shots.
-- **Overview** : display frames two times smaller.
 - **Fullscreen** : toggle full screen mode (you may use your browser shortcut too, like **F11**).
 
 The edit button allow to switch between editing (**✎**) or reading mode (**◉**) . In reading mode the editing tools like shadow elements or drag handles are hidden.

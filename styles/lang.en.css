@@ -35,7 +35,6 @@
 .changed .story::before { content: "There is unsaved modifications"; }
 
 .toggle-nbr::after { content: "numbers"; }
-.toggle-ovw::after { content: "overview"; }
 .toggle-fsc::after { content: "fullscreen"; }
 .toggle-scn::after { content: "reveal all"; }
 .toggle-scn.off::after { content: "fold all"; }
@@ -43,6 +42,10 @@
 .select-view-all::after { content: "images & texts"; }
 .select-view-img::after { content: "images only"; }
 .select-view-txt::after { content: "texts only"; }
+
+.select-size-med::after { content: "medium"; }
+.select-size-big::after { content: "large"; }
+.select-size-sml::after { content: "overview"; }
 
 .btn-edit.off::after { content: "edit"; }
 .btn-edit::after {  content: "view"; }

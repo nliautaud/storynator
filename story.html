@@ -98,8 +98,7 @@ a {
 	padding: 0;
 	margin: 0;
 }
-.header > *,
-.header li {
+.header > * {
 	float: right;
 }
 .header-title {
@@ -108,17 +107,18 @@ a {
 	min-width: 10em;
 	max-width: 100%;
 }
+.header-toggles {
+	text-align: center;
+}
+.header-toggles li {
+	display: inline-block;
+	vertical-align: bottom;
+}
 .header .toggle {
 	position: relative;
 }
 .header-toggles .btn::before {
 	padding-right: .5em;
-}
-.toggle-scn::before {
-	font-size: 2em;
-	position: absolute;
-	left: -0.3em;
-	top: 25%;
 }
 
 
@@ -133,17 +133,18 @@ a {
 }
 
 
-.view-mode,
-.view-mode-options {
+.select,
+.select-options,
+.toggle {
 	width: 13em;
 	overflow: hidden;
 	cursor: pointer;
 }
-.view-mode {
+.select {
     position:relative;
 	height: 4em;
 }
-.view-mode-options {
+.select-options {
     position:fixed;
 	max-height: 4em;
     display: flex;
@@ -156,18 +157,20 @@ a {
 .header-toggles .btn {
 	padding: 1.5em 1em;
 }
-.view-mode.show .view-mode-options {
+.select.show .select-options {
 	max-height: 15em;
 }
-.view-img .btn[data-mode=view-img] { order: 1; }
-.view-txt .btn[data-mode=view-txt] { order: 1; }
-.view-img .btn[data-mode=view-all] { order: 2; }
-.view-txt .btn[data-mode=view-all] { order: 2; }
-.view-img .btn[data-mode=view-txt] { order: 3; }
-.view-txt .btn[data-mode=view-img] { order: 3; }
-.view-mode.show .btn[data-mode=view-all] { order: 1; }
-.view-mode.show .btn[data-mode=view-txt] { order: 2; }
-.view-mode.show .btn[data-mode=view-img] { order: 3; }
+.select-btn:nth-child(1) { order: 2; }
+.select-btn:nth-child(2) { order: 3; }
+.select-btn:nth-child(3) { order: 4; }
+.select-btn:nth-child(4) { order: 5; }
+.select-btn:nth-child(5) { order: 6; }
+.select-btn.selected { order: 1; }
+.select.show .select-btn:nth-child(1) { order: 1; }
+.select.show .select-btn:nth-child(2) { order: 2; }
+.select.show .select-btn:nth-child(3) { order: 3; }
+.select.show .select-btn:nth-child(4) { order: 4; }
+.select.show .select-btn:nth-child(5) { order: 5; }
 
 
 
@@ -324,29 +327,37 @@ ul.frames {
 	width: -moz-min-content;
 	width: min-content;
 }
-.overview .frame {
+.size-sml .frame {
 	padding: 0 .25%;
 }
 
 @media only screen and (min-width : 2000px) {
+	.size-big .frame{ width: 25%; }
 	.frame 			{ width: 20%; }
-	.overview .frame{ width: 10%; }
+	.size-sml .frame{ width: 10%; }
 }
 @media only screen and (max-width : 2000px) {
+	.size-big .frame{ width: 33.33%; }
 	.frame 			{ width: 25%; }
-	.overview .frame{ width: 12.5%; }
+	.size-sml .frame{ width: 12.5%; }
 }
 @media only screen and (max-width : 1500px) {
-	.frame 			{ width: 33%; }
-	.overview .frame{ width: 16.65%; }
+	.size-big .frame{ width: 50%; }
+	.frame 			{ width: 33.33%; }
+	.size-sml .frame{ width: 16.65%; }
 }
 @media only screen and (max-width : 1000px) {
+	.size-big .frame{ width: 100%; }
 	.frame 			{ width: 50%; }
-	.overview .frame{ width: 25%; }
+	.size-sml .frame{ width: 25%; }
+	.header-title {
+		width: 100%;
+	}
 }
 @media only screen and (max-width : 600px) {
-	.frame 			{ width: 100%; }
-	.overview .frame{ width: 50%; }
+	.size-big .frame{ width: 100%; }
+	.frame 			{ width: 50%; }
+	.size-sml .frame{ width: 50%; }
 	body {
 		padding-top: 0 !important;
 	}
@@ -354,10 +365,16 @@ ul.frames {
 	.scene-close {
 		position: static;
 	}
-	.scene-header {
-		-webkit-flex-direction: column;
-		    -ms-flex-direction: column;
-		        flex-direction: column;
+	.select {
+		position: static;
+	}
+	.select-options {
+		position: absolute;
+	}
+	.scene-header_buttons {
+		flex-direction: column;
+		align-items: stretch;
+		justify-content: space-around;
 	}
 }
 
@@ -655,8 +672,8 @@ ul.frames {
 .toggle::before { content: "☑"; }
 .toggle.off::before { content: "☐"; }
 
-.toggle-scn::before { content: "▾"; }
-.toggle-scn.off::before { content: "▴"; }
+.toggle-scn::before { content: "▼"; }
+.toggle-scn.off::before { content: "▲"; }
 
 .btn-edit::before,
 .btn-edit.off.hover::before { 
@@ -682,7 +699,8 @@ ul.frames {
 .overlay .btn-pano::after { content: "⇔"; }
 .frame.ispano .btn-pano::after { content: "⇐⇒"; }
 .overlay .btn-sameshot::after { content: "--"; }
-.frame.sameshot .btn-sameshot::after { content: "||"; }</style>
+.frame.sameshot .btn-sameshot::after { content: "||"; }
+	</style>
 	<style id="storynator_theme" type="text/css">
 /**
  * Flat theme (included by default)
@@ -756,7 +774,7 @@ a:hover,
 .btn.btn-edit {
 	color: #fff;
 	margin: 0 0 .9rem;
-    padding: .4em;
+	padding: .4em;
 	border: 1px solid #2E3F50;
 }
 .btn-edit.hover {
@@ -769,17 +787,17 @@ a:hover,
 	background: #2E3F50;
 }
 
-.view-mode-options {
-    transition: max-height .1s ease, background .1s ease, box-shadow .1s ease;
+.select-options {
+	transition: max-height .1s ease, background .1s ease, box-shadow .1s ease;
 }
-.view-mode.show .view-mode-options {
-    background: #eee;
+.select.show .select-options {
+	background: #eee;
 	box-shadow: 0 1px 1px rgba(0,0,0,.4);
 }
-.view-mode.show .btn:not(:hover) {
+.select.show .btn:not(:hover) {
 	color: #555 !important;
 }
-.view-mode.show .btn {
+.select.show .btn {
 	border-bottom: 1px solid #e4e4e4;
 }
 
@@ -814,7 +832,7 @@ a:hover,
 }
 .scene-header {
 	min-height: 2.75em;
-    padding: .25em 0 .5em;
+	padding: .25em 0 .5em;
 	background: #eee;
 }
 .scene+.shadow {
@@ -862,7 +880,7 @@ a:hover,
 	padding: .25rem .5rem;
 }
 .scene-overview,
-.overview .frame {
+.size-sml .frame {
 	font-size: .85em;
 }
 .scene-header_buttons {
@@ -880,22 +898,22 @@ ul.frames {
 .frames::after {
 	position: absolute;
 	bottom: 1em;
-    right: 1rem;
+	right: 1rem;
 }
 .frame-text {
 	border: 1px solid #eee;
 	padding: 1em 1rem;
 	-webkit-order: 3;
 	-ms-flex-order: 3;
-	    order: 3;
+		order: 3;
 }
 .frame-nbr {
 	margin: .5em 0;
 	-webkit-order: 2;
 	-ms-flex-order: 2;
-	    order: 2;
+		order: 2;
 }
-.overview .frame-text {
+.size-sml .frame-text {
 	padding: .5em .5rem;
 }
 
@@ -904,7 +922,7 @@ ul.frames {
 	.frame {
 		padding: 0 1%;
 	}
-	.overview .frame {
+	.size-sml .frame {
 		padding: 0 .5%;
 	}
 }
@@ -912,10 +930,9 @@ ul.frames {
 	html {
 		font-size: 16px;
 	}
-	.header ul,
 	.changed .story::before,
 	.scene-overview,
-	.overview .frame {
+	.size-sml .frame {
 		font-size: 1em;
 	}
 	.header {
@@ -928,23 +945,32 @@ ul.frames {
 		position: static;
 		text-align: center;
 	}
-	.scene {
-		margin: 1em 0;
-	}
 	.scene-header_content {
-		padding-right: 1em;
+		padding: 0 6%;
 	}
 	.scene-header_content::before {
 		padding-top: .5em;
 	}
+	.scene-header_buttons {
+		padding-right: 8%;
+	}
 	.scene-title {
 		margin: 0;
 	}
+	ul.frames {
+		padding: 6%;
+	}
+	.frames::after {
+		position: static;
+		width: 100%;
+		text-align: center;
+	}
 	.frame,
-	.overview .frame {
+	.size-sml .frame {
 		padding: 0 2%;
 	}
-}</style>
+}
+	</style>
 	<style id="storynator_lang" type="text/css">
 /**
  * English (included by default)
@@ -982,7 +1008,6 @@ ul.frames {
 .changed .story::before { content: "There is unsaved modifications"; }
 
 .toggle-nbr::after { content: "numbers"; }
-.toggle-ovw::after { content: "overview"; }
 .toggle-fsc::after { content: "fullscreen"; }
 .toggle-scn::after { content: "reveal all"; }
 .toggle-scn.off::after { content: "fold all"; }
@@ -991,11 +1016,16 @@ ul.frames {
 .select-view-img::after { content: "images only"; }
 .select-view-txt::after { content: "texts only"; }
 
+.select-size-med::after { content: "medium"; }
+.select-size-big::after { content: "large"; }
+.select-size-sml::after { content: "overview"; }
+
 .btn-edit.off::after { content: "edit"; }
 .btn-edit::after {  content: "view"; }
 .btn-edit.import::after { content: "import"; }
 .btn-edit.export::after { content: "export"; }
-.btn-edit.loading::after { content: "loading"; }</style>
+.btn-edit.loading::after { content: "loading"; }
+	</style>
 </head>
 <body class="">
 	<header class="header">
@@ -1003,15 +1033,23 @@ ul.frames {
 		<div class="btn btn-edit toggle management" data-toggle="hidemanagement"></div>
 		<div class="btn btn-storynator"><a href="https://nliautaud.github.io/storynator" target="_blank">S</a></div>
 		<ul class="header-toggles">
-			<li><div class="btn toggle toggle-fsc" data-toggle="fullscreen"></div></li>
-			<li><div class="btn toggle toggle-ovw" data-toggle="overview"></div></li>
-			<li><div class="btn toggle toggle-nbr" data-toggle="hidenumbers"></div></li>
-			<li><div class="view-mode"><div class="view-mode-options">
-					<div data-mode="view-all" class="btn select-view-all"></div>
-					<div data-mode="view-img" class="btn select-view-img"></div>
-					<div data-mode="view-txt" class="btn select-view-txt"></div>
-				</div></div></li>
 			<li><div class="btn toggle toggle-scn off"></div></li>
+			<li class="select">
+				<div class="select-options">
+					<div data-mode="view-all" class="btn select-btn select-view-all"></div>
+					<div data-mode="view-img" class="btn select-btn select-view-img"></div>
+					<div data-mode="view-txt" class="btn select-btn select-view-txt"></div>
+				</div>
+			</li>
+			<li class="select">
+				<div class="select-options">
+					<div data-mode="size-med" class="btn select-btn select-size-med"></div>
+					<div data-mode="size-big" class="btn select-btn select-size-big"></div>
+					<div data-mode="size-sml" class="btn select-btn select-size-sml"></div>
+				</div>
+			</li>
+			<li><div class="btn toggle toggle-nbr" data-toggle="hidenumbers"></div></li>
+			<li><div class="btn toggle toggle-fsc" data-toggle="fullscreen"></div></li>
 		</ul>
 	</header>
 	<div class="story overview">
@@ -1135,6 +1173,32 @@ ul.frames {
 		// header options toggle
 		document.querySelector('.header').onclick = function (e){
 			var tgt = getTarget(e);
+
+			// drop-down toggles
+			if(tgt.classList.contains('select-btn')) {
+				var mode = tgt.dataset.mode,
+					bodyclass = document.body.classList,
+					selectgrp = tgt.parentNode.parentNode,
+					options = tgt.parentNode.childNodes;
+				
+				var shown = document.querySelector('.select.show');
+				if(shown && shown != selectgrp)
+					shown.classList.remove('show');
+				
+				selectgrp.classList.toggle('show');
+				if(bodyclass.contains(mode)) return;
+
+				for (var i = 0; i < options.length; i++) {
+				 	if(options[i].nodeType !== 1) continue;
+				    bodyclass.remove(options[i].dataset.mode);
+				    options[i].classList.remove('selected');
+				}
+				bodyclass.toggle(mode);
+				tgt.classList.add('selected');
+				return;
+			}
+
+			// simple toggles
 			if(!tgt.classList.contains('toggle')) return;
 			tgt.classList.toggle('off');
 
@@ -1142,6 +1206,7 @@ ul.frames {
 				story.classList.toggle(tgt.dataset.toggle);
 				return;
 			}
+
 			// toggle scenes
 			var target = '.closed';
 			if(!tgt.classList.contains('off'))
@@ -1152,22 +1217,11 @@ ul.frames {
 				scenes[i].classList.toggle('closed');
 			}
 		};
-
-		// view mode toggle
-		var viewmode = document.querySelector('.view-mode');
-		viewmode.onclick = function (e){
-			viewmode.classList.toggle('show');
-			var mode = getTarget(e).dataset.mode,
-				bodyclass = document.body.classList;
-			if(bodyclass.contains(mode)) return;
-			bodyclass.remove('view-all');
-			bodyclass.remove('view-img');
-			bodyclass.remove('view-txt');
-			bodyclass.toggle(mode);
-		};
+		// close drop-down on outside click
 		document.addEventListener('click', function (e) {
-			if(getTarget(e).dataset.mode === undefined)
-				viewmode.classList.remove('show');
+			var shown = document.querySelector('.select.show');
+			if(getTarget(e).dataset.mode === undefined && shown)
+				shown.classList.remove('show');
 		});
 
 		// fullscreen

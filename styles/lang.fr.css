@@ -35,7 +35,6 @@
 .changed .story::before { content: "Des modifications n'ont pas été sauvegardées"; }
 
 .toggle-nbr::after { content: "numéros"; }
-.toggle-ovw::after { content: "vue générale"; }
 .toggle-fsc::after { content: "plein écran"; }
 .toggle-scn::after { content: "Afficher tout"; }
 .toggle-scn.off::after { content: "Cacher tout"; }
@@ -43,6 +42,10 @@
 .select-view-all::after { content: "images & textes"; }
 .select-view-img::after { content: "images seules"; }
 .select-view-txt::after { content: "textes seuls"; }
+
+.select-size-med::after { content: "medium"; }
+.select-size-big::after { content: "large"; }
+.select-size-sml::after { content: "vue générale"; }
 
 .btn-edit.off::after { content: "modifier"; }
 .btn-edit::after {  content: "afficher"; }

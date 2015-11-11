@@ -91,8 +91,7 @@ a {
 	padding: 0;
 	margin: 0;
 }
-.header > *,
-.header li {
+.header > * {
 	float: right;
 }
 .header-title {
@@ -101,17 +100,18 @@ a {
 	min-width: 10em;
 	max-width: 100%;
 }
+.header-toggles {
+	text-align: center;
+}
+.header-toggles li {
+	display: inline-block;
+	vertical-align: bottom;
+}
 .header .toggle {
 	position: relative;
 }
 .header-toggles .btn::before {
 	padding-right: .5em;
-}
-.toggle-scn::before {
-	font-size: 2em;
-	position: absolute;
-	left: -0.3em;
-	top: 25%;
 }
 
 
@@ -126,17 +126,18 @@ a {
 }
 
 
-.view-mode,
-.view-mode-options {
+.select,
+.select-options,
+.toggle {
 	width: 13em;
 	overflow: hidden;
 	cursor: pointer;
 }
-.view-mode {
+.select {
     position:relative;
 	height: 4em;
 }
-.view-mode-options {
+.select-options {
     position:fixed;
 	max-height: 4em;
     display: flex;
@@ -149,18 +150,20 @@ a {
 .header-toggles .btn {
 	padding: 1.5em 1em;
 }
-.view-mode.show .view-mode-options {
+.select.show .select-options {
 	max-height: 15em;
 }
-.view-img .btn[data-mode=view-img] { order: 1; }
-.view-txt .btn[data-mode=view-txt] { order: 1; }
-.view-img .btn[data-mode=view-all] { order: 2; }
-.view-txt .btn[data-mode=view-all] { order: 2; }
-.view-img .btn[data-mode=view-txt] { order: 3; }
-.view-txt .btn[data-mode=view-img] { order: 3; }
-.view-mode.show .btn[data-mode=view-all] { order: 1; }
-.view-mode.show .btn[data-mode=view-txt] { order: 2; }
-.view-mode.show .btn[data-mode=view-img] { order: 3; }
+.select-btn:nth-child(1) { order: 2; }
+.select-btn:nth-child(2) { order: 3; }
+.select-btn:nth-child(3) { order: 4; }
+.select-btn:nth-child(4) { order: 5; }
+.select-btn:nth-child(5) { order: 6; }
+.select-btn.selected { order: 1; }
+.select.show .select-btn:nth-child(1) { order: 1; }
+.select.show .select-btn:nth-child(2) { order: 2; }
+.select.show .select-btn:nth-child(3) { order: 3; }
+.select.show .select-btn:nth-child(4) { order: 4; }
+.select.show .select-btn:nth-child(5) { order: 5; }
 
 
 
@@ -317,29 +320,37 @@ ul.frames {
 	width: -moz-min-content;
 	width: min-content;
 }
-.overview .frame {
+.size-sml .frame {
 	padding: 0 .25%;
 }
 
 @media only screen and (min-width : 2000px) {
+	.size-big .frame{ width: 25%; }
 	.frame 			{ width: 20%; }
-	.overview .frame{ width: 10%; }
+	.size-sml .frame{ width: 10%; }
 }
 @media only screen and (max-width : 2000px) {
+	.size-big .frame{ width: 33.33%; }
 	.frame 			{ width: 25%; }
-	.overview .frame{ width: 12.5%; }
+	.size-sml .frame{ width: 12.5%; }
 }
 @media only screen and (max-width : 1500px) {
-	.frame 			{ width: 33%; }
-	.overview .frame{ width: 16.65%; }
+	.size-big .frame{ width: 50%; }
+	.frame 			{ width: 33.33%; }
+	.size-sml .frame{ width: 16.65%; }
 }
 @media only screen and (max-width : 1000px) {
+	.size-big .frame{ width: 100%; }
 	.frame 			{ width: 50%; }
-	.overview .frame{ width: 25%; }
+	.size-sml .frame{ width: 25%; }
+	.header-title {
+		width: 100%;
+	}
 }
 @media only screen and (max-width : 600px) {
-	.frame 			{ width: 100%; }
-	.overview .frame{ width: 50%; }
+	.size-big .frame{ width: 100%; }
+	.frame 			{ width: 50%; }
+	.size-sml .frame{ width: 50%; }
 	body {
 		padding-top: 0 !important;
 	}
@@ -347,10 +358,16 @@ ul.frames {
 	.scene-close {
 		position: static;
 	}
-	.scene-header {
-		-webkit-flex-direction: column;
-		    -ms-flex-direction: column;
-		        flex-direction: column;
+	.select {
+		position: static;
+	}
+	.select-options {
+		position: absolute;
+	}
+	.scene-header_buttons {
+		flex-direction: column;
+		align-items: stretch;
+		justify-content: space-around;
 	}
 }
 
@@ -648,8 +665,8 @@ ul.frames {
 .toggle::before { content: "☑"; }
 .toggle.off::before { content: "☐"; }
 
-.toggle-scn::before { content: "▾"; }
-.toggle-scn.off::before { content: "▴"; }
+.toggle-scn::before { content: "▼"; }
+.toggle-scn.off::before { content: "▲"; }
 
 .btn-edit::before,
 .btn-edit.off.hover::before { 
@@ -675,4 +692,4 @@ ul.frames {
 .overlay .btn-pano::after { content: "⇔"; }
 .frame.ispano .btn-pano::after { content: "⇐⇒"; }
 .overlay .btn-sameshot::after { content: "--"; }
-.frame.sameshot .btn-sameshot::after { content: "||"; }</style>
+.frame.sameshot .btn-sameshot::after { content: "||"; }
