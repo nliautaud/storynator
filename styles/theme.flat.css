@@ -62,8 +62,10 @@ a:hover,
 	font-size: .8em;
 }
 
-.btn {
+.story .btn {
 	color: #008A7A;
+	background: #EEEEEE;
+	border: 1px solid #DDDDDD;
 }
 .btn-storynator {
 	margin: .25rem 1rem .2rem;
@@ -196,6 +198,9 @@ ul.frames {
 	position: absolute;
 	bottom: 1em;
 	right: 1rem;
+}
+.frame-img-canvas {
+	outline: 4px solid #df4b26;
 }
 .frame-text {
 	border: 1px solid #eee;

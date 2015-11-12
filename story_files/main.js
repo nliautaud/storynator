@@ -10,7 +10,8 @@ $(function() {
 		haveChanged = false,
 		isExport = false,
 		linkedFrames = null,
-		sortableParts = [];
+		sortableParts = [],
+		shift_pressed = false;
 
 	// activate management and contenteditable
 	body.removeClass('nomanagement');
@@ -31,7 +32,15 @@ $(function() {
 			$(this).removeClass('hover');
 		});
 
-	//*/// theme & content import
+
+
+
+	//  ██ ███    ███ ██████   ██████  ██████  ████████ 
+	//  ██ ████  ████ ██   ██ ██    ██ ██   ██    ██    
+	//  ██ ██ ████ ██ ██████  ██    ██ ██████     ██    
+	//  ██ ██  ██  ██ ██      ██    ██ ██   ██    ██    
+	//  ██ ██      ██ ██       ██████  ██   ██    ██    
+	//*///
 
 	$(document)
 		.on('dragstart', function (event) {
@@ -103,7 +112,14 @@ $(function() {
 	}
 
 
-	//*/// changes
+
+
+	//   ██████ ██   ██  █████  ███    ██  ██████  ███████ ███████ 
+	//  ██      ██   ██ ██   ██ ████   ██ ██       ██      ██      
+	//  ██      ███████ ███████ ██ ██  ██ ██   ███ █████   ███████ 
+	//  ██      ██   ██ ██   ██ ██  ██ ██ ██    ██ ██           ██ 
+	//   ██████ ██   ██ ██   ██ ██   ████  ██████  ███████ ███████ 
+	//*///
 
 	function setSaved() {
 		if(!haveChanged) return;
@@ -138,31 +154,177 @@ $(function() {
 	});
 
 
-	//*/// drop images
+
+
+	
+	//  ██████  ██████   █████  ██     ██ ██ ███    ██  ██████  
+	//  ██   ██ ██   ██ ██   ██ ██     ██ ██ ████   ██ ██       
+	//  ██   ██ ██████  ███████ ██  █  ██ ██ ██ ██  ██ ██   ███ 
+	//  ██   ██ ██   ██ ██   ██ ██ ███ ██ ██ ██  ██ ██ ██    ██ 
+	//  ██████  ██   ██ ██   ██  ███ ███  ██ ██   ████  ██████  
+    //*///
+
+	var drawing = [];
+	var paint;
+
+	function getFrameImg(el){
+		if(!el.hasClass('frame-img')) el = el.find('.frame-img');
+		if(el.length === 0) el = el.closest('.frame-img');
+		return el;
+	}
+	function getDrawnImage(frame){
+		var image = frame.find('.frame-img-drawn');
+		if(!image.length) image = $('<img class="frame-img-drawn" />');
+		getFrameImg(frame).prepend(image);
+		return image;
+	}
+	function setCanvas(frame_img){
+		var canvas = frame_img.find('canvas').show();
+		if(canvas.length === 0) {
+			var res = 4;
+			canvas = $('<canvas class="frame-img-canvas">').prependTo(frame_img);
+			canvas.attr('width', canvas.width() * res);
+			canvas.attr('height', canvas.height() * res);
+			var ctx = canvas[0].getContext('2d');
+			ctx.strokeStyle = "#df4b26";
+			ctx.lineJoin = "round";
+		}
+		console.log('start drawing');
+	}
+	function clearCanvas(event){
+		$(this).closest('.frame').find('.frame-img-drawn, canvas').remove();
+		console.log('clear drawing');
+	}
+	function saveCanvas(frame_img) {
+		var canvas = frame_img.find('canvas');
+		if(!canvas.length) return;
+		var image = getDrawnImage(frame_img),
+			context = canvas[0].getContext('2d');
+		context.drawImage(image[0], 0, 0);
+		image.attr('src', canvas[0].toDataURL('png', 0.25));
+		canvas.hide();
+		console.log('save drawing');
+	}
+	function drawCanvas($canvas){
+		var canvas = $canvas[0],
+			context = canvas.getContext('2d'),
+			w = context.canvas.width,
+			h = context.canvas.height;
+		context.clearRect(0, 0, w, h);
+
+		context.strokeStyle = "#df4b26";
+		context.lineJoin = "round";
+		context.lineWidth = w / $canvas.width() * 2;
+
+		for(var i=0; i < drawing.length; i++) {		
+			context.beginPath();
+			var node = drawing[i];
+			if(!node.b && i){
+				var prev = drawing[i-1];
+				context.moveTo(prev.x * w, prev.y * h);
+			}
+			else context.moveTo(node.x * w - 1, node.y * h);
+
+			context.lineTo(node.x * w, node.y * h);
+			context.closePath();
+			context.stroke();
+		}
+	}
+	function addNode(canvas, event, breakline) {
+		var x = (event.pageX - canvas.offset().left) / canvas.width(),
+			y = (event.pageY - canvas.offset().top) / canvas.height();
+		drawing.push({x:x, y:y, b:breakline});
+	}
+	function undoLastStroke() {
+		var canvas = $('.is-drawable canvas');
+		if(!canvas.length) return;
+		for (var i = drawing.length - 1; i > -1; i--) {
+			if(drawing[i].b) break;
+		}
+		if(!i) drawing.length = 0;
+		else drawing = drawing.slice(0, i-1);
+		console.log('undo last chained nodes');
+		drawCanvas(canvas);
+	}
+
+	// management
+	body.delegate('.btn-clear', 'click', clearCanvas);
+	body.delegate('.btn-draw', 'click', function (event) {
+		event.preventDefault();
+		setCanvas($(this).closest('.frame-img'));
+		unselectFrames();
+		return false;
+	});
+	body.on('mousedown', function (event) {
+		var curr_drawable = $('.is-drawable'),
+			curr_frameimg = curr_drawable.find('.frame-img');
+			curr_canvas = curr_drawable.find('canvas')[0];
+		if(!curr_drawable.length || event.target === curr_canvas) return;
+		saveCanvas(curr_frameimg);
+		drawing.length = 0;
+		curr_drawable.removeClass('is-drawable');
+	});
+
+	// drawing
+	body.delegate('canvas', 'mousedown', function(event){
+		paint = true;
+	});
+	body.on('mouseup', function(e){
+		paint = false;
+	});
+	body.delegate('canvas', 'mousemove', function(event) {
+		if(!paint) return;
+		addNode($(this), event);
+		drawCanvas($(this));
+	});
+	body.delegate('canvas', 'mousedown mouseenter mouseleave', function(event) {
+		event.preventDefault();
+		if(!paint) return;
+		addNode($(this), event, true);
+		drawCanvas($(this));
+	});
+
+
+
+
+
+	//  ██ ███    ███  ██████      ██████  ██████   ██████  ██████  
+	//  ██ ████  ████ ██           ██   ██ ██   ██ ██    ██ ██   ██ 
+	//  ██ ██ ████ ██ ██   ███     ██   ██ ██████  ██    ██ ██████  
+	//  ██ ██  ██  ██ ██    ██     ██   ██ ██   ██ ██    ██ ██      
+	//  ██ ██      ██  ██████      ██████  ██   ██  ██████  ██      
+	//*///
 
 	story.delegate('.frame', 'dragenter', unselectFrames);
-	story.delegate('.frame img', 'dragenter', function(e){
+	story.delegate('.frame-img', 'dragenter', function(e){
 		if(!isDragging) {
 			e.stopPropagation();
 			e.preventDefault();
 			$(this).addClass('dragenter');
 		}
 	});
-	story.delegate('.frame img', 'dragleave', function(e){
+	story.delegate('.frame-img', 'dragleave', function(e){
 		if(!isDragging) $(this).removeClass('dragenter');
 	});
-	story.delegate('.frame img', 'dragover', function(e){
+	story.delegate('.frame-img', 'dragover', function(e){
 		if(!isDragging) {
 			e.stopPropagation();
 			e.preventDefault();
 		}
 	});
-	story.delegate('.frame img', 'drop', function(event){
+	story.delegate('.frame-img', 'drop', function(event){
 		if(isDragging) return;
 		event.preventDefault();
+		var frame_img = $(this);
+		function getTarget (frame) {
+			if(event.shiftKey) return getDrawnImage(frame);
+			return frame.find('.frame-img-loaded');
+		}
 		var files = event.originalEvent.dataTransfer.files,
-			target = $(this),
+			target = getTarget(frame_img),
 			frame, newframe;
+		frame_img.removeClass('dragenter');
+
 		for (var i = 0; i < files.length; i++){
 			var load = loadImage(files[i], target);
 			if(!load) continue;
@@ -173,14 +335,13 @@ $(function() {
 				newframe = newFrame();
 				frame.after(newframe);
 			}
-			target = newframe.find('img');
+			target = getTarget(newframe);
 		}
 		return false;
 	});
 
 	function loadImage (file, img) {
 		var frame = img.parents('.frame');
-		img.removeClass('dragenter');
 
 		// not a supported image
 		var authorized = ['image/jpeg', 'image/gif', 'image/png'];
@@ -189,7 +350,7 @@ $(function() {
 			setTimeout(function () {
 				frame.removeClass('notimage');
 			}, 200);
-			console.log('not an image');
+			console.log('dropped file is not an image');
 			return false;
 		}
 		// let's go
@@ -245,7 +406,14 @@ $(function() {
 
 
 
-	//*/// add
+
+
+	//   █████  ██████  ██████  
+	//  ██   ██ ██   ██ ██   ██ 
+	//  ███████ ██   ██ ██   ██ 
+	//  ██   ██ ██   ██ ██   ██ 
+	//  ██   ██ ██████  ██████
+	//*///
 
 	$('.scene:not(.shadow)').each(function () {
 		revealScene($(this));
@@ -329,13 +497,20 @@ $(function() {
 
 
 
-	//*/// frames selection & manipulation
+
+
+	//  ███████ ███████ ██      ███████  ██████ ████████ 
+	//  ██      ██      ██      ██      ██         ██    
+	//  ███████ █████   ██      █████   ██         ██    
+	//       ██ ██      ██      ██      ██         ██    
+	//  ███████ ███████ ███████ ███████  ██████    ██    
+	//*///
 
 	function selectFrame (frame) {
 		frame.prepend(overlay_tpl);
 	}
 	function unselectFrames(el){
-		el = el || story;
+		if(!(el instanceof jQuery)) el = story;
 		el.find('.overlay').remove();
 	}
 	function getSelectedFrames(){
@@ -372,7 +547,8 @@ $(function() {
 			return;
 		}
 		if(!event.shiftKey) unselectFrames();
-		if(target.is('img') && !isShadow(target)){
+		if(target.is('img')){
+			revealFrame(target.parent());
 			selectFrame(target.parent());
 		}
 	});
@@ -383,8 +559,8 @@ $(function() {
 				.removeAttr('style');
 		setChanged();
 	});
-	story.delegate('.overlay .delete', 'click', deleteFrames);
-	story.delegate('.overlay .duplicate', 'click', duplicateFrames);
+	story.delegate('.overlay .btn-delete', 'click', deleteFrames);
+	story.delegate('.overlay .btn-duplicate', 'click', duplicateFrames);
 
 
 
@@ -403,7 +579,14 @@ $(function() {
 
 
 
-	//*/// sortable
+
+
+	//  ███████  ██████  ██████  ████████  █████  ██████  ██      ███████ 
+	//  ██      ██    ██ ██   ██    ██    ██   ██ ██   ██ ██      ██      
+	//  ███████ ██    ██ ██████     ██    ███████ ██████  ██      █████   
+	//       ██ ██    ██ ██   ██    ██    ██   ██ ██   ██ ██      ██      
+	//  ███████  ██████  ██   ██    ██    ██   ██ ██████  ███████ ███████ 
+	//*///
 
 	Sortable.create(document.querySelector('.scenes'), {
 		animation: 100,
@@ -455,14 +638,22 @@ $(function() {
 				onSort: function (evt) {
 					setChanged();
 				},
-				// download images by dragging frames outside browser
+				// allow downloading images by dragging frames outside browser
 				setData: function (dataTransfer, el) {
-					var b64 = $(el).find('img').attr('src'),
+					var tgt;
+					if(shift_pressed)
+						tgt = $(el).find('.frame-img-drawn');
+					if(!shift_pressed || tgt.length === 0)
+						tgt = $(el).find('.frame-img-loaded');
+
+					var b64 = tgt.attr('src'),
 						ext = b64.match(/^data:image\/([a-z]+)/)[1],
-						filename = b64.substring(30, 40),
-						prefix = 'text/html:'+filename+'.'+ext+':';
-					dataTransfer.setData('DownloadURL', prefix + b64);
-					console.log(prefix, b64);
+						filename = new Date().getTime();
+
+					dataTransfer.setData(
+						'DownloadURL',
+						'text/html:'+filename+'.'+ext+':'+b64
+					);
 				}
 			}));
 		});
@@ -529,7 +720,14 @@ $(function() {
 
 
 
-	//*/// shortcuts
+
+
+	//  ███████ ██   ██  ██████  ██████  ████████  ██████ ██    ██ ████████ ███████ 
+	//  ██      ██   ██ ██    ██ ██   ██    ██    ██      ██    ██    ██    ██      
+	//  ███████ ███████ ██    ██ ██████     ██    ██      ██    ██    ██    ███████ 
+	//       ██ ██   ██ ██    ██ ██   ██    ██    ██      ██    ██    ██         ██ 
+	//  ███████ ██   ██  ██████  ██   ██    ██     ██████  ██████     ██    ███████ 
+	//*///
 
 	function cleanup(el) {
 		var list = [
@@ -541,6 +739,11 @@ $(function() {
 		el = el || $(selectall);
 		el.removeAttr(attrs);
 	}
+	// shift pressed detection outside of events (like dragging outside browser)
+	$(document).on('keyup keydown blur drop', function(event){
+		shift_pressed = event.shiftKey || false;
+	});
+	// keyboard shortcuts
 	$(window).on('keydown', function(event) {
 		var key = String.fromCharCode(event.which).toLowerCase();
 		switch (key) {
@@ -564,6 +767,9 @@ $(function() {
 				cleanup();
 				delShadows();
 				setSaved();
+				break;
+			case 'z':
+				undoLastStroke();
 				break;
 		}
 	});

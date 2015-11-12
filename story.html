@@ -231,6 +231,11 @@ a {
 	    -ms-flex: 1;
 	        flex: 1;
 }
+.scene-handle {
+	cursor: -webkit-grab;
+	cursor: -moz-grab;
+	cursor: grab;
+}
 .scene-header_buttons {
 	display: -webkit-box;
 	display: -webkit-flex;
@@ -331,16 +336,10 @@ ul.frames {
 	padding: 0 .25%;
 }
 
-@media only screen and (min-width : 2000px) {
-	.size-big .frame{ width: 25%; }
-	.frame 			{ width: 20%; }
-	.size-sml .frame{ width: 10%; }
-}
-@media only screen and (max-width : 2000px) {
-	.size-big .frame{ width: 33.33%; }
-	.frame 			{ width: 25%; }
-	.size-sml .frame{ width: 12.5%; }
-}
+.size-big .frame{ width: 33.33%; }
+.frame 			{ width: 25%; }
+.size-sml .frame{ width: 12.5%; }
+
 @media only screen and (max-width : 1500px) {
 	.size-big .frame{ width: 50%; }
 	.frame 			{ width: 33.33%; }
@@ -421,9 +420,6 @@ ul.frames {
 	top: 10%; bottom: 10%;
 	background: #9c9c9c;
 }
-.frame.dragged .frame-img::before {
-	content: none;
-}
 .frame:first-child .btn-sameshot {
 	display: none;
 }
@@ -431,22 +427,46 @@ ul.frames {
 .frame-img {
 	position: relative;
 	line-height: 0;
+	cursor: -webkit-grab;
+	cursor: -moz-grab;
+	cursor: grab;
+}
+.is-drawable .frame-img,
+.is-drawable.dragged .frame-img {
+	cursor: crosshair;
+}
+.dragged .frame-img {
+	cursor: -webkit-grabbing;
+	cursor: -moz-grabbing;
+	cursor: grabbing;
 }
 .ispano .frame-img {
 	overflow-x: auto;
 	overflow-y: hidden;
 }
-.frame-img img {
+.frame-img-loaded {
 	position: relative;
 	width: 100%;
 	z-index: 2;
 	-webkit-transition: all .1s ease;
 	        transition: all .1s ease;
 }
+.frame-img-canvas,
+.frame-img-drawn  {
+	position: absolute;
+	top: 0; height: 100%;
+	left: 0; width: 100%;
+}
+.frame-img-drawn {
+	z-index: 3;
+}
+.frame-img-canvas {
+	z-index: 4;
+}
 .ispano .frame-img img {
 	width: auto;
 }
-.frame-img img.dragenter {
+.frame-img.dragenter .frame-img-loaded {
 	outline: 1em solid #00796B;
 	outline-offset: -1em;
 }
@@ -454,10 +474,10 @@ ul.frames {
 	outline: 1px dashed #ccc;
 	outline-offset: -1px;
 }
-.frame.shadow img {
+.frame.shadow .frame-img {
 	opacity: .3;
 }
-.frame.shadow img.dragenter {
+.frame.shadow .frame-img.dragenter {
 	opacity: 1;
 }
 .frame.dropped {
@@ -537,29 +557,38 @@ ul.frames {
 	top: 0; bottom: 0;
 
 	display: -webkit-box;
-
 	display: -webkit-flex;
-
 	display: -ms-flexbox;
-
 	display: flex;
-	-webkit-flex-flow: row-reverse wrap;
-	    -ms-flex-flow: row-reverse wrap;
-	        flex-flow: row-reverse wrap;
+	-webkit-flex-flow: row wrap;
+	    -ms-flex-flow: row wrap;
+	        flex-flow: row wrap;
 	-webkit-align-items: center;
 	    -ms-flex-align: center;
 	        align-items: center;
-	-webkit-justify-content: center;
-	    -ms-flex-pack: center;
-	        justify-content: center;
+	-webkit-justify-content: space-around;
+	    -ms-flex-pack: space-around;
+	        justify-content: space-around;
+
+    padding: 0 20%;
 
 	background: rgba(255,255,255,.6);
 	font-size: 1.75em;
 	z-index: 999;
+	cursor: pointer;
 }
 .overlay .btn {
+	width: 23%;
 	padding: 5%;
 	margin: 0;
+}
+.size-sml .overlay {
+	padding: 0 10%;
+	font-size: 1em;
+}
+.size-big .overlay {
+	padding: 0 25%;
+	font-size: 2em;
 }
 
 /* 
@@ -582,7 +611,7 @@ ul.frames {
 	        justify-content: center;
 
 	max-width: 10em;
-	padding: .25em 1em;
+	padding: .5em 1em;
 	margin-left: .5em;
 	overflow: visible;
 
@@ -693,10 +722,20 @@ ul.frames {
 .add-frame::after { content: "+>"; }
 .add-frame-before::after { content: "<+"; }
 
-.scene-delete::after { content: "✕"; }
-.overlay .delete::after { content: "✕"; }
-.overlay .duplicate::after { content: "++"; }
-.overlay .btn-pano::after { content: "⇔"; }
+.btn-delete::after { content: "✕"; }
+.btn-duplicate::after { content: "++"; }
+.btn-pano::after { content: "⇔"; }
+.btn-draw::after,
+.btn-clear::after {
+	content: "✏";
+	transform: rotate(90deg);
+}
+.btn-clear::before {
+    content: "✕";
+    position: absolute;
+    padding-left: .1em;
+    opacity: .8;
+}
 .frame.ispano .btn-pano::after { content: "⇐⇒"; }
 .overlay .btn-sameshot::after { content: "--"; }
 .frame.sameshot .btn-sameshot::after { content: "||"; }
@@ -765,8 +804,10 @@ a:hover,
 	font-size: .8em;
 }
 
-.btn {
+.story .btn {
 	color: #008A7A;
+	background: #EEEEEE;
+	border: 1px solid #DDDDDD;
 }
 .btn-storynator {
 	margin: .25rem 1rem .2rem;
@@ -899,6 +940,9 @@ ul.frames {
 	position: absolute;
 	bottom: 1em;
 	right: 1rem;
+}
+.frame-img-canvas {
+	outline: 4px solid #df4b26;
 }
 .frame-text {
 	border: 1px solid #eee;
@@ -1065,7 +1109,7 @@ ul.frames {
 				<div class="scene-close"></div>
 			</div>
 			<div class="scene-header_buttons management">
-				<div class="btn scene-delete"></div>
+				<div class="btn btn-delete scene-delete"></div>
 				<div class="btn add-frame-before"></div>
 				<div class="btn add-frame"></div>
 			</div>
@@ -1073,7 +1117,7 @@ ul.frames {
 		<ul class="frames sortable connected"><!--
 			--><li class="frame shadow management">
 				<div class="frame-img">
-					<img src="data:image/gif;base64,R0lGODlhEAAJAKIAAMzMzJaWlrGxsaOjo76+vpycnMXFxaqqqiwAAAAAEAAJAAADCwi63P4wykmrvRgmADs=">
+					<img class="frame-img-loaded" src="data:image/gif;base64,R0lGODlhEAAJAKIAAMzMzJaWlrGxsaOjo76+vpycnMXFxaqqqiwAAAAAEAAJAAADCwi63P4wykmrvRgmADs=">
 				</div>
 				<div class="frame-text" contenteditable="true"></div>
 				<div class="frame-nbr"></div>
@@ -1083,10 +1127,12 @@ ul.frames {
 	</script>
 	<script id="overlay-tpl" type="text/x-custom-template">
 		<div class="overlay">
-			<div class="btn delete"></div>
-			<div class="btn duplicate"></div>
-			<div class="btn btn-pano" data-toggle="ispano"></div>
+			<div class="btn btn-duplicate"></div>
+			<div class="btn btn-delete"></div>
+			<div class="btn btn-draw" data-toggle="is-drawable"></div>
+			<div class="btn btn-clear"></div>
 			<div class="btn btn-sameshot" data-toggle="sameshot"></div>
+			<div class="btn btn-pano" data-toggle="ispano"></div>
 		</div>
 	</script>
 	<script src="./story_files/jquery-2.1.4.min.js"></script>
@@ -1195,6 +1241,7 @@ ul.frames {
 				}
 				bodyclass.toggle(mode);
 				tgt.classList.add('selected');
+				console.log('toggle '+mode);
 				return;
 			}
 
