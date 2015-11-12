@@ -34,30 +34,48 @@ When you're ready to save your changes, juste save the page on your computer (li
 
 In edit mode, you'll see some hollow blocs with dashed borders. They're new scenes and new frames waiting to be created. Start to edit them, and they will instantly became fresh new elements. Start to write some text, drag them to somewhere you'd like a new one, or just drop some images onto the hollow frames.
 
-<img src="img/shadow.png" alt="">
-
 The scene header provide some buttons in edit mode :
 - ``✕`` delete the scene
 - ``<+`` insert a new frame at the begining of the scene
 - ``+>` append a new frame at the end of the scene
 
 You can select frames by clicking on the images (use the ``shift`` key to select multiple ones). The selected frames overlays several options :
-- ``--`` link the selected frames to their predecessors
-- ``⇔`` toggle the selected frames width limitation (see [images](#images))
 - ``++`` duplicate the selected frames (you can use ``ctrl+d`` or ``⌘+d`` too)
 - ``✕`` delete the selected frames (you can use the ``suppr`` shortcut too)
+- ``✏`` enable drawing on the selected frame (see [images](#images))
+- ``✏x`` clear the drawing of the selected frame
+- ``--`` link the selected frames to their predecessors
+- ``⇔`` toggle the selected frames width limitation (see below)
+
+### Frames width
+
+By default, the frames width are set to be nicely layout in regular columns. When an image is especially larger than the others, for a traveling shot for example, that limitation may be inapropriated. By disabling that limitation trough the frames options, the image will mimic the height of its surrounding frames. That option is automaticaly enabled when a dropped image is at least two times larger than tall.
+
+### Shots & frames
 
 By default, each frame of the storyboard define a distinct shot. By linking a frame to its predecessor trough the frame options you define that it's still the same shot, and thus define a shot illustrated by several frames. The shots will be numbered accordingly, and may be displayed differently.
 
-<img src="img/shots.png" alt="">
+## Images
 
-## Loading images
+Storynator is not a drawing tool, and does not aim to replace pencil, paper, professionnal painting softwares or any other drawing app that you're used to. Thus the main content image is loaded by drag & dropping images from your computer, images that you've exported/scanned/copied from your favorite tool. But you can draw things on a separated layer too.
 
-Drop image files onto a frame to load them. You may drop a single file to load or overwrite a single image, or drop a bunch of files to create new frames.
+### Loading images
 
-The image files must be in ``jpg``,``png`` or ``gif`` format. Once reduced to a proper size, they are directly included into the storyboard file.
+Simply drop image files onto a frame to load them. You may drop a single file to load or overwrite a single image, or drop a bunch of files to create new frames. The dropped image files must be in ``jpg``,``png`` or ``gif`` format. Once reduced to a proper size, they are directly included into the storyboard file.
 
-By default, the frames width are set to be nicely layout in regular columns. When an image is especially larger than the others, for a traveling shot for example, that limitation may be inapropriated. By disabling that limitation trough the frames options, the image will mimic the height of its surrounding frames. That option is automaticaly enabled when a dropped image is at least two times larger than tall.
+By using the ``shift`` key, you can load an image file onto the "drawing" layer (you'll want it to be transparent, to overlay the main image below). That way you can use and reuse annotations that you exported from Storynator or that you've made elsewhere.
+
+### Drawing
+
+You can directly draw quick sketches, camera indications or other annotations on top of a frame image. Enable the drawing mode or clear the drawing layer trough the frame options.
+
+The strokes drawn during your last drawing session (i.e. since you've activated the drawing mode) may be undone with ``ctrl+z`` or ``cmd+z``. Your drawing is automaticaly flattened and saved by clicking outside of the active canvas.
+
+That layer may also be populated with external files as indicated in [loading images](#loading-images).
+
+### Exporting an image
+
+Drag a frame on your computer to export its main image. By using the ``shift`` key, you can export the drawing layer instead.
 
 ## Writing
 
