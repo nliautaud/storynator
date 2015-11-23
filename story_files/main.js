@@ -89,14 +89,17 @@ $(function() {
 	}
 	function htmlCallback (html, opt) {
 		var imported = $('<div>').html(html),
-			story = imported.find('.story').first().html();
-		if(opt.shift)
-			story = $('.story').html() + story;
-		replaceContent('.story', story, function () {
+			story = imported.find('.scenes').first();
+		if(!opt.shift) content = story.html();
+		else {
+			story.find('.shadow').remove();
+			content = $('.scenes').html() + story.html();
+		}
+		replaceContent('.scenes', content, function () {
 			var title = imported.find('.header-title').first().html();
 			setTitle(title);
 			initFramesSort();
-			console.log('import story "'+title+'" ('+opt.name+'"');
+			console.log('import story "'+title+'" ('+opt.name+')');
 		});
 	}
 	function replaceContent (sel, content, callback) {
@@ -761,7 +764,6 @@ $(function() {
 				return false;
 			case 's':
 				cleanup();
-				delShadows();
 				setSaved();
 				break;
 			case 'z':
