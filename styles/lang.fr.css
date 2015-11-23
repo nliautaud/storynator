@@ -1,7 +1,7 @@
 
 /**
  * French
- * 
+ *
  * A translation override for storinator, the simple storyboard editor.
  * Just drag this file on a storynator document, use shift to append.
  *
@@ -43,9 +43,10 @@
 .select-view-img::after { content: "images seules"; }
 .select-view-txt::after { content: "textes seuls"; }
 
-.select-size-med::after { content: "medium"; }
-.select-size-big::after { content: "large"; }
-.select-size-sml::after { content: "vue générale"; }
+.select-size-sml::after { content: "petit"; }
+.select-size-med::after { content: "moyen"; }
+.select-size-big::after { content: "grand"; }
+.select-size-ful::after { content: "maxi"; }
 
 .btn-edit.off::after { content: "modifier"; }
 .btn-edit::after {  content: "afficher"; }
