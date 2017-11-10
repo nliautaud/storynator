@@ -20,7 +20,7 @@ gulp.task('libs', function () {
 
 gulp.task('build', function () {
     return gulp.src(paths.html)
-        .pipe(inlinesource())
+        .pipe(inlinesource({ swallowErrors: true }))
         .pipe(gulp.dest('.'));
 });
 
