@@ -1,3 +1,6 @@
+var $ = require('jquery');
+var Sortable = require('sortablejs');
+
 $(function() {
   var scene_tpl = $('#template').html();
   var frame_tpl = $(scene_tpl).find('.frame').wrap('<p>').parent().html();

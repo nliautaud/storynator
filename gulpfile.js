@@ -1,5 +1,7 @@
 var gulp = require('gulp');
 var inlinesource = require('gulp-inline-source');
+var browserify = require('browserify');
+var source = require('vinyl-source-stream');
 
 var paths = {
     html: 'src/*.html',
@@ -7,12 +9,23 @@ var paths = {
     styles: 'src/styles/**/*.css'
 };
 
-gulp.task('default', function () {
+gulp.task('libs', function () {
+    return browserify()
+        .require('jquery')
+        .require('sortablejs')
+        .bundle()
+        .pipe(source('libs.js'))
+        .pipe(gulp.dest('./src/scripts/'));
+});
+
+gulp.task('build', function () {
     return gulp.src(paths.html)
         .pipe(inlinesource())
         .pipe(gulp.dest('.'));
 });
 
 gulp.task('watch', function () {
-    gulp.watch(paths.scripts, ['default']);
+    gulp.watch('src/**/*', ['build']);
 });
+
+gulp.task('default', ['libs', 'build', 'watch']);
