@@ -6,11 +6,15 @@
   <title>Untitled</title>
 </head>
 <body class="">
-  <header class="header">
+  <header class="header wrapper">
     <h1 class="header-title" contenteditable="true"></h1>
-    <div class="btn btn-edit toggle management" data-toggle="hidemanagement"></div>
-    <div class="btn btn-storynator"><a href="https://nliautaud.github.io/storynator" target="_blank">S</a></div>
-    <ul class="header-toggles">
+    <div class="header-buttons">
+      <div class="btn btn-edit toggle management" data-toggle="hidemanagement"></div>
+      <div class="btn btn-storynator">
+        <a href="https://nliautaud.github.io/storynator" target="_blank">S</a>
+      </div>
+    </div>
+    <ul class="header-options">
       <li><div class="btn toggle toggle-scn off"></div></li>
       <li class="select">
         <div class="select-options">
@@ -28,22 +32,22 @@
         </div>
       </li>
       <li><div class="btn toggle toggle-nbr" data-toggle="hidenumbers"></div></li>
-      <li><div class="btn toggle toggle-fsc" data-toggle="fullscreen"></div></li>
+      <li><div class="btn toggle toggle-fsc off" data-toggle="fullscreen"></div></li>
     </ul>
   </header>
-  <div class="story overview">
+  <div class="story wrapper overview">
     <ul class="scenes sortable"></ul>
   </div>
   <script id="template" type="text/template">
   <li class="scene shadow management">
     <header class="scene-header">
-      <div class="scene-header_content">
-        <h1 class="scene-title" contenteditable="true"></h1>
+      <div class="scene-content">
+        <h2 class="scene-title" contenteditable="true"></h2>
         <p class="scene-overview" contenteditable="true"></p>
-        <div class="scene-handle management"></div>
-        <div class="scene-close"></div>
       </div>
-      <div class="scene-header_buttons management">
+      <div class="scene-close"></div>
+      <div class="scene-handle management"></div>
+      <div class="scene-buttons management">
         <div class="btn btn-delete scene-delete"></div>
         <div class="btn add-frame-before"></div>
         <div class="btn add-frame"></div>
@@ -79,4 +83,5 @@
   <!-- Storynator -->
   <script src="scripts/Storynator.edit.js" inline></script>
   <script src="scripts/Storynator.view.js" charset="utf-8" inline></script>
-</body></html>
+</body>
+</html>

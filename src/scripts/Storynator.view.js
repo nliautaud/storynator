@@ -24,20 +24,9 @@ for (var i = 0; i < editables.length; i++) {
   editables[i].setAttribute("contenteditable", false);
 }
 
-// fixed header space
-var setHeaderSpace = function() {
-  document.body.style.paddingTop = header.offsetHeight + 'px';
-};
-window.onresize = setHeaderSpace;
 window.onload = function (event) {
-  setHeaderSpace();
   header.classList.toggle('loading');
   story.classList.toggle('loading');
-};
-document.ondrop = function (event) {
-  setTimeout(function () {
-    setHeaderSpace();
-  }, 200);
 };
 
 // panoramic images height
@@ -142,7 +131,7 @@ function exitFullscreen () {
   else if(document.webkitExitFullscreen) document.webkitExitFullscreen();
 }
 document.querySelector('.toggle-fsc').onclick = function (e){
-  if(getTarget(e).classList.contains('off')) exitFullscreen();
+  if(!getTarget(e).classList.contains('off')) exitFullscreen();
   else fullscreen(document.documentElement);
 };
 
