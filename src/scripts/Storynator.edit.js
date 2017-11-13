@@ -1,5 +1,7 @@
 var $ = require('jquery');
 var Sortable = require('sortablejs');
+var SVG = require('svgjs');
+require('svg.draw.js');
 
 $(function() {
   var scene_tpl = $('#template').html();
@@ -170,125 +172,95 @@ $(function() {
   //  ██████  ██   ██ ██   ██  ███ ███  ██ ██   ████  ██████
     //*///
 
-  var drawing = [];
-  var paint;
+  var isDrawing;
+  var svg;
+  var tool;
+  const getTool = () => {
+    return {
+      type: 'pen',
+      stroke: 'red',
+      'stroke-width': 1,
+      'fill': 'none',
+    };
+  }
 
-  function getFrameImg(el){
-    if(!el.hasClass('frame-img')) el = el.find('.frame-img');
-    if(el.length === 0) el = el.closest('.frame-img');
-    return el;
+  function setupDrawing(frame) {
+    // get existing svg or create new one
+    let el = frame.find('svg')[0] || frame.find('.frame-svg')[0]
+    svg = SVG(el);
+    // set svg viewbox
+    let rect = el.getBoundingClientRect();
+    svg.viewbox(0, 0, rect.width, rect.height);
   }
-  function getDrawnImage(frame){
-    var image = frame.find('.frame-img-drawn');
-    if(!image.length) image = $('<img class="frame-img-drawn" />');
-    getFrameImg(frame).prepend(image);
-    return image;
-  }
-  function setCanvas(frame_img){
-    var canvas = frame_img.find('canvas').show();
-    if(canvas.length === 0) {
-      var res = 4;
-      canvas = $('<canvas class="frame-img-canvas">').prependTo(frame_img);
-      canvas.attr('width', canvas.width() * res);
-      canvas.attr('height', canvas.height() * res);
-      var ctx = canvas[0].getContext('2d');
-      ctx.strokeStyle = "#df4b26";
-      ctx.lineJoin = "round";
-    }
+  function startDrawing(event) {
+    event.preventDefault();
+    isDrawing = true;
+    startStroke(event);
     console.log('start drawing');
   }
-  function clearCanvas(event){
-    $(this).closest('.frame').find('.frame-img-drawn, canvas').remove();
+  function startStroke(event) {
+    if (!isDrawing) return;
+
+    tool = getTool();
+
+    let polyline = svg.polyline().attr(tool).draw(event);
+    // remove small circles
+    polyline.remember("_paintHandler").drawCircles = function () { };
+
+    plotDrawing(event);
+    console.log('start stroke');
+  }
+  function plotDrawing(event) {
+    if (!isDrawing) return;
+    if (tool.type === 'pen') {
+      svg.last().draw('point', event);
+    }
+  }
+  function stopStroke(event) {
+    if (!isDrawing) return;
+    svg.last().draw('stop', event);
+    console.log('stop stroke');
+  }
+  function stopDrawing(event) {
+    if (!isDrawing) return;
+    if (tool.type === 'pen') {
+      stopStroke(event);
+    } else svg.last().draw(event);
+    isDrawing = false;
+    console.log('stop drawing');
+  }
+  function clearDrawing(event) {
+    $(this).closest('.frame').find('svg').remove();
     console.log('clear drawing');
   }
-  function saveCanvas(frame_img) {
-    var canvas = frame_img.find('canvas');
-    if(!canvas.length) return;
-    var image = getDrawnImage(frame_img),
-      context = canvas[0].getContext('2d');
-    context.drawImage(image[0], 0, 0);
-    image.attr('src', canvas[0].toDataURL('png', 0.25));
-    canvas.hide();
-    console.log('save drawing');
-  }
-  function drawCanvas($canvas){
-    var canvas = $canvas[0],
-      context = canvas.getContext('2d'),
-      w = context.canvas.width,
-      h = context.canvas.height;
-    context.clearRect(0, 0, w, h);
-
-    context.strokeStyle = "#df4b26";
-    context.lineJoin = "round";
-    context.lineWidth = w / $canvas.width() * 2;
-
-    for(var i=0; i < drawing.length; i++) {
-      context.beginPath();
-      var node = drawing[i];
-      if(!node.b && i){
-        var prev = drawing[i-1];
-        context.moveTo(prev.x * w, prev.y * h);
-      }
-      else context.moveTo(node.x * w - 1, node.y * h);
-
-      context.lineTo(node.x * w, node.y * h);
-      context.closePath();
-      context.stroke();
-    }
-  }
-  function addNode(canvas, event, breakline) {
-    var x = (event.pageX - canvas.offset().left) / canvas.width(),
-      y = (event.pageY - canvas.offset().top) / canvas.height();
-    drawing.push({x:x, y:y, b:breakline});
-  }
   function undoLastStroke() {
-    var canvas = $('.is-drawable canvas');
-    if(!canvas.length) return;
-    for (var i = drawing.length - 1; i > -1; i--) {
-      if(drawing[i].b) break;
-    }
-    if(!i) drawing.length = 0;
-    else drawing = drawing.slice(0, i-1);
-    console.log('undo last chained nodes');
-    drawCanvas(canvas);
+    var last = svg.last();
+    if (!last) return;
+    last.remove();
+    console.log('undo last stroke');
   }
 
   // management
-  body.delegate('.btn-clear', 'click', clearCanvas);
+  body.delegate('.btn-clear', 'click', clearDrawing);
   body.delegate('.btn-draw', 'click', function (event) {
     event.preventDefault();
-    setCanvas($(this).closest('.frame-img'));
+    setupDrawing($(this).closest('.frame'));
     unselectFrames();
     return false;
   });
   body.on('mousedown', function (event) {
-    var curr_drawable = $('.is-drawable'),
-      curr_frameimg = curr_drawable.find('.frame-img');
-      curr_canvas = curr_drawable.find('canvas')[0];
-    if(!curr_drawable.length || event.target === curr_canvas) return;
-    saveCanvas(curr_frameimg);
-    drawing.length = 0;
-    curr_drawable.removeClass('is-drawable');
+    var curr_drawn = $('.is-drawable'),
+    curr_svg = curr_drawn.find('svg')[0];
+    if(!curr_drawn.length || event.target.closest('svg') === curr_svg) return;
+    $('.is-drawable').removeClass('is-drawable');
   });
 
   // drawing
-  body.delegate('canvas', 'mousedown', function(event){
-    paint = true;
-  });
-  body.on('mouseup', function(e){
-    paint = false;
-  });
-  body.delegate('canvas', 'mousemove', function(event) {
-    if(!paint) return;
-    addNode($(this), event);
-    drawCanvas($(this));
-  });
-  body.delegate('canvas', 'mousedown mouseenter mouseleave', function(event) {
-    event.preventDefault();
-    if(!paint) return;
-    addNode($(this), event, true);
-    drawCanvas($(this));
-  });
+  body.delegate('svg', 'mousedown', startDrawing);
+  body.delegate('svg', 'mouseenter', startStroke);
+  body.delegate('svg', 'mousemove', plotDrawing)
+  body.delegate('svg', 'mouseleave', stopStroke)
+  body.on('mouseup', stopDrawing)
 
 
 
@@ -516,14 +488,14 @@ $(function() {
     frame.prepend(overlay_tpl);
   }
   function unselectFrames(el){
-    if(!(el instanceof jQuery)) el = story;
+    if(!(el instanceof $)) el = story;
     el.find('.overlay').remove();
   }
   function getSelectedFrames(){
     return $('.overlay').parents('.frame');
   }
   function deleteFrames(frames){
-    if(!(frames instanceof jQuery))
+    if(!(frames instanceof $))
       frames = getSelectedFrames();
     frames.addClass('remove');
     setTimeout(function(){
@@ -532,7 +504,7 @@ $(function() {
     setChanged();
   }
   function duplicateFrames(frames){
-    if(!(frames instanceof jQuery))
+    if(!(frames instanceof $))
       frames = getSelectedFrames();
     frames.each(function(){
       var newFrame = $(this).clone().insertAfter($(this));
@@ -646,19 +618,23 @@ $(function() {
         },
         // allow downloading images by dragging frames outside browser
         setData: function (dataTransfer, el) {
-          var tgt;
-          if(shift_pressed)
-            tgt = $(el).find('.frame-img-drawn');
-          if(!shift_pressed || tgt.length === 0)
-            tgt = $(el).find('.frame-img-loaded');
-
-          var b64 = tgt.attr('src'),
-            ext = b64.match(/^data:image\/([a-z]+)/)[1],
-            filename = new Date().getTime();
-
+          var filename = new Date().getTime();
+          // svg with shift
+          if(shift_pressed) {
+            var svgElement = $(el).find('svg')[0];
+            if (!svgElement) return;
+            dataTransfer.setData(
+              'DownloadURL',
+              `text/html:${filename}.svg:data:image/svg+xml;utf8,${svgElement.outerHTML}`
+            );
+            return;
+          }
+          // main image without
+          var b64 = $(el).find('.frame-img-loaded').attr('src'),
+              ext = b64.match(/^data:image\/([a-z]+)/)[1];
           dataTransfer.setData(
             'DownloadURL',
-            'text/html:'+filename+'.'+ext+':'+b64
+            `text/html:${filename}.${ext}:${b64}`
           );
         }
       }));

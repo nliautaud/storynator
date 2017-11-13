@@ -153,9 +153,6 @@ a:hover,
 	border-radius: .3em 0 0 .3em;
 	padding: 0;
 }
-.shadow .scene-handle {
-	display: none;
-}
 .scene-close::before,
 .frames::after,
 .story::after,

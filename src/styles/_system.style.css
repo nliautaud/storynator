@@ -210,8 +210,7 @@ a {
 .scene.dragged .management {
 	display: none;
 }
-.scene.shadow .scene-buttons,
-.scene.shadow:only-child .scene-handle {
+.scene.shadow .scene-delete {
 	display: none;
 }
 .scene-header {
@@ -409,19 +408,17 @@ ul.frames {
 	position: relative;
 	width: 100%;
 	z-index: 2;
-	        transition: all .1s ease;
+	transition: all .1s ease;
 }
-.frame-img-canvas,
-.frame-img-drawn  {
+.frame-svg  {
 	position: absolute;
 	top: 0; height: 100%;
 	left: 0; width: 100%;
-}
-.frame-img-drawn {
 	z-index: 3;
+	pointer-events: none;
 }
-.frame-img-canvas {
-	z-index: 4;
+.is-drawable .frame-svg {
+	pointer-events: all;
 }
 .ispano .frame-img img {
 	width: auto;

@@ -13,6 +13,8 @@ gulp.task('libs', function () {
     return browserify()
         .require('jquery')
         .require('sortablejs')
+        .require('svgjs')
+        .require('svg.draw.js')
         .bundle()
         .pipe(source('libs.js'))
         .pipe(gulp.dest('./src/scripts/'));
