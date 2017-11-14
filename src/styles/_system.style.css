@@ -229,13 +229,11 @@ a {
 .scene-title {
     margin: 0;
 }
-.scene-handle {
-	cursor: grab;
-}
 .scene-buttons {
 	display: flex;
     align-items: center;
-    justify-content: center;
+	justify-content: center;
+	font: normal 1em/1 monospace;
 }
 .scene-close {
 	display: flex;
@@ -391,7 +389,8 @@ ul.frames {
 .frame-img {
 	position: relative;
 	line-height: 0;
-	cursor: grab;
+	cursor: move;
+	cursor: -webkit-grab;
 }
 .is-drawable .frame-img,
 .is-drawable.dragged .frame-img {
@@ -438,13 +437,13 @@ ul.frames {
 	opacity: 1;
 }
 .frame.dropped {
-	        animation: drop .4s ease-in-out;
+	animation: drop .4s ease-in-out;
 }
 .frame.notimage {
-	        animation: error .2s;
+	animation: error .2s;
 }
 .frame-text {
-	        flex: 1;
+	flex: 1;
 }
 /* switches */
 .nomanagement .management {
@@ -453,20 +452,21 @@ ul.frames {
 .management {
 	opacity: 1;
 	visibility: visible;
-	        transition: opacity .2s ease, visibility 0 .2s linear;
+	transition: opacity .2s ease, visibility 0 .2s linear;
 }
 .hidemanagement .management {
 	max-height: 0;
 	opacity: 0;
-	visibility: hidden;
-	flex: 0;
+	padding: 0;
+	width: 0;
+	transform: scale(0);
 }
 .overlay {
-	        animation: reveal .2s;
+	animation: reveal .2s;
 }
 .frame {
-	        animation: reveal .2s;
-	        transition: all .2s ease;
+	animation: reveal .2s;
+	transition: all .2s ease;
 }
 .frame.remove {
 	min-width: 0;
@@ -479,7 +479,7 @@ ul.frames {
 .frame-nbr {
 	max-height: 30em;
 	opacity: 1;
-	        transition: all .2s ease;
+	transition: all .2s ease;
 }
 .view-img .scene-overview,
 .view-img .frame-text,
@@ -505,11 +505,11 @@ ul.frames {
 	top: 0; bottom: 0;
 
 	display: flex;
-	        flex-flow: row wrap;
-	        align-items: center;
-	        justify-content: space-around;
+	flex-flow: row wrap;
+	align-items: center;
+	justify-content: space-between;
 
-    padding: 0 20%;
+    padding: 5% 25%;
 
 	background: rgba(255,255,255,.6);
 	font-size: 1.75em;
@@ -517,17 +517,16 @@ ul.frames {
 	cursor: pointer;
 }
 .overlay .btn {
-	width: 23%;
+	flex-basis: 35%;
 	padding: 5%;
 	margin: 0;
 }
-.size-sml .overlay {
-	padding: 0 10%;
-	font-size: 1em;
+.overlay .btn:last-of-type {
+	flex-basis: 100%;
 }
-.size-big .overlay {
-	padding: 0 25%;
-	font-size: 2em;
+.size-sml .overlay {
+	padding: 0 20%;
+	font-size: 1.5em;
 }
 
 /*
@@ -542,6 +541,7 @@ ul.frames {
     align-items: center;
     justify-content: center;
 
+	margin-left: .5em;
 	padding: .5em 1em;
 	overflow: visible;
 
@@ -649,3 +649,16 @@ ul.frames {
 .frame.ispano .btn-pano::after { content: "⇐⇒"; }
 .overlay .btn-sameshot::after { content: "--"; }
 .frame.sameshot .btn-sameshot::after { content: "||"; }
+
+
+.grabbable {
+	cursor: move;
+	cursor: grab;
+	cursor: -moz-grab;
+	cursor: -webkit-grab;
+}
+.grabbable:active {
+	cursor: grabbing;
+	cursor: -moz-grabbing;
+	cursor: -webkit-grabbing;
+}

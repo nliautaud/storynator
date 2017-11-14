@@ -601,7 +601,7 @@ $(function() {
         handle: '.frame-img',
         chosenClass: 'dragged',
         ghostClass: 'dragged',
-        animation: 0,
+        animation: 150,
         onStart: function (evt) {
           isDragging = true;
           tagSiblingsOf($(evt.item));
