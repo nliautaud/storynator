@@ -662,3 +662,46 @@ ul.frames {
 	cursor: -moz-grabbing;
 	cursor: -webkit-grabbing;
 }
+
+
+.drawing-toolbar {
+	position: fixed;
+	display: none;
+	margin: 2%;
+	width: 2.5em;
+	flex-flow: column;
+	border: 1px solid grey;
+	background: #fff;
+	padding: .5em;
+	z-index: 9;
+}
+.drawing-toolbar.show {
+	display: flex;
+}
+.drawing-toolbar .group {
+	border-top: 1px solid silver;
+	margin-top: .5em;
+	padding-top: .5em;
+}
+.drawing-toolbar .btn {
+	box-sizing: border-box;
+	width: 100%;
+	height: 2.5rem;
+	margin: .25em 0;
+}
+.drawing-toolbar input[type=radio] {
+	display: none;
+}
+.drawing-toolbar input:checked+.btn {
+	background: #ccc;
+}
+.color-picker {
+	-webkit-appearance: none;
+	padding: 0;
+}
+.color-picker::-webkit-color-swatch-wrapper {
+	padding: 0;
+}
+.color-picker::-webkit-color-swatch {
+	border: none;
+}

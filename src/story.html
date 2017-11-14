@@ -35,6 +35,25 @@
       <li><div class="btn toggle toggle-fsc off" data-toggle="fullscreen"></div></li>
     </ul>
   </header>
+  <div class="drawing-toolbar">
+    <div class="group color">
+      <input class="btn color-picker" type="color" name="color-picker" value="#FF5722">
+    </div>
+    <div class="group tools">
+      <input type="radio" name="tools" value="free" id="tool-free" checked>
+      <label for="tool-free" class="btn">✎</label>
+      <input type="radio" name="tools" value="line" id="tool-line">
+      <label for="tool-line" class="btn">╱</input>
+    </div>
+    <div class="group widths">
+      <input type="radio" name="widths" value="big" id="width-big">
+      <label for="width-big" class="btn">⬤</label>
+      <input type="radio" name="widths" value="med" id="width-med" checked>
+      <label for="width-med" class="btn">●</label>
+      <input type="radio" name="widths" value="sml" id="width-sml">
+      <label for="width-sml" class="btn">•</label>
+    </div>
+  </div>
   <div class="story wrapper overview">
     <ul class="scenes sortable"></ul>
   </div>
@@ -53,16 +72,16 @@
         <div class="btn add-frame"></div>
       </div>
     </header>
-    <ul class="frames sortable connected"><!--
-      --><li class="frame shadow management">
+    <ul class="frames sortable connected">
+      <li class="frame shadow management">
         <div class="frame-img grabbable">
           <div class="frame-svg"></div>
           <img class="frame-img-loaded" src="data:image/gif;base64,R0lGODlhEAAJAKIAAMzMzJaWlrGxsaOjo76+vpycnMXFxaqqqiwAAAAAEAAJAAADCwi63P4wykmrvRgmADs=">
         </div>
         <div class="frame-text" contenteditable="true"></div>
         <div class="frame-nbr"></div>
-      </li><!--
-    --></ul>
+      </li>
+    </ul>
   </li>
   </script>
   <script id="overlay-tpl" type="text/template">

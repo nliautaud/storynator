@@ -172,18 +172,40 @@ $(function() {
   //  ██████  ██   ██ ██   ██  ███ ███  ██ ██   ████  ██████
     //*///
 
+  // toolbar
+  var DrawingToolbar = {
+    init: function () {
+      this.$el = $('.drawing-toolbar').first();
+      this.$color = this.$el.find('.color-picker');
+    },
+    get tool() {
+      return this.$el.find('.tools input:checked').val();
+    },
+    get color() {
+      return this.$color.val();
+    },
+    get width() {
+      let val = this.$el.find('.widths input:checked').val() || 'med';
+      switch (val) {
+        case 'big': return 10;
+        case 'sml': return 1;
+        default: return 3;
+      }
+    },
+    show: function (state) {
+      this.$el.toggleClass('show', state);
+    }
+  }
+  DrawingToolbar.init();
+
+
   var isDrawing;
   var svg;
   var tool;
-  const getTool = () => {
-    return {
-      type: 'pen',
-      stroke: 'red',
-      'stroke-width': 1,
-      'fill': 'none',
-    };
-  }
 
+  function toggleDrawable(state) {
+    DrawingToolbar.show(state);
+  }
   function setupDrawing(frame) {
     // get existing svg or create new one
     let el = frame.find('svg')[0] || frame.find('.frame-svg')[0]
@@ -195,37 +217,49 @@ $(function() {
   function startDrawing(event) {
     event.preventDefault();
     isDrawing = true;
-    startStroke(event);
+    startStroke(event, true);
     console.log('start drawing');
   }
-  function startStroke(event) {
-    if (!isDrawing) return;
+  function startStroke(event, anyType) {
+    if (!isDrawing || !(anyType || tool.type === 'free')) return;
 
-    tool = getTool();
+    tool = {
+      type: DrawingToolbar.tool,
+      stroke: DrawingToolbar.color,
+      'stroke-width': DrawingToolbar.width,
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round',
+      fill: 'none',
+    };
 
     let polyline = svg.polyline().attr(tool).draw(event);
     // remove small circles
     polyline.remember("_paintHandler").drawCircles = function () { };
 
-    plotDrawing(event);
+    plotDrawing(event, true);
     console.log('start stroke');
   }
-  function plotDrawing(event) {
-    if (!isDrawing) return;
-    if (tool.type === 'pen') {
-      svg.last().draw('point', event);
-    }
+  function plotDrawing(event, anyType) {
+    if (!isDrawing || !(anyType || tool.type === 'free')) return;
+    svg.last().draw('point', event);
   }
-  function stopStroke(event) {
-    if (!isDrawing) return;
+  function stopStroke(event, anyType) {
+    if (!isDrawing || !(anyType || tool.type === 'free')) return;
     svg.last().draw('stop', event);
     console.log('stop stroke');
   }
   function stopDrawing(event) {
     if (!isDrawing) return;
-    if (tool.type === 'pen') {
-      stopStroke(event);
-    } else svg.last().draw(event);
+    switch (tool.type) {
+      case 'free':
+        stopStroke(event);
+        break;
+      case 'line':
+        svg.last().draw('point', event).draw('done');
+        break;
+      default:
+        svg.last().draw(event);
+    }
     isDrawing = false;
     console.log('stop drawing');
   }
@@ -250,9 +284,11 @@ $(function() {
   });
   body.on('mousedown', function (event) {
     var curr_drawn = $('.is-drawable'),
-    curr_svg = curr_drawn.find('svg')[0];
-    if(!curr_drawn.length || event.target.closest('svg') === curr_svg) return;
+        toolbar = event.target.closest('.drawing-toolbar'),
+        curr_svg = curr_drawn.find('svg')[0];
+    if (toolbar || !curr_drawn.length || event.target.closest('svg') === curr_svg) return;
     $('.is-drawable').removeClass('is-drawable');
+    toggleDrawable(false);
   });
 
   // drawing
@@ -261,7 +297,6 @@ $(function() {
   body.delegate('svg', 'mousemove', plotDrawing)
   body.delegate('svg', 'mouseleave', stopStroke)
   body.on('mouseup', stopDrawing)
-
 
 
 
@@ -539,6 +574,7 @@ $(function() {
   });
   story.delegate('.overlay .btn-delete', 'click', deleteFrames);
   story.delegate('.overlay .btn-duplicate', 'click', duplicateFrames);
+  story.delegate('.overlay .btn-draw', 'click', toggleDrawable);
 
 
 
