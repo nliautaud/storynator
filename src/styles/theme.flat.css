@@ -20,25 +20,25 @@ body {
 }
 *[contenteditable] {
 	font-family: "Anonymous Pro", "Courier New", monospace;
-	cursor: text;
 }
 .nomanagement *[contenteditable] {
 	cursor: default;
 }
 
 
-.header {
-	padding: 1em 5% 0;
-	background: #34495e;
+.header  {
 	box-shadow: 0 2px 2px rgba(0, 0, 0, .2);
 }
 .header,
 .header .btn {
+	background: #34495e;
 	color: #eaeaea;
 	font-weight: 300;
+	border: none;
 }
 a:hover,
-.header-toggles .btn:hover,
+.header-options .btn:hover,
+.btn-storynator:hover a,
 .story .btn:hover {
 	color: #FF5722;
 }
@@ -48,7 +48,6 @@ a:hover,
 	font-size: 1.5rem;
 	font-weight: 700;
 	padding: .4em .5em;
-	margin: 0 0 1rem;
 }
 .header-title:focus {
 	background: #455B71;
@@ -58,24 +57,36 @@ a:hover,
 	color: #283848;
 	transition: none;
 }
-.header-toggles {
+.header-buttons,
+.header-options {
 	font-size: .8em;
 }
 
 .story .btn {
-	color: #008A7A;
-	background: #EEEEEE;
-	border: 1px solid #DDDDDD;
+	color: #fff;
+	background: #008A7A;
+	font-weight: bold;
+	border: none;
+}
+.story .btn:hover {
+	background: rgb(6, 126, 110);
+	color: #fff;
+	border: none;
 }
 .btn-storynator {
 	margin: .25rem 1rem .2rem;
 }
+.btn-storynator a {
+	color: #fff;
+	transition: all .2s ease;
+}
 .btn.btn-edit {
 	color: #fff;
-	margin: 0 0 .9rem;
+	width: 7em;
 	padding: .4em;
 	border: 1px solid #2E3F50;
 }
+.btn-edit:not(.off),
 .btn-edit.hover {
 	color: #fff;
 	background: #008a7a;
@@ -97,14 +108,15 @@ a:hover,
 	color: #555 !important;
 }
 .select.show .btn {
+	border: none;
 	border-bottom: 1px solid #e4e4e4;
+	background: none;
 }
 
 
 
 
 .story {
-	margin: 0 5%;
 	position: relative;
 }
 .changed .story::before {
@@ -128,11 +140,12 @@ a:hover,
 }
 .scene.dragged {
 	outline: .5em dashed #008A7A;
+	outline-width: .25em 0;
 }
 .scene-header {
 	min-height: 2.75em;
-	padding: .25em 0 .5em;
 	background: #eee;
+	border: none;
 }
 .scene+.shadow {
 	opacity: .5;
@@ -146,13 +159,7 @@ a:hover,
 	top: 0; bottom: 0;
 	left: -1em; width: 1em;
 	border-radius: .3em 0 0 .3em;
-}
-.shadow .scene-handle {
-	display: none;
-}
-.scene-header_content {
-	padding: 0 7em 0 1em;
-	margin: .5em 0;
+	padding: 0;
 }
 .scene-close::before,
 .frames::after,
@@ -161,9 +168,6 @@ a:hover,
 	font-size: .7em;
 	line-height: 1;
 	color: #A0A0A0;
-}
-.scene-close {
-	padding: .5em .5em .25em;
 }
 .scene-close::after {
 	color: #ccc;
@@ -182,18 +186,11 @@ a:hover,
 .size-sml .frame {
 	font-size: .85em;
 }
-.scene-header_buttons {
+.scene-buttons {
 	font-size: 1.2rem;
-	padding-right: 1em;
-}
-.scene-header_buttons .btn {
-	border: 1px solid #ddd;
 }
 
 
-ul.frames {
-	padding: 4% 2% 4%;
-}
 .frames::after {
 	position: absolute;
 	bottom: 1em;
@@ -247,13 +244,13 @@ ul.frames {
 		position: static;
 		text-align: center;
 	}
-	.scene-header_content {
+	.scene-content {
 		padding: 0 6%;
 	}
-	.scene-header_content::before {
+	.scene-content::before {
 		padding-top: .5em;
 	}
-	.scene-header_buttons {
+	.scene-buttons {
 		padding-right: 8%;
 	}
 	.scene-title {
@@ -271,4 +268,28 @@ ul.frames {
 	.size-sml .frame {
 		padding: 0 2%;
 	}
+}
+.drawing-toolbar {
+	background: #455B71;
+	border: none;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+	border-radius: 3px;
+}
+.drawing-toolbar .group {
+	border-color: rgba(0, 0, 0, .2);
+}
+.drawing-toolbar .btn {
+	color: white;
+	background: transparent;
+	border: 1px solid rgba(0, 0, 0, .2);
+}
+.drawing-toolbar .btn:hover {
+	background: #3d5166;
+}
+.drawing-toolbar input:checked+.btn {
+	background: #34495e;
+	box-shadow: inset 0 4px 6px rgba(0,0,0,.05);
+}
+.color-picker::-webkit-color-swatch {
+	border-radius: 3px;
 }

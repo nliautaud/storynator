@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Untitled</title>
+</head>
+<body class="">
+  <header class="header wrapper">
+    <h1 class="header-title" contenteditable="true"></h1>
+    <div class="header-buttons">
+      <div class="btn btn-edit toggle management" data-toggle="hidemanagement"></div>
+      <div class="btn btn-storynator">
+        <a href="https://nliautaud.github.io/storynator" target="_blank">S</a>
+      </div>
+    </div>
+    <ul class="header-options">
+      <li><div class="btn toggle toggle-scn off"></div></li>
+      <li class="select">
+        <div class="select-options">
+          <div data-mode="view-all" class="btn select-btn select-view-all"></div>
+          <div data-mode="view-img" class="btn select-btn select-view-img"></div>
+          <div data-mode="view-txt" class="btn select-btn select-view-txt"></div>
+        </div>
+      </li>
+      <li class="select">
+        <div class="select-options">
+          <div data-mode="size-med" class="btn select-btn select-size-med"></div>
+          <div data-mode="size-sml" class="btn select-btn select-size-sml"></div>
+          <div data-mode="size-big" class="btn select-btn select-size-big"></div>
+          <div data-mode="size-ful" class="btn select-btn select-size-ful"></div>
+        </div>
+      </li>
+      <li><div class="btn toggle toggle-nbr" data-toggle="hidenumbers"></div></li>
+      <li><div class="btn toggle toggle-fsc off" data-toggle="fullscreen"></div></li>
+    </ul>
+  </header>
+  <div class="drawing-toolbar">
+    <div class="group color">
+      <input class="btn color-picker" type="color" name="color-picker" value="#FF5722">
+    </div>
+    <div class="group tools">
+      <input type="radio" name="tools" value="free" id="tool-free" checked>
+      <label for="tool-free" class="btn">✎</label>
+      <input type="radio" name="tools" value="line" id="tool-line">
+      <label for="tool-line" class="btn">╱</input>
+    </div>
+    <div class="group widths">
+      <input type="radio" name="widths" value="big" id="width-big">
+      <label for="width-big" class="btn">⬤</label>
+      <input type="radio" name="widths" value="med" id="width-med" checked>
+      <label for="width-med" class="btn">●</label>
+      <input type="radio" name="widths" value="sml" id="width-sml">
+      <label for="width-sml" class="btn">•</label>
+    </div>
+  </div>
+  <div class="story wrapper overview">
+    <ul class="scenes sortable"></ul>
+  </div>
+  <script id="template" type="text/template">
+  <li class="scene shadow management">
+    <header class="scene-header">
+      <div class="scene-content">
+        <h2 class="scene-title" contenteditable="true"></h2>
+        <p class="scene-overview" contenteditable="true"></p>
+      </div>
+      <div class="scene-close"></div>
+      <div class="scene-handle grabbable management"></div>
+      <div class="scene-buttons management">
+        <div class="btn btn-delete scene-delete"></div>
+        <div class="btn add-frame-before"></div>
+        <div class="btn add-frame"></div>
+      </div>
+    </header>
+    <ul class="frames sortable connected">
+      <li class="frame shadow management">
+        <div class="frame-img grabbable">
+          <div class="frame-svg"></div>
+          <img class="frame-img-loaded" src="data:image/gif;base64,R0lGODlhEAAJAKIAAMzMzJaWlrGxsaOjo76+vpycnMXFxaqqqiwAAAAAEAAJAAADCwi63P4wykmrvRgmADs=">
+        </div>
+        <div class="frame-text" contenteditable="true"></div>
+        <div class="frame-nbr"></div>
+      </li>
+    </ul>
+  </li>
+  </script>
+  <script id="overlay-tpl" type="text/template">
+    <div class="overlay">
+      <div class="btn btn-duplicate"></div>
+      <div class="btn btn-delete"></div>
+      <div class="btn btn-draw" data-toggle="is-drawable"></div>
+      <div class="btn btn-clear"></div>
+      <div class="btn btn-sameshot" data-toggle="sameshot"></div>
+      <div class="btn btn-pano" data-toggle="ispano"></div>
+    </div>
+  </script>
+  <!-- Themes and languages -->
+  <link rel="stylesheet" id="storynator__system" type="text/css" media="screen" href="styles/_system.style.css" inline>
+  <link rel="stylesheet" id="storynator_theme" type="text/css" href="styles/theme.flat.css" inline>
+  <link rel="stylesheet" id="storynator_lang" type="text/css" href="styles/lang.en.css" inline>
+  <!-- libs -->
+  <script src="scripts/libs.js" inline></script>
+  <!-- Storynator -->
+  <script src="scripts/Storynator.edit.js" inline></script>
+  <script src="scripts/Storynator.view.js" charset="utf-8" inline></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "name": "storynator",
+  "version": "1.0.0",
+  "description": "A simple storyboard editor",
+  "main": "gulpfile.js",
+  "devDependencies": {
+    "browserify": "^14.5.0",
+    "gulp": "^3.9.1",
+    "gulp-inline-source": "^3.1.0",
+    "jquery": "^3.2.1",
+    "sortablejs": "^1.7.0",
+    "svg.draw.js": "^2.0.3",
+    "svgjs": "^2.6.2",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nliautaud/storynator.git"
+  },
+  "author": "Nicolas Liautaud",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nliautaud/storynator/issues"
+  },
+  "homepage": "https://github.com/nliautaud/storynator#readme"
+}
